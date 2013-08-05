@@ -1,6 +1,7 @@
 ---
 layout: post
 title: "Spotify Programming Challenge 1: Reggae"
+author: ian zapolsky
 category: posts
 ---
 
