@@ -10,7 +10,7 @@ a {
 
 .header {
   position: top;
-  margin-left: 180px;
+  margin-left: 220px;
   width: 300px;
   font-family: Helvetica, sans-serif; }
   .header a {
@@ -23,8 +23,8 @@ a {
 
 .sidebar {
   position: fixed;
-  left: 20px;
-  top: 20px;
+  left: 50px;
+  top: 48px;
   width: 100px;
   font-family: Helvetica, sans-serif; }
   .sidebar a {
@@ -88,7 +88,7 @@ a {
 
 .content {
   max-width: 750px;
-  margin-left: 180px;
+  margin-left: 220px;
   margin-right: 20px;
   margin-bottom: 50px; }
   .content h1 {

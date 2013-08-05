@@ -4,7 +4,7 @@
  <title>Haikus in C</title>
  <link href="http://haikus-in-c.github.io/atom.xml" rel="self"/>
  <link href="http://haikus-in-c.github.io/"/>
- <updated>2013-08-05T03:36:41-03:00</updated>
+ <updated>2013-08-05T11:21:16-03:00</updated>
  <id>http://haikus-in-c.github.io</id>
  <author>
    <name>Haikus in C</name>
@@ -14,14 +14,12 @@
  <entry>
    <title>Welcome</title>
    <link href="http://haikus-in-c.github.io/posts/welcome"/>
-   <updated>2013-08-05T00:00:00-03:00</updated>
+   <updated>2013-04-05T00:00:00-03:00</updated>
    <id>http://haikus-in-c.github.io/posts/welcome</id>
    <content type="html">&lt;p&gt;Welcome to &lt;a href=&quot;https://haikus-in-c.github.io&quot;&gt;Haikus in C&lt;/a&gt;, the programming blog of Ian and Ruchir, two
 CS students at Columbia.&lt;/p&gt;
 
-&lt;p&gt;We wanted a place to share code, work on tough problems, and talk about our solutions
-so we built this place. Check out the &lt;a href=&quot;https://github.com/haikus-in-c&quot;&gt;github page&lt;/a&gt; to see all the code
-in its entirety.&lt;/p&gt;
+&lt;p&gt;Stay tuned for our migration here from &lt;a href=&quot;https://haikusinc.tumblr.com&quot;&gt;tumblr&lt;/a&gt;, and some new posts too!&lt;/p&gt;
 </content>
  </entry>
  

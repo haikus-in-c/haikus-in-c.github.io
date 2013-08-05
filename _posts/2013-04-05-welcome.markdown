@@ -1,0 +1,14 @@
+---
+layout: post
+title: Welcome
+category: posts
+---
+
+Welcome to [Haikus in C][haikus], the programming blog of Ian and Ruchir, two
+CS students at Columbia.
+
+Stay tuned for our migration here from [tumblr][tumblr], and some new posts too!
+
+[haikus]: https://haikus-in-c.github.io
+[haikus_github]: https://github.com/haikus-in-c
+[tumblr]: https://haikusinc.tumblr.com
