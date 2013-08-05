@@ -38,6 +38,7 @@ binary string.
 	2%2 = 0 --> append to binary string: 00
 	2/2 = 1
 	1%2 = 1 --> append to binary string: 001
+	1/2 = 0 --> stop
 {% endhighlight %}
 
 Notice that this method gives us the number in a reversed form _already_, assuming we
