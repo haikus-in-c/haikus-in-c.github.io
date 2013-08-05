@@ -1,0 +1,10 @@
+markdown: rdiscout
+pygments: true
+permalink: /posts/:title
+rdiscount:
+  extensions: [smart]
+
+name: Haikus in C
+url: http://haikus-in-c.github.io
+description: a place where two columbia cs students share code and talk about their projects
+github: haikus-in-c
