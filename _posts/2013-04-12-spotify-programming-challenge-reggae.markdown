@@ -22,20 +22,20 @@ This division allows us to raise our modulous divisor by a power of 2, or shift 
 one place in binary. When we compute 5 mod 2 what we're really seeing is the 
 remainder of 11/4 expressed in terms of 2. Notice that if we didn't divide by 
 2 here and simply doubled the modulous divisor, we would get our remainder in 1s, which
-in this case would be (11%4= 3), a very unhelpful number in binary. 
+in this case would be (11%4 = 3), a very unhelpful number in binary. 
 
 The central idea is to find the remainder of x/2^(n+1) in terms of 2^n in order
 to find out if the nth binary slot from the right is a 0 or a 1.
 
-{% highlight latex %}
-	11%2 = 1 --> append to binary string: 1
-	11/2 = 5
-	5%2 = 1  --> append to binary string: 11
-	5/2 = 2
-	2%2 = 0  --> append to binary string: 011
-	2/2 = 1
-	1%2 = 1  --> append to binary string: 1011
-	1/2 = 0  --> stop because we reach 0
+{% highlight css %}
+11%2 = 1 --> append to binary string: 1
+11/2 = 5
+5%2 = 1  --> append to binary string: 11
+5/2 = 2
+2%2 = 0  --> append to binary string: 011
+2/2 = 1
+1%2 = 1  --> append to binary string: 1011
+1/2 = 0  --> stop because we reach 0
 {% endhighlight %}
 
 Notice that the example above appends new 1s and 0s _to the left_. This means that if we were 

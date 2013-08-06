@@ -82,19 +82,19 @@ This division allows us to raise our modulous divisor by a power of 2, or shift 
 one place in binary. When we compute 5 mod 2 what we&rsquo;re really seeing is the
 remainder of 11/4 expressed in terms of 2. Notice that if we didn&rsquo;t divide by
 2 here and simply doubled the modulous divisor, we would get our remainder in 1s, which
-in this case would be (11%4= 3), a very unhelpful number in binary.</p>
+in this case would be (11%4 = 3), a very unhelpful number in binary.</p>
 
 <p>The central idea is to find the remainder of x/2<sup>n+1</sup> in terms of 2<sup>n</sup> in order
 to find out if the nth binary slot from the right is a 0 or a 1.</p>
 
-<div class="highlight"><pre><code class="latex">    11<span class="c">%2 = 1 --&gt; append to binary string: 1</span>
-    11/2 = 5
-    5<span class="c">%2 = 1  --&gt; append to binary string: 11</span>
-    5/2 = 2
-    2<span class="c">%2 = 0  --&gt; append to binary string: 011</span>
-    2/2 = 1
-    1<span class="c">%2 = 1  --&gt; append to binary string: 1011</span>
-    1/2 = 0  --&gt; stop because we reach 0
+<div class="highlight"><pre><code class="css"><span class="nt">11</span><span class="o">%</span><span class="nt">2</span> <span class="o">=</span> <span class="nt">1</span> <span class="nt">--</span><span class="o">&gt;</span> <span class="nt">append</span> <span class="nt">to</span> <span class="nt">binary</span> <span class="nt">string</span><span class="o">:</span> <span class="nt">1</span>
+<span class="nt">11</span><span class="o">/</span><span class="nt">2</span> <span class="o">=</span> <span class="nt">5</span>
+<span class="nt">5</span><span class="o">%</span><span class="nt">2</span> <span class="o">=</span> <span class="nt">1</span>  <span class="nt">--</span><span class="o">&gt;</span> <span class="nt">append</span> <span class="nt">to</span> <span class="nt">binary</span> <span class="nt">string</span><span class="o">:</span> <span class="nt">11</span>
+<span class="nt">5</span><span class="o">/</span><span class="nt">2</span> <span class="o">=</span> <span class="nt">2</span>
+<span class="nt">2</span><span class="o">%</span><span class="nt">2</span> <span class="o">=</span> <span class="nt">0</span>  <span class="nt">--</span><span class="o">&gt;</span> <span class="nt">append</span> <span class="nt">to</span> <span class="nt">binary</span> <span class="nt">string</span><span class="o">:</span> <span class="nt">011</span>
+<span class="nt">2</span><span class="o">/</span><span class="nt">2</span> <span class="o">=</span> <span class="nt">1</span>
+<span class="nt">1</span><span class="o">%</span><span class="nt">2</span> <span class="o">=</span> <span class="nt">1</span>  <span class="nt">--</span><span class="o">&gt;</span> <span class="nt">append</span> <span class="nt">to</span> <span class="nt">binary</span> <span class="nt">string</span><span class="o">:</span> <span class="nt">1011</span>
+<span class="nt">1</span><span class="o">/</span><span class="nt">2</span> <span class="o">=</span> <span class="nt">0</span>  <span class="nt">--</span><span class="o">&gt;</span> <span class="nt">stop</span> <span class="nt">because</span> <span class="nt">we</span> <span class="nt">reach</span> <span class="nt">0</span>
 </code></pre></div>
 
 
