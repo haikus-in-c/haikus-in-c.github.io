@@ -14,26 +14,18 @@ to get 13 (11 > 1011 > 1101 > 13).
 Let's continue with 11. 11 is 1011, or (1\*2^3 + 0\*2^2 + 1\*2^1 + 1\*2^0), in binary. 
 Why is this?
 
-If we divide any number x mod 2, we get either a 1 or a 0, telling us the remainder of
-x/2 and consequently if the 1s place of x in binary is 1 or 0. 11 mod 2 is 1, and thus 
-we know that when divided by 2s, 11 needs an extra 1 (10/2 = 5 R1). 
+If we divide 11 mod 2, we'll get a 1, telling us the remainder of
+11/2 and consequently whether the 1s place of 11 in binary form is 1 or 0.
 
-Now, let's divide 11/2, rounding down to the nearest integer. This division allows us to
-raise our divisor by power of 2, or shift left one place in binary. Now, when we divide mod
-2 we'll told the remainder of x/4, in terms of 2s, or how many 2s are needed to make up the 
-remainder of a division by 4. If we didn't divide by 2 and simply doubled the divisor, we would get our remainder in 1s, but we need it in 2s because we already figured out the 1s. 
+Now, let's divide 11/2, rounding down to the nearest integer, which makes 5. 
+This division allows us to raise our modulous divisor by a power of 2, or shift left 
+one place in binary. When we compute 5 mod 2 what we're really seeing is the 
+remainder of 11/4 expressed in terms of 2. Notice that if we didn't divide by 
+2 here and simply doubled the modulous divisor, we would get our remainder in 1s, which
+in this case would be (11%4= 3), a very unhelpful number in binary. 
 
-(11/2 = 5) mod 2 also equals 1, so we know that when divided by _4s_, 11 needs 
-at least an extra 2. We put a 1 in the 2s place (notice that simply 11 mod 4 = 3, a
-very unhelpful number in binary).
-
-Dividing by 2 and then by modulus 2 again, we find that (5/2 = 2) mod 2 equals 0, which
-means that when divided by _8s_, 11 _does not need_ at least another 4 (which would make 12). 
-We put a 0 in the 4s place.
-
-Finally, (2/2 = 1) mod 2 is 1, meaning that when divided by 16s, 11 does need
-at least another 8 (this is of course because 16 does not go into 11 any times). 
-We stop there because the next division brings us to 0. 
+The central idea is to find the remainder of x/2^(n+1) in terms of 2^n in order
+to find out if the nth binary slot from the right is a 0 or a 1.
 
 {% highlight latex %}
 	11%2 = 1 --> append to binary string: 1
@@ -43,7 +35,7 @@ We stop there because the next division brings us to 0.
 	2%2 = 0  --> append to binary string: 011
 	2/2 = 1
 	1%2 = 1  --> append to binary string: 1011
-	1/2 = 0  --> stop
+	1/2 = 0  --> stop because we reach 0
 {% endhighlight %}
 
 Notice that the example above appends new 1s and 0s _to the left_. This means that if we were 
