@@ -4,7 +4,7 @@
  <title>Haikus in C</title>
  <link href="http://haikus-in-c.github.io/atom.xml" rel="self"/>
  <link href="http://haikus-in-c.github.io/"/>
- <updated>2013-08-06T00:07:09-03:00</updated>
+ <updated>2013-08-06T11:13:23-03:00</updated>
  <id>http://haikus-in-c.github.io</id>
  <author>
    <name>Haikus in C</name>
@@ -12,11 +12,78 @@
  
  
  <entry>
-   <title>Spotify Programming Challenge 1: Reggae</title>
+   <title>Can You Yodle and Juggle at the Same Time?</title>
+   <link href="http://haikus-in-c.github.io/posts/jugglefest"/>
+   <updated>2013-05-24T00:00:00-03:00</updated>
+   <id>http://haikus-in-c.github.io/posts/jugglefest</id>
+   <content type="html">&lt;p&gt;In the careers section of startup &lt;a href=&quot;http://www.yodle.com/&quot;&gt;Yodle&amp;rsquo;s&lt;/a&gt; website, there are a couple programming
+problems, one of which is called &lt;a href=&quot;http://www.yodlecareers.com/puzzles/jugglefest.html&quot;&gt;JuggleFest&lt;/a&gt;. Here&amp;rsquo;s a summary: given a
+list of x circuits and y jugglers, where each juggler has a certain number of circuit
+preferences ranked 1 &amp;ndash; n, assign the jugglers to circuits evenly such that the number of
+jugglers in each circuit is y/x and no juggler could switch to a circuit that they prefer
+more than the one they are already assigned to &lt;em&gt;and&lt;/em&gt; be a better fit for that circuit than
+one of the other jugglers assigned to it. Whew.&lt;/p&gt;
+
+&lt;p&gt;We determine how good a match a juggler is for a circuit by taking the dot product of three
+variables which they all share: Hand-eye Coordination (H), Endurance (E), and Pizzazz (P).
+The higher the dot product of a juggler with a specific circuit, the better fit a juggler
+is for that circuit.&lt;/p&gt;
+
+&lt;p&gt;This problem is a great exercise in designing an airtight algorithm from small scale to
+large scale. The sample input provided by Yodle gives us 3 circuits and 12 jugglers,
+while the actual text file required to solve the challenge has 2,000 circuits and 12,000
+jugglers. Below is my process broken into steps. There is no code here due to its
+length, but check out the whole solution on the &lt;a href=&quot;https://github.com/haikus-in-c/haikus-in-c/tree/master/2013.5/juggle_fest&quot;&gt;github&lt;/a&gt;. Also note that I
+refer to Circuits and Jugglers with their first letters capitalized to signify that these
+are classes.&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;Read all Circuits and Jugglers into the program from an input file. This process can be
+handled many different ways, but one important requirement is that we figure out the
+total number of Jugglers and Circuits so we can determine the target number of Jugglers
+that each Circuit should hold.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Assign all Jugglers to their first preference Circuits. I designed my Circuits so that they
+contain two ArrayLists of Jugglers, one called jugglers, the other called overflow. Anytime
+the jugglers ArrayList becomes full, any subsequent Juggler added to that Circuit is checked
+against those already in jugglers. If it is better than none of them it is placed in overflow.
+If the new Juggler &lt;em&gt;is&lt;/em&gt; a better match for the Circuit than another Juggler, then the worst
+match in jugglers is bumped down to overflow and the new Juggler is inserted in its sorted
+position in jugglers.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Examine Circuits one-by-one and distribute the members of their overflow array (if there are
+any) to the other Circuits. Repeat the following steps for each Circuit:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;Find the worst matched Juggler in the overflow array.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Check this Juggler against its next preference Circuit.&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;If the Circuit is under capacity, add the Juggler to this Circuit immediately.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;If the Circuit is at or over capacity, but the Juggler is a better match than one of the
+Jugglers currently in the Circuit&amp;rsquo;s jugglers ArrayList, insert it and kick the worst
+performing Juggler down to overflow.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;If the Circuit is at or over capacity and the Juggler is not a better match than one
+of the Jugglers currently in jugglers, check against the next preference Circuit.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;If this Juggler is not better than one of the Jugglers in its last preference Circuit,
+check all Circuits for an under-full Circuit and add it there.&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Sweep across all the Circuits, repeating steps 3-4 until they&amp;rsquo;re all filled perfectly.&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+</content>
+ </entry>
+ 
+ <entry>
+   <title>So This is what Reggae Feels Like</title>
    <link href="http://haikus-in-c.github.io/posts/spotify-programming-challenge-reggae"/>
    <updated>2013-04-12T00:00:00-03:00</updated>
    <id>http://haikus-in-c.github.io/posts/spotify-programming-challenge-reggae</id>
-   <content type="html">&lt;p&gt;Here&amp;rsquo;s what we need to do: write a program to take some integer in decimal form
+   <content type="html">&lt;p&gt;On &lt;a href=&quot;https://www.spotify.com/us/jobs/tech/&quot;&gt;Spotify&amp;rsquo;s puzzle page&lt;/a&gt;, they&amp;rsquo;ve got three tech puzzles for potential hires
+to play around with. This is the first of them, whose difficulty is rated &lt;em&gt;Reggae&lt;/em&gt;.&lt;/p&gt;
+
+&lt;p&gt;Here&amp;rsquo;s what we need to do: write a program to take some integer in decimal form
 between 1 and 1,000,000,000 (inclusive), convert it to binary form, reverse that binary
 string, and then convert the result back into decimal form. For example, on input 11,
 we convert to binary number 1011, reverse to get 1101, then convert back to decimal form
@@ -81,7 +148,7 @@ from the end of the String, adding increasing powers of 2 to a final result.&lt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;p&gt;And that&amp;rsquo;s it! We solved the first spotify programming challenge.&lt;/p&gt;
+&lt;p&gt;And that&amp;rsquo;s it! We solved the first Spotify programming challenge.&lt;/p&gt;
 </content>
  </entry>
  

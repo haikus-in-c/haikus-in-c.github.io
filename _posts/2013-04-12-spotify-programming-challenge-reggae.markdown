@@ -1,9 +1,12 @@
 ---
 layout: post
-title: "Spotify Programming Challenge 1: Reggae"
+title: "So This is what Reggae Feels Like"
 author: "Ian Zapolsky"
 category: posts
 ---
+
+On [Spotify's puzzle page][spotify], they've got three tech puzzles for potential hires
+to play around with. This is the first of them, whose difficulty is rated *Reggae*.
 
 Here's what we need to do: write a program to take some integer in decimal form
 between 1 and 1,000,000,000 (inclusive), convert it to binary form, reverse that binary
@@ -70,6 +73,6 @@ int convertBinaryToDecimal(String binary) {
 }
 {% endhighlight %}
 
-And that's it! We solved the first spotify programming challenge.
+And that's it! We solved the first Spotify programming challenge.
 	
-
+[spotify]:https://www.spotify.com/us/jobs/tech/
