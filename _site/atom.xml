@@ -4,7 +4,7 @@
  <title>Haikus in C</title>
  <link href="http://haikus-in-c.github.io/atom.xml" rel="self"/>
  <link href="http://haikus-in-c.github.io/"/>
- <updated>2013-08-05T20:17:54-03:00</updated>
+ <updated>2013-08-05T23:28:10-03:00</updated>
  <id>http://haikus-in-c.github.io</id>
  <author>
    <name>Haikus in C</name>
@@ -16,45 +16,50 @@
    <link href="http://haikus-in-c.github.io/posts/spotify-programming-challenge-reggae"/>
    <updated>2013-04-12T00:00:00-03:00</updated>
    <id>http://haikus-in-c.github.io/posts/spotify-programming-challenge-reggae</id>
-   <content type="html">&lt;p&gt;Here&amp;rsquo;s what we need to do: write a program that takes some integer in decimal form
-between 1 and 1,000,000,000 (inclusive), converts it to binary form, reverses that binary
-number, and then converts the result back into decimal form.&lt;/p&gt;
+   <content type="html">&lt;p&gt;Here&amp;rsquo;s what we need to do: write a program to take some integer in decimal form
+between 1 and 1,000,000,000 (inclusive), convert it to binary form, reverse that binary
+string, and then convert the result back into decimal form. For example, on input 11,
+we convert to binary number 1011, reverse to get 1101, then convert back to decimal form
+to get 13 (11 &gt; 1011 &gt; 1101 &gt; 13).&lt;/p&gt;
 
-&lt;p&gt;For example, on input 4, we convert to binary number 100, reverse it to 001, then convert
-that back to decimal form, which in this case would be 1. So 4 &gt; 100 &gt; 001 &gt; 1.&lt;/p&gt;
+&lt;p&gt;Let&amp;rsquo;s continue with 11. 11 is 1011, or (1*2&lt;sup&gt;3&lt;/sup&gt; + 0*2&lt;sup&gt;2&lt;/sup&gt; + 1*2&lt;sup&gt;1&lt;/sup&gt; + 1*2&lt;sup&gt;0&lt;/sup&gt;), in binary.
+Why is this?&lt;/p&gt;
 
-&lt;p&gt;This problem is pretty simple, we really only need to do three things: convert an integer
-from decimal to binary and vice versa, and reverse a string. It should be noted that there
-are standard library functions to do all of these things. The Integer class has a builtin
-toBinaryString() method and the String class has a built in reverse() method. But of course,
-we&amp;rsquo;re not going to use those.&lt;/p&gt;
+&lt;p&gt;If we divide any number x mod 2, we get either a 1 or a 0, telling us the remainder of
+x/2 and consequently if the 1s place of x in binary is 1 or 0. 11 mod 2 is 1, and thus
+we know that when divided by 2s, 11 needs an extra 1 (10/2 = 5 R1).&lt;/p&gt;
 
-&lt;p&gt;So, to tackle the first of our problems let&amp;rsquo;s look at converting an integer to a binary string.
-Let&amp;rsquo;s return to 4, since it&amp;rsquo;s easy to work with. As we saw above, 4 is 100 (1*2&lt;sup&gt;2&lt;/sup&gt; + 0*2&lt;sup&gt;1&lt;/sup&gt; + 0*2&lt;sup&gt;0&lt;/sup&gt;)
-in binary. This literally means that 4 has: one 4, zero 2s, and zero 1s. To see the pattern a
-a little clearer, let&amp;rsquo;s go bigger: 100 = 1100100. 100 has: one 64, one 32, zero 16s, zero 8s, one 4,
-zero 2s, and zero 1s. OK, I think we&amp;rsquo;ve got the pattern now. What we need to do is figure out how
-many times each power of two is in the number. The key is modulus division.&lt;/p&gt;
+&lt;p&gt;Now, let&amp;rsquo;s divide 11/2, rounding down to the nearest integer. This division allows us to
+raise our divisor by power of 2, or shift left one place in binary. Now, when we divide mod
+2 we&amp;rsquo;ll told the remainder of x/4, in terms of 2s, or how many 2s are needed to make up the
+remainder of a division by 4. If we didn&amp;rsquo;t divide by 2 and simply doubled the divisor, we would get our remainder in 1s, but we need it in 2s because we already figured out the 1s.&lt;/p&gt;
 
-&lt;p&gt;If we divide some integer x mod 2, we get either a 1 or a 0, telling us that 2 perfectly fit into
-this number, or that it didn&amp;rsquo;t. This 1 or 0 also represents the 1s place of the binary string
-representation of that integer.  If we take (x/2) mod 2, we again get either a 1 or a 0, but
-because we divided by 2, &lt;em&gt;this&lt;/em&gt; 1 or 0 represents the 2s place of the binary string. We can
-continue this method until the next division by 2 results in a 0, then we have the whole
-binary string.&lt;/p&gt;
+&lt;p&gt;(11/2 = 5) mod 2 also equals 1, so we know that when divided by &lt;em&gt;4s&lt;/em&gt;, 11 needs
+at least an extra 2. We put a 1 in the 2s place (notice that simply 11 mod 4 = 3, a
+very unhelpful number in binary).&lt;/p&gt;
 
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;latex&quot;&gt;    4&lt;span class=&quot;c&quot;&gt;%2 = 0 --&amp;gt; append to binary string: 0&lt;/span&gt;
-    4/2 = 2
-    2&lt;span class=&quot;c&quot;&gt;%2 = 0 --&amp;gt; append to binary string: 00&lt;/span&gt;
+&lt;p&gt;Dividing by 2 and then by modulus 2 again, we find that (5/2 = 2) mod 2 equals 0, which
+means that when divided by &lt;em&gt;8s&lt;/em&gt;, 11 &lt;em&gt;does not need&lt;/em&gt; at least another 4 (which would make 12).
+We put a 0 in the 4s place.&lt;/p&gt;
+
+&lt;p&gt;Finally, (2/2 = 1) mod 2 is 1, meaning that when divided by 16s, 11 does need
+at least another 8 (this is of course because 16 does not go into 11 any times).
+We stop there because the next division brings us to 0.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;latex&quot;&gt;    11&lt;span class=&quot;c&quot;&gt;%2 = 1 --&amp;gt; append to binary string: 1&lt;/span&gt;
+    11/2 = 5
+    5&lt;span class=&quot;c&quot;&gt;%2 = 1  --&amp;gt; append to binary string: 11&lt;/span&gt;
+    5/2 = 2
+    2&lt;span class=&quot;c&quot;&gt;%2 = 0  --&amp;gt; append to binary string: 011&lt;/span&gt;
     2/2 = 1
-    1&lt;span class=&quot;c&quot;&gt;%2 = 1 --&amp;gt; append to binary string: 001&lt;/span&gt;
-    1/2 = 0 --&amp;gt; stop
+    1&lt;span class=&quot;c&quot;&gt;%2 = 1  --&amp;gt; append to binary string: 1011&lt;/span&gt;
+    1/2 = 0  --&amp;gt; stop
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;p&gt;Notice that this method gives us the number in a reversed form &lt;em&gt;already&lt;/em&gt;, assuming we
-just appended each number onto a String as we got it. Below is code that executes this
-idea.&lt;/p&gt;
+&lt;p&gt;Notice that the example above appends new 1s and 0s &lt;em&gt;to the left&lt;/em&gt;. This means that if we were
+to append to the right in a method, as I do below, it would yield an already-reversed binary string,
+thus killing two birds with one piece of code!&lt;/p&gt;
 
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;convertDecimalToReversedBinary&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
     &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;result&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
@@ -69,8 +74,7 @@ idea.&lt;/p&gt;
 
 &lt;p&gt;Now, all we need is a method to convert a binary string back into an integer. This isn&amp;rsquo;t
 hard, as we already know how binary strings are put together. My method works backwards
-from the end of the string, adding increasing powers of 2 to a final result value that&amp;rsquo;s
-returned at the end.&lt;/p&gt;
+from the end of the String, adding increasing powers of 2 to a final result.&lt;/p&gt;
 
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;convertBinaryToDecimal&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;binary&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
     &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;value&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;

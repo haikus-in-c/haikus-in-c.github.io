@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Welcome"
-author: ian zapolsky
+author: "Ian Zapolsky"
 category: posts
 ---
 
