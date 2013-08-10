@@ -2,6 +2,7 @@
 layout: post
 title: "Let's Get Funky"
 author: "Ian Zapolsky"
+comments: true
 category: posts
 ---
 

@@ -2,6 +2,7 @@
 layout: post
 title: "Welcome"
 author: "Ian Zapolsky"
+comments: true
 category: posts
 ---
 

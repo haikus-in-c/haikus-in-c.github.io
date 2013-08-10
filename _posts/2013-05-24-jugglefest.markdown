@@ -2,6 +2,7 @@
 layout: post
 title: "Can You Yodle and Juggle at the Same Time?"
 author: "Ian Zapolsky"
+comments: true
 categroy: posts
 ---
 

@@ -2,6 +2,7 @@
 layout: post
 title: "So This is What Reggae Feels Like"
 author: "Ian Zapolsky"
+comments: true
 category: posts
 ---
 
