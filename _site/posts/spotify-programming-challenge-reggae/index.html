@@ -86,8 +86,8 @@ remainder of 11/4 expressed in terms of 2. Notice that if we didn&rsquo;t divide
 2 here and simply doubled the modulous divisor, we would get our remainder in 1s, which
 in this case would be (11%4 = 3), a very unhelpful number in binary.</p>
 
-<p>The central idea is to find the remainder of x/2<sup>n+1</sup> in terms of 2<sup>n</sup> in order
-to find out if the nth binary slot from the right is a 0 or a 1.</p>
+<p>The central idea is to find the remainder of x/2<sup>n+1</sup> in terms of 2<sup>n</sup>, which will always
+either be a 1 or a 0, in order to find the value of the nth binary slot from the right.</p>
 
 <div class="highlight"><pre><code class="css"><span class="nt">11</span><span class="o">%</span><span class="nt">2</span> <span class="o">=</span> <span class="nt">1</span> <span class="nt">--</span><span class="o">&gt;</span> <span class="nt">append</span> <span class="nt">to</span> <span class="nt">binary</span> <span class="nt">string</span><span class="o">:</span> <span class="nt">1</span>
 <span class="nt">11</span><span class="o">/</span><span class="nt">2</span> <span class="o">=</span> <span class="nt">5</span>

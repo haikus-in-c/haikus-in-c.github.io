@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <title>
     
-      Home &ndash;
+      Let's Get Funky &ndash;
     
     Haikus in C
   </title>
@@ -56,82 +56,15 @@
   </section>
 
   <section class="content">
-  
-	<h1>
-	  <a href="/posts/jugglefest">Can You Yodle and Juggle at the Same Time?</a>
-	</h1>
-	
-	<section class="byline">
-	  by Ian Zapolsky, May 24, 2013
-	</section>
+  <h1>
+    <a href="/posts/spotify-programming-challenge-funk">Let's Get Funky</a>
+  </h1>
 
-	<p><p>In the careers section of startup <a href="http://www.yodle.com/">Yodle&rsquo;s</a> website, there are a couple programming
-problems, one of which is called <a href="http://www.yodlecareers.com/puzzles/jugglefest.html">JuggleFest</a>. Here&rsquo;s a summary: given a
-list of x circuits and y jugglers, where each juggler has a certain number of circuit
-preferences ranked 1 &ndash; n, assign the jugglers to circuits evenly such that the number of
-jugglers in each circuit is y/x and no juggler could switch to a circuit that they prefer
-more than the one they are already assigned to <em>and</em> be a better fit for that circuit than
-one of the other jugglers assigned to it. Whew.</p>
+  <section class="byline">
+    by Ian Zapolsky, April 26, 2013
+  </section>
 
-<p>We determine how good a match a juggler is for a circuit by taking the dot product of three
-variables which they all share: Hand-eye Coordination (H), Endurance (E), and Pizzazz (P).
-The higher the dot product of a juggler with a specific circuit, the better fit a juggler
-is for that circuit.</p>
-
-<p>This problem is a great exercise in designing an airtight algorithm from small scale to
-large scale. The sample input provided by Yodle gives us 3 circuits and 12 jugglers,
-while the actual text file required to solve the challenge has 2,000 circuits and 12,000
-jugglers. Below is my process broken into steps. There is no code here due to its
-length, but check out the whole solution on the <a href="https://github.com/haikus-in-c/haikus-in-c/tree/master/2013.5/juggle_fest">github</a>. Also note that I
-refer to Circuits and Jugglers with their first letters capitalized to signify that these
-are classes.</p>
-
-<ol>
-<li><p>Read all Circuits and Jugglers into the program from an input file. This process can be
-handled many different ways, but one important requirement is that we figure out the
-total number of Jugglers and Circuits so we can determine the target number of Jugglers
-that each Circuit should hold.</p></li>
-<li><p>Assign all Jugglers to their first preference Circuits. I designed my Circuits so that they
-contain two ArrayLists of Jugglers, one called jugglers, the other called overflow. Anytime
-the jugglers ArrayList becomes full, any subsequent Juggler added to that Circuit is checked
-against those already in jugglers. If it is better than none of them it is placed in overflow.
-If the new Juggler <em>is</em> a better match for the Circuit than another Juggler, then the worst
-match in jugglers is bumped down to overflow and the new Juggler is inserted in its sorted
-position in jugglers.</p></li>
-<li><p>Examine Circuits one-by-one and distribute the members of their overflow array (if there are
-any) to the other Circuits. Repeat the following steps for each Circuit:</p>
-
-<ol>
-<li><p>Find the worst matched Juggler in the overflow array.</p></li>
-<li><p>Check this Juggler against its next preference Circuit.</p>
-
-<ol>
-<li><p>If the Circuit is under capacity, add the Juggler to this Circuit immediately.</p></li>
-<li><p>If the Circuit is at or over capacity, but the Juggler is a better match than one of the
-Jugglers currently in the Circuit&rsquo;s jugglers ArrayList, insert it and kick the worst
-performing Juggler down to overflow.</p></li>
-<li><p>If the Circuit is at or over capacity and the Juggler is not a better match than one
-of the Jugglers currently in jugglers, check against the next preference Circuit.</p></li>
-<li><p>If this Juggler is not better than one of the Jugglers in its last preference Circuit,
-check all Circuits for an under-full Circuit and add it there.</p></li>
-</ol>
-</li>
-</ol>
-</li>
-<li><p>Sweep across all the Circuits, repeating steps 3-4 until they&rsquo;re all filled perfectly.</p></li>
-</ol>
-
-</p>
-  
-	<h1>
-	  <a href="/posts/spotify-programming-challenge-funk">Let's Get Funky</a>
-	</h1>
-	
-	<section class="byline">
-	  by Ian Zapolsky, Apr 26, 2013
-	</section>
-
-	<p><p>Today we return to <a href="https://www.spotify.com/us/jobs/tech/">Spotify&rsquo;s hallowed puzzle page</a> for the second of the three puzzles
+  <p>Today we return to <a href="https://www.spotify.com/us/jobs/tech/">Spotify&rsquo;s hallowed puzzle page</a> for the second of the three puzzles
 they offer there. This one, the middle brother in between <a href="http://haikus-in-c.com/posts/spotify-programming-challenge-reggae/">Reggae</a> and <a href="http://haikus-in-c.com">Heavy Metal</a>,
 is called <em>Funk</em>.</p>
 
@@ -234,101 +167,29 @@ and return the first m songs (as specified in input).</p>
 
 
 
-</p>
-  
-	<h1>
-	  <a href="/posts/spotify-programming-challenge-reggae">So This is What Reggae Feels Like</a>
-	</h1>
-	
-	<section class="byline">
-	  by Ian Zapolsky, Apr 12, 2013
-	</section>
-
-	<p><p>On <a href="https://www.spotify.com/us/jobs/tech/">Spotify&rsquo;s puzzle page</a>, they&rsquo;ve got three tech puzzles for potential hires
-to play around with. This is the first of them, whose difficulty is rated <em>Reggae</em>.</p>
-
-<p>Here&rsquo;s what we need to do: write a program to take some integer in decimal form
-between 1 and 1,000,000,000 (inclusive), convert it to binary form, reverse that binary
-string, and then convert the result back into decimal form. For example, on input 11,
-we convert to binary number 1011, reverse to get 1101, then convert back to decimal form
-to get 13 (11 > 1011 > 1101 > 13).</p>
-
-<p>Let&rsquo;s continue with 11. 11 is 1011, or (1*2<sup>3</sup> + 0*2<sup>2</sup> + 1*2<sup>1</sup> + 1*2<sup>0</sup>), in binary.
-Why is this?</p>
-
-<p>If we divide 11 mod 2, we&rsquo;ll get a 1, telling us the remainder of
-11/2 and consequently whether the 1s place of 11 in binary form is 1 or 0.</p>
-
-<p>Now, let&rsquo;s divide 11/2, rounding down to the nearest integer, which makes 5.
-This division allows us to raise our modulous divisor by a power of 2, or shift left
-one place in binary. When we compute 5 mod 2 what we&rsquo;re really seeing is the
-remainder of 11/4 expressed in terms of 2. Notice that if we didn&rsquo;t divide by
-2 here and simply doubled the modulous divisor, we would get our remainder in 1s, which
-in this case would be (11%4 = 3), a very unhelpful number in binary.</p>
-
-<p>The central idea is to find the remainder of x/2<sup>n+1</sup> in terms of 2<sup>n</sup>, which will always
-either be a 1 or a 0, in order to find the value of the nth binary slot from the right.</p>
-
-<div class="highlight"><pre><code class="css"><span class="nt">11</span><span class="o">%</span><span class="nt">2</span> <span class="o">=</span> <span class="nt">1</span> <span class="nt">--</span><span class="o">&gt;</span> <span class="nt">append</span> <span class="nt">to</span> <span class="nt">binary</span> <span class="nt">string</span><span class="o">:</span> <span class="nt">1</span>
-<span class="nt">11</span><span class="o">/</span><span class="nt">2</span> <span class="o">=</span> <span class="nt">5</span>
-<span class="nt">5</span><span class="o">%</span><span class="nt">2</span> <span class="o">=</span> <span class="nt">1</span>  <span class="nt">--</span><span class="o">&gt;</span> <span class="nt">append</span> <span class="nt">to</span> <span class="nt">binary</span> <span class="nt">string</span><span class="o">:</span> <span class="nt">11</span>
-<span class="nt">5</span><span class="o">/</span><span class="nt">2</span> <span class="o">=</span> <span class="nt">2</span>
-<span class="nt">2</span><span class="o">%</span><span class="nt">2</span> <span class="o">=</span> <span class="nt">0</span>  <span class="nt">--</span><span class="o">&gt;</span> <span class="nt">append</span> <span class="nt">to</span> <span class="nt">binary</span> <span class="nt">string</span><span class="o">:</span> <span class="nt">011</span>
-<span class="nt">2</span><span class="o">/</span><span class="nt">2</span> <span class="o">=</span> <span class="nt">1</span>
-<span class="nt">1</span><span class="o">%</span><span class="nt">2</span> <span class="o">=</span> <span class="nt">1</span>  <span class="nt">--</span><span class="o">&gt;</span> <span class="nt">append</span> <span class="nt">to</span> <span class="nt">binary</span> <span class="nt">string</span><span class="o">:</span> <span class="nt">1011</span>
-<span class="nt">1</span><span class="o">/</span><span class="nt">2</span> <span class="o">=</span> <span class="nt">0</span>  <span class="nt">--</span><span class="o">&gt;</span> <span class="nt">stop</span> <span class="nt">because</span> <span class="nt">we</span> <span class="nt">reach</span> <span class="nt">0</span>
-</code></pre></div>
 
 
-<p>Notice that the example above appends new 1s and 0s <em>to the left</em>. This means that if we were
-to append to the right in a method, as I do below, it would yield an already-reversed binary string,
-thus killing two birds with one piece of code!</p>
+<!-- possibly update this later
+   TODO: bio here
+  <section class="meta">
+    <h3>Discussion, links, and tweets</h3>
+    <section class="copy">
+      <a href="https://twitter.com/" target="_blank">
+        <img src="?s=142" height="50" width="50" />
+      </a>
 
-<div class="highlight"><pre><code class="java"><span class="n">String</span> <span class="nf">convertDecimalToReversedBinary</span><span class="o">(</span><span class="kt">int</span> <span class="n">value</span><span class="o">)</span> <span class="o">{</span>
-    <span class="n">String</span> <span class="n">result</span> <span class="o">=</span> <span class="s">&quot;&quot;</span><span class="o">;</span>
-    <span class="k">while</span> <span class="o">(</span><span class="n">value</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
-        <span class="n">result</span> <span class="o">+=</span> <span class="s">&quot;&quot;</span><span class="o">+(</span><span class="n">value</span><span class="o">%</span><span class="mi">2</span><span class="o">);</span>
-        <span class="n">value</span> <span class="o">=</span> <span class="n">value</span><span class="o">/</span><span class="mi">2</span><span class="o">;</span>
-    <span class="o">}</span>
-    <span class="k">return</span> <span class="n">result</span><span class="o">;</span>
-<span class="o">}</span>
-</code></pre></div>
+      <p>
+        I'm a developer at GitHub. <a href="https://twitter.com/" target="_blank">Follow me on Twitter</a>;
+        you'll enjoy my tweets. I take care to carefully craft each one. Or at least aim to make
+        you giggle. Or offended. One of those two&mdash; I haven't decided which yet.
+      </p>
 
-
-<p>Now, all we need is a method to convert a binary string back into an integer. This isn&rsquo;t
-hard, as we already know how binary strings are put together. My method works backwards
-from the end of the String, adding increasing powers of 2 to a final result.</p>
-
-<div class="highlight"><pre><code class="java"><span class="kt">int</span> <span class="nf">convertBinaryToDecimal</span><span class="o">(</span><span class="n">String</span> <span class="n">binary</span><span class="o">)</span> <span class="o">{</span>
-    <span class="kt">int</span> <span class="n">value</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
-    <span class="kt">int</span> <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
-    <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="o">(</span><span class="n">binary</span><span class="o">.</span><span class="na">length</span><span class="o">()-</span><span class="mi">1</span><span class="o">);</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span><span class="o">--)</span> <span class="o">{</span>
-        <span class="k">if</span> <span class="o">(</span><span class="n">binary</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">i</span><span class="o">)</span> <span class="o">==</span> <span class="sc">&#39;1&#39;</span><span class="o">)</span>
-            <span class="n">value</span> <span class="o">+=</span> <span class="n">Math</span><span class="o">.</span><span class="na">pow</span><span class="o">(</span><span class="mi">2</span><span class="o">,</span> <span class="n">count</span><span class="o">);</span>
-        <span class="n">count</span><span class="o">++;</span>
-    <span class="o">}</span>
-    <span class="k">return</span> <span class="n">value</span><span class="o">;</span>
-<span class="o">}</span>
-</code></pre></div>
-
-
-<p>And that&rsquo;s it! We solved the first Spotify programming challenge.</p>
-</p>
-  
-	<h1>
-	  <a href="/posts/welcome">Welcome</a>
-	</h1>
-	
-	<section class="byline">
-	  by Ian Zapolsky, Apr  5, 2013
-	</section>
-
-	<p><p>Welcome to <a href="https://haikus-in-c.github.io">Haikus in C</a>, the programming blog of Ian and Ruchir, two
-CS students at Columbia.</p>
-
-<p>Stay tuned for our migration here from <a href="https://haikusinc.tumblr.com">tumblr</a>, and some new posts too!</p>
-</p>
-  
+      <a href="http://twitter.com/share" class="twitter-share-button" data-count="none" data-via="">Tweet</a>
+      <a href="http://twitter.com/" class="twitter-follow-button" data-show-count="false">Follow @</a>
+      <script src="http://platform.twitter.com/widgets.js" type="text/javascript"></script>
+    </section>
+  </section>
+-->
 </section>
 
 </body>

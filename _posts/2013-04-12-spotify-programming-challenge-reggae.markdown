@@ -27,8 +27,8 @@ remainder of 11/4 expressed in terms of 2. Notice that if we didn't divide by
 2 here and simply doubled the modulous divisor, we would get our remainder in 1s, which
 in this case would be (11%4 = 3), a very unhelpful number in binary. 
 
-The central idea is to find the remainder of x/2^(n+1) in terms of 2^n in order
-to find out if the nth binary slot from the right is a 0 or a 1.
+The central idea is to find the remainder of x/2^(n+1) in terms of 2^n, which will always
+either be a 1 or a 0, in order to find the value of the nth binary slot from the right.
 
 {% highlight css %}
 11%2 = 1 --> append to binary string: 1
