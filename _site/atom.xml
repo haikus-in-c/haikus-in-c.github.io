@@ -4,7 +4,7 @@
  <title>Haikus in C</title>
  <link href="http://haikus-in-c.github.io/atom.xml" rel="self"/>
  <link href="http://haikus-in-c.github.io/"/>
- <updated>2013-08-09T21:57:57-03:00</updated>
+ <updated>2013-08-09T22:04:50-03:00</updated>
  <id>http://haikus-in-c.github.io</id>
  <author>
    <name>Haikus in C</name>
@@ -137,15 +137,15 @@ the second has a ratio of 1.02.&lt;/p&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;p&gt;Now that we&amp;rsquo;ve got this Song data structure, all we need to do is wrap up however many songs we
+&lt;p&gt;Now that we&amp;rsquo;ve got this Song class, all we need to do is wrap up however many Songs we
 have in an array or any other data structure that allows for quick iteration and sorting. I chose
 array here just because of the relative simplicity of the sample inputs, but a linked list would
 also be a totally valid choice.&lt;/p&gt;
 
 &lt;p&gt;Below is the main method, which reads input from the command line in the &lt;a href=&quot;https://www.spotify.com/us/jobs/tech/zipfsong/&quot;&gt;given format&lt;/a&gt;,
-constructs an array of songs, and then iterates through the array, setting the expected_plays
-and ratios of each song based on the number of plays of the first song. Then we sort by ratio,
-and return the first m songs (as specified in input).&lt;/p&gt;
+constructs an array of Songs, and then iterates through the array, setting the expected plays
+and ratios of each song based on the number of plays of the first song. Then we sort by ratio
+and return the first m songs (as specified in the input) in descending order of popularity.&lt;/p&gt;
 
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
 

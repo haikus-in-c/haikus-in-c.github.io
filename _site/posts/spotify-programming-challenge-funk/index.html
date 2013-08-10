@@ -121,15 +121,15 @@ the second has a ratio of 1.02.</p>
 </code></pre></div>
 
 
-<p>Now that we&rsquo;ve got this Song data structure, all we need to do is wrap up however many songs we
+<p>Now that we&rsquo;ve got this Song class, all we need to do is wrap up however many Songs we
 have in an array or any other data structure that allows for quick iteration and sorting. I chose
 array here just because of the relative simplicity of the sample inputs, but a linked list would
 also be a totally valid choice.</p>
 
 <p>Below is the main method, which reads input from the command line in the <a href="https://www.spotify.com/us/jobs/tech/zipfsong/">given format</a>,
-constructs an array of songs, and then iterates through the array, setting the expected_plays
-and ratios of each song based on the number of plays of the first song. Then we sort by ratio,
-and return the first m songs (as specified in input).</p>
+constructs an array of Songs, and then iterates through the array, setting the expected plays
+and ratios of each song based on the number of plays of the first song. Then we sort by ratio
+and return the first m songs (as specified in the input) in descending order of popularity.</p>
 
 <div class="highlight"><pre><code class="java"><span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
 

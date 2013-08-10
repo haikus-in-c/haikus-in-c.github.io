@@ -62,15 +62,15 @@ public class Song implements Comparable<Song> {
 }
 {% endhighlight %}
 
-Now that we've got this Song data structure, all we need to do is wrap up however many songs we
+Now that we've got this Song class, all we need to do is wrap up however many Songs we
 have in an array or any other data structure that allows for quick iteration and sorting. I chose
 array here just because of the relative simplicity of the sample inputs, but a linked list would
 also be a totally valid choice.
 
 Below is the main method, which reads input from the command line in the [given format][funk],
-constructs an array of songs, and then iterates through the array, setting the expected plays 
-and ratios of each song based on the number of plays of the first song. Then we sort by ratio,
-and return the first m songs (as specified in input) in descending order of popularity.
+constructs an array of Songs, and then iterates through the array, setting the expected plays 
+and ratios of each song based on the number of plays of the first song. Then we sort by ratio
+and return the first m songs (as specified in the input) in descending order of popularity.
 
 {% highlight java %}
 public static void main(String[] args) {
