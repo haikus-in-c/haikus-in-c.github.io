@@ -4,7 +4,7 @@
  <title>Haikus in C</title>
  <link href="http://haikus-in-c.github.io/atom.xml" rel="self"/>
  <link href="http://haikus-in-c.github.io/"/>
- <updated>2013-08-09T22:23:01-03:00</updated>
+ <updated>2013-08-09T22:52:36-03:00</updated>
  <id>http://haikus-in-c.github.io</id>
  <author>
    <name>Haikus in C</name>
@@ -213,8 +213,9 @@ remainder of 11/4 expressed in terms of 2. Notice that if we didn&amp;rsquo;t di
 2 here and simply doubled the modulous divisor, we would get our remainder in 1s, which
 in this case would be (11%4 = 3), a very unhelpful number in binary.&lt;/p&gt;
 
-&lt;p&gt;The central idea is to find the remainder of x/2&lt;sup&gt;n+1&lt;/sup&gt; in terms of 2&lt;sup&gt;n&lt;/sup&gt;, which will always
-either be a 1 or a 0, in order to find the value of the nth binary slot from the right.&lt;/p&gt;
+&lt;p&gt;The central idea is to find the remainder of the number you&amp;rsquo;re converting (in this case 11)/2&lt;sup&gt;n+1&lt;/sup&gt;
+in terms of 2&lt;sup&gt;n&lt;/sup&gt;, which will always either be a 1 or a 0, in order to find the value of the nth
+binary slot from the right.&lt;/p&gt;
 
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;css&quot;&gt;&lt;span class=&quot;nt&quot;&gt;11&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;%&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;2&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;--&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;append&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;to&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;binary&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;string&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;1&lt;/span&gt;
 &lt;span class=&quot;nt&quot;&gt;11&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;2&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;5&lt;/span&gt;
