@@ -16,6 +16,7 @@ the shell, you can type:
 This touches a file at ~/Desktop/thing-i-have-to-do. Here's the code of the script itself.
 
 {% highlight bash %}
+#!/bin/sh
 set -e
 
 touch ~/Desktop/"$*"
@@ -50,7 +51,7 @@ prompt comes in, which prints the todo list to the shell in an organized manner.
 	
 	$ todo -p
 
-This returns:
+Assuming our previous input, this would return:
 
 {% highlight bash %}
 /// TOP PRIORITY ///

@@ -75,7 +75,8 @@ the shell, you can type:</p>
 
 <p>This touches a file at ~/Desktop/thing-i-have-to-do. Here&rsquo;s the code of the script itself.</p>
 
-<div class="highlight"><pre><code class="bash"><span class="nb">set</span> -e
+<div class="highlight"><pre><code class="bash"><span class="c">#!/bin/sh</span>
+<span class="nb">set</span> -e
 
 touch ~/Desktop/<span class="s2">&quot;$*&quot;</span>
 </code></pre></div>
@@ -112,7 +113,7 @@ prompt comes in, which prints the todo list to the shell in an organized manner.
 <pre><code>$ todo -p
 </code></pre>
 
-<p>This returns:</p>
+<p>Assuming our previous input, this would return:</p>
 
 <div class="highlight"><pre><code class="bash">/// TOP PRIORITY ///
   - other-top-priority-thing

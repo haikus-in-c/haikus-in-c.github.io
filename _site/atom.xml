@@ -4,7 +4,7 @@
  <title>Haikus in C</title>
  <link href="http://haikus-in-c.github.io/atom.xml" rel="self"/>
  <link href="http://haikus-in-c.github.io/"/>
- <updated>2013-08-11T02:05:13-03:00</updated>
+ <updated>2013-08-11T02:09:33-03:00</updated>
  <id>http://haikus-in-c.github.io</id>
  <author>
    <name>Haikus in C</name>
@@ -26,7 +26,8 @@ the shell, you can type:&lt;/p&gt;
 
 &lt;p&gt;This touches a file at ~/Desktop/thing-i-have-to-do. Here&amp;rsquo;s the code of the script itself.&lt;/p&gt;
 
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;&lt;span class=&quot;nb&quot;&gt;set&lt;/span&gt; -e
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;&lt;span class=&quot;c&quot;&gt;#!/bin/sh&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;set&lt;/span&gt; -e
 
 touch ~/Desktop/&lt;span class=&quot;s2&quot;&gt;&amp;quot;$*&amp;quot;&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
@@ -63,7 +64,7 @@ prompt comes in, which prints the todo list to the shell in an organized manner.
 &lt;pre&gt;&lt;code&gt;$ todo -p
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;This returns:&lt;/p&gt;
+&lt;p&gt;Assuming our previous input, this would return:&lt;/p&gt;
 
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;/// TOP PRIORITY ///
   - other-top-priority-thing
