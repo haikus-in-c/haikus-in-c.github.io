@@ -4,12 +4,185 @@
  <title>Haikus in C</title>
  <link href="http://haikus-in-c.github.io/atom.xml" rel="self"/>
  <link href="http://haikus-in-c.github.io/"/>
- <updated>2013-08-10T00:04:54-03:00</updated>
+ <updated>2013-08-11T02:05:13-03:00</updated>
  <id>http://haikus-in-c.github.io</id>
  <author>
    <name>Haikus in C</name>
  </author>
  
+ 
+ <entry>
+   <title>todo -t write-todo-blog-post</title>
+   <link href="http://haikus-in-c.github.io/posts/bash-todo-list-tool"/>
+   <updated>2013-08-11T00:00:00-03:00</updated>
+   <id>http://haikus-in-c.github.io/posts/bash-todo-list-tool</id>
+   <content type="html">&lt;p&gt;Recently I read an &lt;a href=&quot;http://zachholman.com/posts/inbox-zero-everything-zero/&quot;&gt;article by Zach Holman&lt;/a&gt;, an engineer at Github and the guy
+whose jekyll theme I adapted to build this site, about a simple (read: &lt;em&gt;very&lt;/em&gt; simple)
+todo script he wrote to keep track of his tasks. Here&amp;rsquo;s how it works: any time you&amp;rsquo;re at
+the shell, you can type:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ todo thing-i-have-to-do
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This touches a file at ~/Desktop/thing-i-have-to-do. Here&amp;rsquo;s the code of the script itself.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;&lt;span class=&quot;nb&quot;&gt;set&lt;/span&gt; -e
+
+touch ~/Desktop/&lt;span class=&quot;s2&quot;&gt;&amp;quot;$*&amp;quot;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Obviously, this tool assumes that the user keeps a tidy Desktop and cleans it regularly. Otherwise,
+it just wouldn&amp;rsquo;t be feasible to keep track of all the todo files. In his own words, &lt;a href=&quot;http://zachholman.com/posts/inbox-zero-everything-zero/&quot;&gt;Zach writes&lt;/a&gt;,&lt;/p&gt;
+
+&lt;blockquote&gt;&lt;p&gt;I keep a clean desktop: under three icons at a time, preferably. It made sense to use my
+desktop as a kind of bucket I need to empty&amp;hellip;.&lt;/p&gt;&lt;/blockquote&gt;
+
+&lt;p&gt;Unfortunately, my desktop isn&amp;rsquo;t so clean. I&amp;rsquo;ve got all sorts of music and image files lying around,
+in addition to miscellaneous stuff that&amp;rsquo;s not related at all to programming. So, I decided to heavily
+edit this todo script to accept several command line options that allow a user to set a priority for
+a task (top &amp;ndash; mid &amp;ndash; low), print all the tasks in the todo list, organized by priority, and remove any
+task. All the task files, which are the exact same empty files created with the touch command as in
+Holman&amp;rsquo;s original, are organized under one directory at ~/Desktop/todo. Within todo, there are three
+more directories, todo/top, todo/mid, and todo/low. Each of these represents one priority category.&lt;/p&gt;
+
+&lt;p&gt;With my script, any time you&amp;rsquo;re at the shell you can type:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ todo -t top-priority-thing
+$ todo -m mid-priority-thing
+$ todo -l low-priority-thing
+$ todo other-top-priority-thing
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The options -t, -m, and -l add a given task to directories top, mid, and low, respectively. If we run
+todo without any option, our task will be automatically added to the top priority category. This is all
+good, but we still have a problem when we want to peruse our list. It&amp;rsquo;s all bundled up inside directories,
+and none of us want to cd back and forth or fiddle with finder to see everything. That&amp;rsquo;s where this
+prompt comes in, which prints the todo list to the shell in an organized manner.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ todo -p
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This returns:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;/// TOP PRIORITY ///
+  - other-top-priority-thing
+  - top-priority-thing
+
+/// MID PRIORITY ///
+  - mid-priority-thing
+
+/// LOW PRIORITY ///
+  - low-priority-thing
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Boom! Finally, one last thing. Removing tasks is probably the easiest operation to complete using just
+regular command line tools. However, for those who are lazy, there&amp;rsquo;s this command, which deletes
+any task you want, so long as you provide the priority directory.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ todo -r mid/mid-priority-thing
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;That&amp;rsquo;s all, a little todo tool to help you keep track of the stuff you&amp;rsquo;re doing. Thanks to Zach for
+getting the ball rolling. For those interested, here&amp;rsquo;s the full version of my adapted todo script:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;&lt;span class=&quot;c&quot;&gt;#!/bin/sh&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;#&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# A customized extension to Zach Holman&amp;#39;s todo script by Ian Zapolsky (8/11/13)&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;#&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# Adds the ability to prioritize, delete, and display all the todo files you&amp;#39;ve&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# touched.&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;#&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# Usage:&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;#&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# todo thing-i-have-to-do    --&amp;gt; left with no argument, we automatically touch&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;#                                a file in the top priority directory&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# todo -t thing-i-have-to-do --&amp;gt; creates thing-i-have-to-do as a top priority&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;#                                todo&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# todo -m thing-i-have-to-do --&amp;gt; creates thing-i-have-to-do as a mid priority&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;#                                todo&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# todo -l thing-i-have-to-do --&amp;gt; creates thing-i-have-to-do as a low priority&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;#                                todo&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# todo -p                    --&amp;gt; prints a list of your todos, organized by category&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;#&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# todo -r priority-level/thing-i-have-to-do --&amp;gt; removes a todo. note that this&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;#                                               command must be run with the priority &lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;#                                               directory&lt;/span&gt;
+
+&lt;span class=&quot;nb&quot;&gt;set&lt;/span&gt; -e
+
+&lt;span class=&quot;k&quot;&gt;function &lt;/span&gt;print_list &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;nv&quot;&gt;TOP&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;~/Desktop/todo/top/*
+  &lt;span class=&quot;nv&quot;&gt;MID&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;~/Desktop/todo/mid/*
+  &lt;span class=&quot;nv&quot;&gt;LOW&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;~/Desktop/todo/low/*
+
+  &lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;\n/// TOP PRIORITY ///&amp;quot;&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;for &lt;/span&gt;f in &lt;span class=&quot;nv&quot;&gt;$TOP&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;    &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;filename&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;$(&lt;/span&gt;basename &lt;span class=&quot;s2&quot;&gt;&amp;quot;$f&amp;quot;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;  - $filename&amp;quot;&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;done&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;  &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;\n/// MID PRIORITY ///&amp;quot;&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;for &lt;/span&gt;f in &lt;span class=&quot;nv&quot;&gt;$MID&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;    &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;filename&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;$(&lt;/span&gt;basename &lt;span class=&quot;s2&quot;&gt;&amp;quot;$f&amp;quot;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;  - $filename&amp;quot;&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;done&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;  &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;\n/// LOW PRIORITY ///&amp;quot;&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;for &lt;/span&gt;f in &lt;span class=&quot;nv&quot;&gt;$LOW&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;    &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;filename&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;$(&lt;/span&gt;basename &lt;span class=&quot;s2&quot;&gt;&amp;quot;$f&amp;quot;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;  - $filename&amp;quot;&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;done&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;  &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;\n&amp;quot;&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;nv&quot;&gt;flag&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;0
+&lt;span class=&quot;k&quot;&gt;while &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;getopts&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;:t:m:l:r:p&amp;quot;&lt;/span&gt; opt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;  case&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$opt&lt;/span&gt; in
+    t&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+      touch ~/Desktop/todo/top/&lt;span class=&quot;s2&quot;&gt;&amp;quot;${*:2}&amp;quot;&lt;/span&gt; &amp;gt;&amp;amp;2
+      &lt;span class=&quot;nv&quot;&gt;flag&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;1
+      ;;
+    m&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+      touch ~/Desktop/todo/mid/&lt;span class=&quot;s2&quot;&gt;&amp;quot;${*:2}&amp;quot;&lt;/span&gt; &amp;gt;&amp;amp;2
+      &lt;span class=&quot;nv&quot;&gt;flag&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;1
+      ;;
+    l&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+      touch ~/Desktop/todo/low/&lt;span class=&quot;s2&quot;&gt;&amp;quot;${*:2}&amp;quot;&lt;/span&gt; &amp;gt;&amp;amp;2
+      &lt;span class=&quot;nv&quot;&gt;flag&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;1
+      ;;
+    p&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+      print_list
+      &lt;span class=&quot;nv&quot;&gt;flag&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;1
+      ;;
+    r&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+      rm ~/Desktop/todo/&lt;span class=&quot;s2&quot;&gt;&amp;quot;${*:2}&amp;quot;&lt;/span&gt; &amp;gt;&amp;amp;2
+      &lt;span class=&quot;nv&quot;&gt;flag&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;1
+      ;;
+    :&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+      touch ~/Desktop/todo/top/&lt;span class=&quot;s2&quot;&gt;&amp;quot;${*:2}&amp;quot;&lt;/span&gt; &amp;gt;&amp;amp;2
+      &lt;span class=&quot;nv&quot;&gt;flag&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;1
+      ;;
+    &lt;span class=&quot;se&quot;&gt;\?&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+      &lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;Invalid option: -$OPTARG&amp;quot;&lt;/span&gt; &amp;gt;&amp;amp;2
+      &lt;span class=&quot;nb&quot;&gt;exit &lt;/span&gt;1
+      ;;
+  &lt;span class=&quot;k&quot;&gt;esac&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;done&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;$flag&amp;quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;0&amp;quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;; &lt;span class=&quot;k&quot;&gt;then&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;    &lt;/span&gt;touch ~/Desktop/todo/top/&lt;span class=&quot;s2&quot;&gt;&amp;quot;$*&amp;quot;&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;fi&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+
+</content>
+ </entry>
  
  <entry>
    <title>Can You Yodle and Juggle at the Same Time?</title>
@@ -217,14 +390,14 @@ in this case would be (11%4 = 3), a very unhelpful number in binary.&lt;/p&gt;
 in terms of 2&lt;sup&gt;n&lt;/sup&gt;, which will always either be a 1 or a 0, in order to find the value of the nth
 binary slot from the right.&lt;/p&gt;
 
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;css&quot;&gt;&lt;span class=&quot;nt&quot;&gt;11&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;%&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;2&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;--&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;append&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;to&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;binary&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;string&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;1&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;11&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;2&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;5&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;%&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;2&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;1&lt;/span&gt;  &lt;span class=&quot;nt&quot;&gt;--&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;append&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;to&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;binary&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;string&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;11&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;2&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;2&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;%&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;2&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;0&lt;/span&gt;  &lt;span class=&quot;nt&quot;&gt;--&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;append&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;to&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;binary&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;string&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;011&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;2&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;1&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;%&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;2&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;1&lt;/span&gt;  &lt;span class=&quot;nt&quot;&gt;--&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;append&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;to&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;binary&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;string&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;1011&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;2&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;0&lt;/span&gt;  &lt;span class=&quot;nt&quot;&gt;--&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;stop&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;because&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;we&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;reach&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;0&lt;/span&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;11%2 &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; 1 --&amp;gt; append to binary string: 1
+11/2 &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; 5
+5%2 &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; 1  --&amp;gt; append to binary string: 11
+5/2 &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; 2
+2%2 &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; 0  --&amp;gt; append to binary string: 011
+2/2 &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; 1
+1%2 &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; 1  --&amp;gt; append to binary string: 1011
+1/2 &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; 0  --&amp;gt; stop because we reach 0
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 

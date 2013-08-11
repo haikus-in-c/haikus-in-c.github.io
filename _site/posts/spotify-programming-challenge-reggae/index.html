@@ -90,14 +90,14 @@ in this case would be (11%4 = 3), a very unhelpful number in binary.</p>
 in terms of 2<sup>n</sup>, which will always either be a 1 or a 0, in order to find the value of the nth
 binary slot from the right.</p>
 
-<div class="highlight"><pre><code class="css"><span class="nt">11</span><span class="o">%</span><span class="nt">2</span> <span class="o">=</span> <span class="nt">1</span> <span class="nt">--</span><span class="o">&gt;</span> <span class="nt">append</span> <span class="nt">to</span> <span class="nt">binary</span> <span class="nt">string</span><span class="o">:</span> <span class="nt">1</span>
-<span class="nt">11</span><span class="o">/</span><span class="nt">2</span> <span class="o">=</span> <span class="nt">5</span>
-<span class="nt">5</span><span class="o">%</span><span class="nt">2</span> <span class="o">=</span> <span class="nt">1</span>  <span class="nt">--</span><span class="o">&gt;</span> <span class="nt">append</span> <span class="nt">to</span> <span class="nt">binary</span> <span class="nt">string</span><span class="o">:</span> <span class="nt">11</span>
-<span class="nt">5</span><span class="o">/</span><span class="nt">2</span> <span class="o">=</span> <span class="nt">2</span>
-<span class="nt">2</span><span class="o">%</span><span class="nt">2</span> <span class="o">=</span> <span class="nt">0</span>  <span class="nt">--</span><span class="o">&gt;</span> <span class="nt">append</span> <span class="nt">to</span> <span class="nt">binary</span> <span class="nt">string</span><span class="o">:</span> <span class="nt">011</span>
-<span class="nt">2</span><span class="o">/</span><span class="nt">2</span> <span class="o">=</span> <span class="nt">1</span>
-<span class="nt">1</span><span class="o">%</span><span class="nt">2</span> <span class="o">=</span> <span class="nt">1</span>  <span class="nt">--</span><span class="o">&gt;</span> <span class="nt">append</span> <span class="nt">to</span> <span class="nt">binary</span> <span class="nt">string</span><span class="o">:</span> <span class="nt">1011</span>
-<span class="nt">1</span><span class="o">/</span><span class="nt">2</span> <span class="o">=</span> <span class="nt">0</span>  <span class="nt">--</span><span class="o">&gt;</span> <span class="nt">stop</span> <span class="nt">because</span> <span class="nt">we</span> <span class="nt">reach</span> <span class="nt">0</span>
+<div class="highlight"><pre><code class="bash">11%2 <span class="o">=</span> 1 --&gt; append to binary string: 1
+11/2 <span class="o">=</span> 5
+5%2 <span class="o">=</span> 1  --&gt; append to binary string: 11
+5/2 <span class="o">=</span> 2
+2%2 <span class="o">=</span> 0  --&gt; append to binary string: 011
+2/2 <span class="o">=</span> 1
+1%2 <span class="o">=</span> 1  --&gt; append to binary string: 1011
+1/2 <span class="o">=</span> 0  --&gt; stop because we reach 0
 </code></pre></div>
 
 

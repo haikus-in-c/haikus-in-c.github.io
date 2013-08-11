@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+  <meta charset="utf-8">
+  <title>
+    
+      todo -t write-todo-blog-post &ndash;
+    
+    Haikus in C
+  </title>
+
+  <meta name="author" content="Haikus in C" />
+  <meta name="description" content="a place where two columbia cs students share code and talk about their projects" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <link rel="alternate" type="application/rss+xml" href="/atom.xml" />
+
+  <link rel="stylesheet" href="/css/fontawesome.min.css" type="text/css" media="screen, projection" />
+  <link rel="stylesheet" href="/css/base.css" type="text/css" media="screen, projection" />
+  <link rel="stylesheet" href="/css/pygments.css" type="text/css" />
+  <link media="only screen and (max-device-width: 480px)" href="/css/mobile.css" type="text/css" rel="stylesheet" />
+  <link media="only screen and (device-width: 768px)" href="/css/mobile.css" type="text/css" rel="stylesheet" />
+  <link href='http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz' rel='stylesheet' type='text/css'>
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+  <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+  <script type="text/javascript" src="/js/application.js"></script>
+</head>
+
+<body>
+  <section class="header">
+	<h1>
+	  <a href="/">Haikus in C</a>
+	</h1>
+  </section>
+
+  <section class="sidebar">
+
+    <section class="meta">
+      <a href="https://github.com/haikus-in-c" target="_blank"><i class="icon icon-github"></i></a>
+    </section>
+
+    <section class="sections">
+      <ul>
+		<li><a href="/">home</a><li>
+        <li><a href="/about.html">about</a></li>
+        <li><a href="/posts.html">posts</a></li>
+      </ul>
+    </section>
+
+	<section class="shoutout">
+	  <p>made with help from <a href="https://github.com/mojombo/jekyll">jekyll</a> and an adapted theme from
+		<a href="http://zachholman.com/">zach holman</a>.</p>
+	</section>
+
+  </section>
+
+  <section class="content">
+  <h1>
+    <a href="/posts/bash-todo-list-tool">todo -t write-todo-blog-post</a>
+  </h1>
+
+  <section class="byline">
+    by Ian Zapolsky, August 11, 2013
+  </section>
+
+  <p>Recently I read an <a href="http://zachholman.com/posts/inbox-zero-everything-zero/">article by Zach Holman</a>, an engineer at Github and the guy
+whose jekyll theme I adapted to build this site, about a simple (read: <em>very</em> simple)
+todo script he wrote to keep track of his tasks. Here&rsquo;s how it works: any time you&rsquo;re at
+the shell, you can type:</p>
+
+<pre><code>$ todo thing-i-have-to-do
+</code></pre>
+
+<p>This touches a file at ~/Desktop/thing-i-have-to-do. Here&rsquo;s the code of the script itself.</p>
+
+<div class="highlight"><pre><code class="bash"><span class="nb">set</span> -e
+
+touch ~/Desktop/<span class="s2">&quot;$*&quot;</span>
+</code></pre></div>
+
+
+<p>Obviously, this tool assumes that the user keeps a tidy Desktop and cleans it regularly. Otherwise,
+it just wouldn&rsquo;t be feasible to keep track of all the todo files. In his own words, <a href="http://zachholman.com/posts/inbox-zero-everything-zero/">Zach writes</a>,</p>
+
+<blockquote><p>I keep a clean desktop: under three icons at a time, preferably. It made sense to use my
+desktop as a kind of bucket I need to empty&hellip;.</p></blockquote>
+
+<p>Unfortunately, my desktop isn&rsquo;t so clean. I&rsquo;ve got all sorts of music and image files lying around,
+in addition to miscellaneous stuff that&rsquo;s not related at all to programming. So, I decided to heavily
+edit this todo script to accept several command line options that allow a user to set a priority for
+a task (top &ndash; mid &ndash; low), print all the tasks in the todo list, organized by priority, and remove any
+task. All the task files, which are the exact same empty files created with the touch command as in
+Holman&rsquo;s original, are organized under one directory at ~/Desktop/todo. Within todo, there are three
+more directories, todo/top, todo/mid, and todo/low. Each of these represents one priority category.</p>
+
+<p>With my script, any time you&rsquo;re at the shell you can type:</p>
+
+<pre><code>$ todo -t top-priority-thing
+$ todo -m mid-priority-thing
+$ todo -l low-priority-thing
+$ todo other-top-priority-thing
+</code></pre>
+
+<p>The options -t, -m, and -l add a given task to directories top, mid, and low, respectively. If we run
+todo without any option, our task will be automatically added to the top priority category. This is all
+good, but we still have a problem when we want to peruse our list. It&rsquo;s all bundled up inside directories,
+and none of us want to cd back and forth or fiddle with finder to see everything. That&rsquo;s where this
+prompt comes in, which prints the todo list to the shell in an organized manner.</p>
+
+<pre><code>$ todo -p
+</code></pre>
+
+<p>This returns:</p>
+
+<div class="highlight"><pre><code class="bash">/// TOP PRIORITY ///
+  - other-top-priority-thing
+  - top-priority-thing
+
+/// MID PRIORITY ///
+  - mid-priority-thing
+
+/// LOW PRIORITY ///
+  - low-priority-thing
+</code></pre></div>
+
+
+<p>Boom! Finally, one last thing. Removing tasks is probably the easiest operation to complete using just
+regular command line tools. However, for those who are lazy, there&rsquo;s this command, which deletes
+any task you want, so long as you provide the priority directory.</p>
+
+<pre><code>$ todo -r mid/mid-priority-thing
+</code></pre>
+
+<p>That&rsquo;s all, a little todo tool to help you keep track of the stuff you&rsquo;re doing. Thanks to Zach for
+getting the ball rolling. For those interested, here&rsquo;s the full version of my adapted todo script:</p>
+
+<div class="highlight"><pre><code class="bash"><span class="c">#!/bin/sh</span>
+<span class="c">#</span>
+<span class="c"># A customized extension to Zach Holman&#39;s todo script by Ian Zapolsky (8/11/13)</span>
+<span class="c">#</span>
+<span class="c"># Adds the ability to prioritize, delete, and display all the todo files you&#39;ve</span>
+<span class="c"># touched.</span>
+<span class="c">#</span>
+<span class="c"># Usage:</span>
+<span class="c">#</span>
+<span class="c"># todo thing-i-have-to-do    --&gt; left with no argument, we automatically touch</span>
+<span class="c">#                                a file in the top priority directory</span>
+<span class="c"># todo -t thing-i-have-to-do --&gt; creates thing-i-have-to-do as a top priority</span>
+<span class="c">#                                todo</span>
+<span class="c"># todo -m thing-i-have-to-do --&gt; creates thing-i-have-to-do as a mid priority</span>
+<span class="c">#                                todo</span>
+<span class="c"># todo -l thing-i-have-to-do --&gt; creates thing-i-have-to-do as a low priority</span>
+<span class="c">#                                todo</span>
+<span class="c"># todo -p                    --&gt; prints a list of your todos, organized by category</span>
+<span class="c">#</span>
+<span class="c"># todo -r priority-level/thing-i-have-to-do --&gt; removes a todo. note that this</span>
+<span class="c">#                                               command must be run with the priority </span>
+<span class="c">#                                               directory</span>
+
+<span class="nb">set</span> -e
+
+<span class="k">function </span>print_list <span class="o">{</span>
+  <span class="nv">TOP</span><span class="o">=</span>~/Desktop/todo/top/*
+  <span class="nv">MID</span><span class="o">=</span>~/Desktop/todo/mid/*
+  <span class="nv">LOW</span><span class="o">=</span>~/Desktop/todo/low/*
+
+  <span class="nb">echo</span> <span class="s2">&quot;\n/// TOP PRIORITY ///&quot;</span>
+  <span class="k">for </span>f in <span class="nv">$TOP</span>
+  <span class="k">do</span>
+<span class="k">    </span><span class="nv">filename</span><span class="o">=</span><span class="k">$(</span>basename <span class="s2">&quot;$f&quot;</span><span class="k">)</span>
+    <span class="nb">echo</span> <span class="s2">&quot;  - $filename&quot;</span>
+  <span class="k">done</span>
+
+<span class="k">  </span><span class="nb">echo</span> <span class="s2">&quot;\n/// MID PRIORITY ///&quot;</span>
+  <span class="k">for </span>f in <span class="nv">$MID</span>
+  <span class="k">do</span>
+<span class="k">    </span><span class="nv">filename</span><span class="o">=</span><span class="k">$(</span>basename <span class="s2">&quot;$f&quot;</span><span class="k">)</span>
+    <span class="nb">echo</span> <span class="s2">&quot;  - $filename&quot;</span>
+  <span class="k">done</span>
+
+<span class="k">  </span><span class="nb">echo</span> <span class="s2">&quot;\n/// LOW PRIORITY ///&quot;</span>
+  <span class="k">for </span>f in <span class="nv">$LOW</span>
+  <span class="k">do</span>
+<span class="k">    </span><span class="nv">filename</span><span class="o">=</span><span class="k">$(</span>basename <span class="s2">&quot;$f&quot;</span><span class="k">)</span>
+    <span class="nb">echo</span> <span class="s2">&quot;  - $filename&quot;</span>
+  <span class="k">done</span>
+<span class="k">  </span><span class="nb">echo</span> <span class="s2">&quot;\n&quot;</span>
+<span class="o">}</span>
+
+<span class="nv">flag</span><span class="o">=</span>0
+<span class="k">while </span><span class="nb">getopts</span> <span class="s2">&quot;:t:m:l:r:p&quot;</span> opt; <span class="k">do</span>
+<span class="k">  case</span> <span class="nv">$opt</span> in
+    t<span class="o">)</span>
+      touch ~/Desktop/todo/top/<span class="s2">&quot;${*:2}&quot;</span> &gt;&amp;2
+      <span class="nv">flag</span><span class="o">=</span>1
+      ;;
+    m<span class="o">)</span>
+      touch ~/Desktop/todo/mid/<span class="s2">&quot;${*:2}&quot;</span> &gt;&amp;2
+      <span class="nv">flag</span><span class="o">=</span>1
+      ;;
+    l<span class="o">)</span>
+      touch ~/Desktop/todo/low/<span class="s2">&quot;${*:2}&quot;</span> &gt;&amp;2
+      <span class="nv">flag</span><span class="o">=</span>1
+      ;;
+    p<span class="o">)</span>
+      print_list
+      <span class="nv">flag</span><span class="o">=</span>1
+      ;;
+    r<span class="o">)</span>
+      rm ~/Desktop/todo/<span class="s2">&quot;${*:2}&quot;</span> &gt;&amp;2
+      <span class="nv">flag</span><span class="o">=</span>1
+      ;;
+    :<span class="o">)</span>
+      touch ~/Desktop/todo/top/<span class="s2">&quot;${*:2}&quot;</span> &gt;&amp;2
+      <span class="nv">flag</span><span class="o">=</span>1
+      ;;
+    <span class="se">\?</span><span class="o">)</span>
+      <span class="nb">echo</span> <span class="s2">&quot;Invalid option: -$OPTARG&quot;</span> &gt;&amp;2
+      <span class="nb">exit </span>1
+      ;;
+  <span class="k">esac</span>
+<span class="k">done</span>
+
+<span class="k">if</span> <span class="o">[</span> <span class="s2">&quot;$flag&quot;</span> <span class="o">=</span> <span class="s2">&quot;0&quot;</span> <span class="o">]</span>; <span class="k">then</span>
+<span class="k">    </span>touch ~/Desktop/todo/top/<span class="s2">&quot;$*&quot;</span>
+<span class="k">fi</span>
+</code></pre></div>
+
+
+
+
+
+<!-- possibly update this later
+   TODO: bio here
+  <section class="meta">
+    <h3>Discussion, links, and tweets</h3>
+    <section class="copy">
+      <a href="https://twitter.com/" target="_blank">
+        <img src="?s=142" height="50" width="50" />
+      </a>
+
+      <p>
+        I'm a developer at GitHub. <a href="https://twitter.com/" target="_blank">Follow me on Twitter</a>;
+        you'll enjoy my tweets. I take care to carefully craft each one. Or at least aim to make
+        you giggle. Or offended. One of those two&mdash; I haven't decided which yet.
+      </p>
+
+      <a href="http://twitter.com/share" class="twitter-share-button" data-count="none" data-via="">Tweet</a>
+      <a href="http://twitter.com/" class="twitter-follow-button" data-show-count="false">Follow @</a>
+      <script src="http://platform.twitter.com/widgets.js" type="text/javascript"></script>
+    </section>
+  </section>
+-->
+
+<hr>
+  
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+      /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+      var disqus_shortname = 'haikus'; // required: replace example with your forum shortname
+
+      /* * * DON'T EDIT BELOW THIS LINE * * */
+      (function() {
+          var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+          dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+  
+
+</section>
+
+
+</body>
+
+</html>

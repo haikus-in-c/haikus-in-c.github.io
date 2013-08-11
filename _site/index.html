@@ -58,6 +58,181 @@
   <section class="content">
   
 	<h1>
+	  <a href="/posts/bash-todo-list-tool">todo -t write-todo-blog-post</a>
+	</h1>
+	
+	<section class="byline">
+	  by Ian Zapolsky, Aug 11, 2013
+	</section>
+
+	<p><p>Recently I read an <a href="http://zachholman.com/posts/inbox-zero-everything-zero/">article by Zach Holman</a>, an engineer at Github and the guy
+whose jekyll theme I adapted to build this site, about a simple (read: <em>very</em> simple)
+todo script he wrote to keep track of his tasks. Here&rsquo;s how it works: any time you&rsquo;re at
+the shell, you can type:</p>
+
+<pre><code>$ todo thing-i-have-to-do
+</code></pre>
+
+<p>This touches a file at ~/Desktop/thing-i-have-to-do. Here&rsquo;s the code of the script itself.</p>
+
+<div class="highlight"><pre><code class="bash"><span class="nb">set</span> -e
+
+touch ~/Desktop/<span class="s2">&quot;$*&quot;</span>
+</code></pre></div>
+
+
+<p>Obviously, this tool assumes that the user keeps a tidy Desktop and cleans it regularly. Otherwise,
+it just wouldn&rsquo;t be feasible to keep track of all the todo files. In his own words, <a href="http://zachholman.com/posts/inbox-zero-everything-zero/">Zach writes</a>,</p>
+
+<blockquote><p>I keep a clean desktop: under three icons at a time, preferably. It made sense to use my
+desktop as a kind of bucket I need to empty&hellip;.</p></blockquote>
+
+<p>Unfortunately, my desktop isn&rsquo;t so clean. I&rsquo;ve got all sorts of music and image files lying around,
+in addition to miscellaneous stuff that&rsquo;s not related at all to programming. So, I decided to heavily
+edit this todo script to accept several command line options that allow a user to set a priority for
+a task (top &ndash; mid &ndash; low), print all the tasks in the todo list, organized by priority, and remove any
+task. All the task files, which are the exact same empty files created with the touch command as in
+Holman&rsquo;s original, are organized under one directory at ~/Desktop/todo. Within todo, there are three
+more directories, todo/top, todo/mid, and todo/low. Each of these represents one priority category.</p>
+
+<p>With my script, any time you&rsquo;re at the shell you can type:</p>
+
+<pre><code>$ todo -t top-priority-thing
+$ todo -m mid-priority-thing
+$ todo -l low-priority-thing
+$ todo other-top-priority-thing
+</code></pre>
+
+<p>The options -t, -m, and -l add a given task to directories top, mid, and low, respectively. If we run
+todo without any option, our task will be automatically added to the top priority category. This is all
+good, but we still have a problem when we want to peruse our list. It&rsquo;s all bundled up inside directories,
+and none of us want to cd back and forth or fiddle with finder to see everything. That&rsquo;s where this
+prompt comes in, which prints the todo list to the shell in an organized manner.</p>
+
+<pre><code>$ todo -p
+</code></pre>
+
+<p>This returns:</p>
+
+<div class="highlight"><pre><code class="bash">/// TOP PRIORITY ///
+  - other-top-priority-thing
+  - top-priority-thing
+
+/// MID PRIORITY ///
+  - mid-priority-thing
+
+/// LOW PRIORITY ///
+  - low-priority-thing
+</code></pre></div>
+
+
+<p>Boom! Finally, one last thing. Removing tasks is probably the easiest operation to complete using just
+regular command line tools. However, for those who are lazy, there&rsquo;s this command, which deletes
+any task you want, so long as you provide the priority directory.</p>
+
+<pre><code>$ todo -r mid/mid-priority-thing
+</code></pre>
+
+<p>That&rsquo;s all, a little todo tool to help you keep track of the stuff you&rsquo;re doing. Thanks to Zach for
+getting the ball rolling. For those interested, here&rsquo;s the full version of my adapted todo script:</p>
+
+<div class="highlight"><pre><code class="bash"><span class="c">#!/bin/sh</span>
+<span class="c">#</span>
+<span class="c"># A customized extension to Zach Holman&#39;s todo script by Ian Zapolsky (8/11/13)</span>
+<span class="c">#</span>
+<span class="c"># Adds the ability to prioritize, delete, and display all the todo files you&#39;ve</span>
+<span class="c"># touched.</span>
+<span class="c">#</span>
+<span class="c"># Usage:</span>
+<span class="c">#</span>
+<span class="c"># todo thing-i-have-to-do    --&gt; left with no argument, we automatically touch</span>
+<span class="c">#                                a file in the top priority directory</span>
+<span class="c"># todo -t thing-i-have-to-do --&gt; creates thing-i-have-to-do as a top priority</span>
+<span class="c">#                                todo</span>
+<span class="c"># todo -m thing-i-have-to-do --&gt; creates thing-i-have-to-do as a mid priority</span>
+<span class="c">#                                todo</span>
+<span class="c"># todo -l thing-i-have-to-do --&gt; creates thing-i-have-to-do as a low priority</span>
+<span class="c">#                                todo</span>
+<span class="c"># todo -p                    --&gt; prints a list of your todos, organized by category</span>
+<span class="c">#</span>
+<span class="c"># todo -r priority-level/thing-i-have-to-do --&gt; removes a todo. note that this</span>
+<span class="c">#                                               command must be run with the priority </span>
+<span class="c">#                                               directory</span>
+
+<span class="nb">set</span> -e
+
+<span class="k">function </span>print_list <span class="o">{</span>
+  <span class="nv">TOP</span><span class="o">=</span>~/Desktop/todo/top/*
+  <span class="nv">MID</span><span class="o">=</span>~/Desktop/todo/mid/*
+  <span class="nv">LOW</span><span class="o">=</span>~/Desktop/todo/low/*
+
+  <span class="nb">echo</span> <span class="s2">&quot;\n/// TOP PRIORITY ///&quot;</span>
+  <span class="k">for </span>f in <span class="nv">$TOP</span>
+  <span class="k">do</span>
+<span class="k">    </span><span class="nv">filename</span><span class="o">=</span><span class="k">$(</span>basename <span class="s2">&quot;$f&quot;</span><span class="k">)</span>
+    <span class="nb">echo</span> <span class="s2">&quot;  - $filename&quot;</span>
+  <span class="k">done</span>
+
+<span class="k">  </span><span class="nb">echo</span> <span class="s2">&quot;\n/// MID PRIORITY ///&quot;</span>
+  <span class="k">for </span>f in <span class="nv">$MID</span>
+  <span class="k">do</span>
+<span class="k">    </span><span class="nv">filename</span><span class="o">=</span><span class="k">$(</span>basename <span class="s2">&quot;$f&quot;</span><span class="k">)</span>
+    <span class="nb">echo</span> <span class="s2">&quot;  - $filename&quot;</span>
+  <span class="k">done</span>
+
+<span class="k">  </span><span class="nb">echo</span> <span class="s2">&quot;\n/// LOW PRIORITY ///&quot;</span>
+  <span class="k">for </span>f in <span class="nv">$LOW</span>
+  <span class="k">do</span>
+<span class="k">    </span><span class="nv">filename</span><span class="o">=</span><span class="k">$(</span>basename <span class="s2">&quot;$f&quot;</span><span class="k">)</span>
+    <span class="nb">echo</span> <span class="s2">&quot;  - $filename&quot;</span>
+  <span class="k">done</span>
+<span class="k">  </span><span class="nb">echo</span> <span class="s2">&quot;\n&quot;</span>
+<span class="o">}</span>
+
+<span class="nv">flag</span><span class="o">=</span>0
+<span class="k">while </span><span class="nb">getopts</span> <span class="s2">&quot;:t:m:l:r:p&quot;</span> opt; <span class="k">do</span>
+<span class="k">  case</span> <span class="nv">$opt</span> in
+    t<span class="o">)</span>
+      touch ~/Desktop/todo/top/<span class="s2">&quot;${*:2}&quot;</span> &gt;&amp;2
+      <span class="nv">flag</span><span class="o">=</span>1
+      ;;
+    m<span class="o">)</span>
+      touch ~/Desktop/todo/mid/<span class="s2">&quot;${*:2}&quot;</span> &gt;&amp;2
+      <span class="nv">flag</span><span class="o">=</span>1
+      ;;
+    l<span class="o">)</span>
+      touch ~/Desktop/todo/low/<span class="s2">&quot;${*:2}&quot;</span> &gt;&amp;2
+      <span class="nv">flag</span><span class="o">=</span>1
+      ;;
+    p<span class="o">)</span>
+      print_list
+      <span class="nv">flag</span><span class="o">=</span>1
+      ;;
+    r<span class="o">)</span>
+      rm ~/Desktop/todo/<span class="s2">&quot;${*:2}&quot;</span> &gt;&amp;2
+      <span class="nv">flag</span><span class="o">=</span>1
+      ;;
+    :<span class="o">)</span>
+      touch ~/Desktop/todo/top/<span class="s2">&quot;${*:2}&quot;</span> &gt;&amp;2
+      <span class="nv">flag</span><span class="o">=</span>1
+      ;;
+    <span class="se">\?</span><span class="o">)</span>
+      <span class="nb">echo</span> <span class="s2">&quot;Invalid option: -$OPTARG&quot;</span> &gt;&amp;2
+      <span class="nb">exit </span>1
+      ;;
+  <span class="k">esac</span>
+<span class="k">done</span>
+
+<span class="k">if</span> <span class="o">[</span> <span class="s2">&quot;$flag&quot;</span> <span class="o">=</span> <span class="s2">&quot;0&quot;</span> <span class="o">]</span>; <span class="k">then</span>
+<span class="k">    </span>touch ~/Desktop/todo/top/<span class="s2">&quot;$*&quot;</span>
+<span class="k">fi</span>
+</code></pre></div>
+
+
+
+</p>
+  
+	<h1>
 	  <a href="/posts/jugglefest">Can You Yodle and Juggle at the Same Time?</a>
 	</h1>
 	
@@ -270,14 +445,14 @@ in this case would be (11%4 = 3), a very unhelpful number in binary.</p>
 in terms of 2<sup>n</sup>, which will always either be a 1 or a 0, in order to find the value of the nth
 binary slot from the right.</p>
 
-<div class="highlight"><pre><code class="css"><span class="nt">11</span><span class="o">%</span><span class="nt">2</span> <span class="o">=</span> <span class="nt">1</span> <span class="nt">--</span><span class="o">&gt;</span> <span class="nt">append</span> <span class="nt">to</span> <span class="nt">binary</span> <span class="nt">string</span><span class="o">:</span> <span class="nt">1</span>
-<span class="nt">11</span><span class="o">/</span><span class="nt">2</span> <span class="o">=</span> <span class="nt">5</span>
-<span class="nt">5</span><span class="o">%</span><span class="nt">2</span> <span class="o">=</span> <span class="nt">1</span>  <span class="nt">--</span><span class="o">&gt;</span> <span class="nt">append</span> <span class="nt">to</span> <span class="nt">binary</span> <span class="nt">string</span><span class="o">:</span> <span class="nt">11</span>
-<span class="nt">5</span><span class="o">/</span><span class="nt">2</span> <span class="o">=</span> <span class="nt">2</span>
-<span class="nt">2</span><span class="o">%</span><span class="nt">2</span> <span class="o">=</span> <span class="nt">0</span>  <span class="nt">--</span><span class="o">&gt;</span> <span class="nt">append</span> <span class="nt">to</span> <span class="nt">binary</span> <span class="nt">string</span><span class="o">:</span> <span class="nt">011</span>
-<span class="nt">2</span><span class="o">/</span><span class="nt">2</span> <span class="o">=</span> <span class="nt">1</span>
-<span class="nt">1</span><span class="o">%</span><span class="nt">2</span> <span class="o">=</span> <span class="nt">1</span>  <span class="nt">--</span><span class="o">&gt;</span> <span class="nt">append</span> <span class="nt">to</span> <span class="nt">binary</span> <span class="nt">string</span><span class="o">:</span> <span class="nt">1011</span>
-<span class="nt">1</span><span class="o">/</span><span class="nt">2</span> <span class="o">=</span> <span class="nt">0</span>  <span class="nt">--</span><span class="o">&gt;</span> <span class="nt">stop</span> <span class="nt">because</span> <span class="nt">we</span> <span class="nt">reach</span> <span class="nt">0</span>
+<div class="highlight"><pre><code class="bash">11%2 <span class="o">=</span> 1 --&gt; append to binary string: 1
+11/2 <span class="o">=</span> 5
+5%2 <span class="o">=</span> 1  --&gt; append to binary string: 11
+5/2 <span class="o">=</span> 2
+2%2 <span class="o">=</span> 0  --&gt; append to binary string: 011
+2/2 <span class="o">=</span> 1
+1%2 <span class="o">=</span> 1  --&gt; append to binary string: 1011
+1/2 <span class="o">=</span> 0  --&gt; stop because we reach 0
 </code></pre></div>
 
 

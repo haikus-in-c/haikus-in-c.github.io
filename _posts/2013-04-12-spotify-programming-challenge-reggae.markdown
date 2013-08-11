@@ -32,7 +32,7 @@ The central idea is to find the remainder of the number you're converting (in th
 in terms of 2^n, which will always either be a 1 or a 0, in order to find the value of the nth 
 binary slot from the right.
 
-{% highlight css %}
+{% highlight bash %}
 11%2 = 1 --> append to binary string: 1
 11/2 = 5
 5%2 = 1  --> append to binary string: 11
