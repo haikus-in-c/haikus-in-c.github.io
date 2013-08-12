@@ -90,7 +90,7 @@ desktop as a kind of bucket I need to empty&hellip;.</p></blockquote>
 <p>Unfortunately, my desktop isn&rsquo;t so clean. I&rsquo;ve got all sorts of music and image files lying around,
 in addition to miscellaneous stuff that&rsquo;s not related at all to programming. So, I decided to heavily
 edit this todo script to accept several command line options that allow a user to set a priority for
-a task (top &ndash; mid &ndash; low), print all the tasks in the todo list, organized by priority, and remove any
+a task (top - mid - low), print all the tasks in the todo list, organized by priority, and remove any
 task. All the task files, which are the exact same empty files created with the touch command as in
 Holman&rsquo;s original, are organized under one directory at ~/Desktop/todo. Within todo, there are three
 more directories, todo/top, todo/mid, and todo/low. Each of these represents one priority category.</p>
@@ -134,102 +134,7 @@ any task you want, so long as you provide the priority directory.</p>
 </code></pre>
 
 <p>That&rsquo;s all, a little todo tool to help you keep track of the stuff you&rsquo;re doing. Thanks to Zach for
-getting the ball rolling. For those interested, here&rsquo;s the full version of my adapted todo script:</p>
-
-<div class="highlight"><pre><code class="bash"><span class="c">#!/bin/sh</span>
-<span class="c">#</span>
-<span class="c"># A customized extension to Zach Holman&#39;s todo script by Ian Zapolsky (8/11/13)</span>
-<span class="c">#</span>
-<span class="c"># Adds the ability to prioritize, delete, and display all the todo files you&#39;ve</span>
-<span class="c"># touched.</span>
-<span class="c">#</span>
-<span class="c"># Usage:</span>
-<span class="c">#</span>
-<span class="c"># todo thing-i-have-to-do    --&gt; left with no argument, we automatically touch</span>
-<span class="c">#                                a file in the top priority directory</span>
-<span class="c"># todo -t thing-i-have-to-do --&gt; creates thing-i-have-to-do as a top priority</span>
-<span class="c">#                                todo</span>
-<span class="c"># todo -m thing-i-have-to-do --&gt; creates thing-i-have-to-do as a mid priority</span>
-<span class="c">#                                todo</span>
-<span class="c"># todo -l thing-i-have-to-do --&gt; creates thing-i-have-to-do as a low priority</span>
-<span class="c">#                                todo</span>
-<span class="c"># todo -p                    --&gt; prints a list of your todos, organized by category</span>
-<span class="c">#</span>
-<span class="c"># todo -r priority-level/thing-i-have-to-do --&gt; removes a todo. note that this</span>
-<span class="c">#                                               command must be run with the priority </span>
-<span class="c">#                                               directory</span>
-
-<span class="nb">set</span> -e
-
-<span class="k">function </span>print_list <span class="o">{</span>
-  <span class="nv">TOP</span><span class="o">=</span>~/Desktop/todo/top/*
-  <span class="nv">MID</span><span class="o">=</span>~/Desktop/todo/mid/*
-  <span class="nv">LOW</span><span class="o">=</span>~/Desktop/todo/low/*
-
-  <span class="nb">echo</span> <span class="s2">&quot;\n/// TOP PRIORITY ///&quot;</span>
-  <span class="k">for </span>f in <span class="nv">$TOP</span>
-  <span class="k">do</span>
-<span class="k">    </span><span class="nv">filename</span><span class="o">=</span><span class="k">$(</span>basename <span class="s2">&quot;$f&quot;</span><span class="k">)</span>
-    <span class="nb">echo</span> <span class="s2">&quot;  - $filename&quot;</span>
-  <span class="k">done</span>
-
-<span class="k">  </span><span class="nb">echo</span> <span class="s2">&quot;\n/// MID PRIORITY ///&quot;</span>
-  <span class="k">for </span>f in <span class="nv">$MID</span>
-  <span class="k">do</span>
-<span class="k">    </span><span class="nv">filename</span><span class="o">=</span><span class="k">$(</span>basename <span class="s2">&quot;$f&quot;</span><span class="k">)</span>
-    <span class="nb">echo</span> <span class="s2">&quot;  - $filename&quot;</span>
-  <span class="k">done</span>
-
-<span class="k">  </span><span class="nb">echo</span> <span class="s2">&quot;\n/// LOW PRIORITY ///&quot;</span>
-  <span class="k">for </span>f in <span class="nv">$LOW</span>
-  <span class="k">do</span>
-<span class="k">    </span><span class="nv">filename</span><span class="o">=</span><span class="k">$(</span>basename <span class="s2">&quot;$f&quot;</span><span class="k">)</span>
-    <span class="nb">echo</span> <span class="s2">&quot;  - $filename&quot;</span>
-  <span class="k">done</span>
-<span class="k">  </span><span class="nb">echo</span> <span class="s2">&quot;\n&quot;</span>
-<span class="o">}</span>
-
-<span class="nv">flag</span><span class="o">=</span>0
-<span class="k">while </span><span class="nb">getopts</span> <span class="s2">&quot;:t:m:l:r:p&quot;</span> opt; <span class="k">do</span>
-<span class="k">  case</span> <span class="nv">$opt</span> in
-    t<span class="o">)</span>
-      touch ~/Desktop/todo/top/<span class="s2">&quot;${*:2}&quot;</span> &gt;&amp;2
-      <span class="nv">flag</span><span class="o">=</span>1
-      ;;
-    m<span class="o">)</span>
-      touch ~/Desktop/todo/mid/<span class="s2">&quot;${*:2}&quot;</span> &gt;&amp;2
-      <span class="nv">flag</span><span class="o">=</span>1
-      ;;
-    l<span class="o">)</span>
-      touch ~/Desktop/todo/low/<span class="s2">&quot;${*:2}&quot;</span> &gt;&amp;2
-      <span class="nv">flag</span><span class="o">=</span>1
-      ;;
-    p<span class="o">)</span>
-      print_list
-      <span class="nv">flag</span><span class="o">=</span>1
-      ;;
-    r<span class="o">)</span>
-      rm ~/Desktop/todo/<span class="s2">&quot;${*:2}&quot;</span> &gt;&amp;2
-      <span class="nv">flag</span><span class="o">=</span>1
-      ;;
-    :<span class="o">)</span>
-      touch ~/Desktop/todo/top/<span class="s2">&quot;${*:2}&quot;</span> &gt;&amp;2
-      <span class="nv">flag</span><span class="o">=</span>1
-      ;;
-    <span class="se">\?</span><span class="o">)</span>
-      <span class="nb">echo</span> <span class="s2">&quot;Invalid option: -$OPTARG&quot;</span> &gt;&amp;2
-      <span class="nb">exit </span>1
-      ;;
-  <span class="k">esac</span>
-<span class="k">done</span>
-
-<span class="k">if</span> <span class="o">[</span> <span class="s2">&quot;$flag&quot;</span> <span class="o">=</span> <span class="s2">&quot;0&quot;</span> <span class="o">]</span>; <span class="k">then</span>
-<span class="k">    </span>touch ~/Desktop/todo/top/<span class="s2">&quot;$*&quot;</span>
-<span class="k">fi</span>
-</code></pre></div>
-
-
-
+getting the ball rolling. For those interested, here&rsquo;s the <a href="https://github.com/haikus-in-c/haikus-in-c/blob/master/2013.8/todo/todo">full version of my adapted todo script</a>.</p>
 
 
 <!-- possibly update this later

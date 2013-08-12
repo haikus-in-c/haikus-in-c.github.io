@@ -4,7 +4,7 @@
  <title>Haikus in C</title>
  <link href="http://haikus-in-c.github.io/atom.xml" rel="self"/>
  <link href="http://haikus-in-c.github.io/"/>
- <updated>2013-08-11T02:09:33-03:00</updated>
+ <updated>2013-08-12T16:05:04+00:00</updated>
  <id>http://haikus-in-c.github.io</id>
  <author>
    <name>Haikus in C</name>
@@ -14,7 +14,7 @@
  <entry>
    <title>todo -t write-todo-blog-post</title>
    <link href="http://haikus-in-c.github.io/posts/bash-todo-list-tool"/>
-   <updated>2013-08-11T00:00:00-03:00</updated>
+   <updated>2013-08-11T00:00:00+00:00</updated>
    <id>http://haikus-in-c.github.io/posts/bash-todo-list-tool</id>
    <content type="html">&lt;p&gt;Recently I read an &lt;a href=&quot;http://zachholman.com/posts/inbox-zero-everything-zero/&quot;&gt;article by Zach Holman&lt;/a&gt;, an engineer at Github and the guy
 whose jekyll theme I adapted to build this site, about a simple (read: &lt;em&gt;very&lt;/em&gt; simple)
@@ -42,7 +42,7 @@ desktop as a kind of bucket I need to empty&amp;hellip;.&lt;/p&gt;&lt;/blockquot
 &lt;p&gt;Unfortunately, my desktop isn&amp;rsquo;t so clean. I&amp;rsquo;ve got all sorts of music and image files lying around,
 in addition to miscellaneous stuff that&amp;rsquo;s not related at all to programming. So, I decided to heavily
 edit this todo script to accept several command line options that allow a user to set a priority for
-a task (top &amp;ndash; mid &amp;ndash; low), print all the tasks in the todo list, organized by priority, and remove any
+a task (top - mid - low), print all the tasks in the todo list, organized by priority, and remove any
 task. All the task files, which are the exact same empty files created with the touch command as in
 Holman&amp;rsquo;s original, are organized under one directory at ~/Desktop/todo. Within todo, there are three
 more directories, todo/top, todo/mid, and todo/low. Each of these represents one priority category.&lt;/p&gt;
@@ -86,114 +86,19 @@ any task you want, so long as you provide the priority directory.&lt;/p&gt;
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;That&amp;rsquo;s all, a little todo tool to help you keep track of the stuff you&amp;rsquo;re doing. Thanks to Zach for
-getting the ball rolling. For those interested, here&amp;rsquo;s the full version of my adapted todo script:&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;&lt;span class=&quot;c&quot;&gt;#!/bin/sh&lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;#&lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;# A customized extension to Zach Holman&amp;#39;s todo script by Ian Zapolsky (8/11/13)&lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;#&lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;# Adds the ability to prioritize, delete, and display all the todo files you&amp;#39;ve&lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;# touched.&lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;#&lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;# Usage:&lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;#&lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;# todo thing-i-have-to-do    --&amp;gt; left with no argument, we automatically touch&lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;#                                a file in the top priority directory&lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;# todo -t thing-i-have-to-do --&amp;gt; creates thing-i-have-to-do as a top priority&lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;#                                todo&lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;# todo -m thing-i-have-to-do --&amp;gt; creates thing-i-have-to-do as a mid priority&lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;#                                todo&lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;# todo -l thing-i-have-to-do --&amp;gt; creates thing-i-have-to-do as a low priority&lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;#                                todo&lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;# todo -p                    --&amp;gt; prints a list of your todos, organized by category&lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;#&lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;# todo -r priority-level/thing-i-have-to-do --&amp;gt; removes a todo. note that this&lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;#                                               command must be run with the priority &lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;#                                               directory&lt;/span&gt;
-
-&lt;span class=&quot;nb&quot;&gt;set&lt;/span&gt; -e
-
-&lt;span class=&quot;k&quot;&gt;function &lt;/span&gt;print_list &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-  &lt;span class=&quot;nv&quot;&gt;TOP&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;~/Desktop/todo/top/*
-  &lt;span class=&quot;nv&quot;&gt;MID&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;~/Desktop/todo/mid/*
-  &lt;span class=&quot;nv&quot;&gt;LOW&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;~/Desktop/todo/low/*
-
-  &lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;\n/// TOP PRIORITY ///&amp;quot;&lt;/span&gt;
-  &lt;span class=&quot;k&quot;&gt;for &lt;/span&gt;f in &lt;span class=&quot;nv&quot;&gt;$TOP&lt;/span&gt;
-  &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;    &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;filename&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;$(&lt;/span&gt;basename &lt;span class=&quot;s2&quot;&gt;&amp;quot;$f&amp;quot;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;  - $filename&amp;quot;&lt;/span&gt;
-  &lt;span class=&quot;k&quot;&gt;done&lt;/span&gt;
-
-&lt;span class=&quot;k&quot;&gt;  &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;\n/// MID PRIORITY ///&amp;quot;&lt;/span&gt;
-  &lt;span class=&quot;k&quot;&gt;for &lt;/span&gt;f in &lt;span class=&quot;nv&quot;&gt;$MID&lt;/span&gt;
-  &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;    &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;filename&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;$(&lt;/span&gt;basename &lt;span class=&quot;s2&quot;&gt;&amp;quot;$f&amp;quot;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;  - $filename&amp;quot;&lt;/span&gt;
-  &lt;span class=&quot;k&quot;&gt;done&lt;/span&gt;
-
-&lt;span class=&quot;k&quot;&gt;  &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;\n/// LOW PRIORITY ///&amp;quot;&lt;/span&gt;
-  &lt;span class=&quot;k&quot;&gt;for &lt;/span&gt;f in &lt;span class=&quot;nv&quot;&gt;$LOW&lt;/span&gt;
-  &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;    &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;filename&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;$(&lt;/span&gt;basename &lt;span class=&quot;s2&quot;&gt;&amp;quot;$f&amp;quot;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;  - $filename&amp;quot;&lt;/span&gt;
-  &lt;span class=&quot;k&quot;&gt;done&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;  &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;\n&amp;quot;&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-
-&lt;span class=&quot;nv&quot;&gt;flag&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;0
-&lt;span class=&quot;k&quot;&gt;while &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;getopts&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;:t:m:l:r:p&amp;quot;&lt;/span&gt; opt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;  case&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$opt&lt;/span&gt; in
-    t&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-      touch ~/Desktop/todo/top/&lt;span class=&quot;s2&quot;&gt;&amp;quot;${*:2}&amp;quot;&lt;/span&gt; &amp;gt;&amp;amp;2
-      &lt;span class=&quot;nv&quot;&gt;flag&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;1
-      ;;
-    m&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-      touch ~/Desktop/todo/mid/&lt;span class=&quot;s2&quot;&gt;&amp;quot;${*:2}&amp;quot;&lt;/span&gt; &amp;gt;&amp;amp;2
-      &lt;span class=&quot;nv&quot;&gt;flag&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;1
-      ;;
-    l&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-      touch ~/Desktop/todo/low/&lt;span class=&quot;s2&quot;&gt;&amp;quot;${*:2}&amp;quot;&lt;/span&gt; &amp;gt;&amp;amp;2
-      &lt;span class=&quot;nv&quot;&gt;flag&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;1
-      ;;
-    p&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-      print_list
-      &lt;span class=&quot;nv&quot;&gt;flag&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;1
-      ;;
-    r&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-      rm ~/Desktop/todo/&lt;span class=&quot;s2&quot;&gt;&amp;quot;${*:2}&amp;quot;&lt;/span&gt; &amp;gt;&amp;amp;2
-      &lt;span class=&quot;nv&quot;&gt;flag&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;1
-      ;;
-    :&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-      touch ~/Desktop/todo/top/&lt;span class=&quot;s2&quot;&gt;&amp;quot;${*:2}&amp;quot;&lt;/span&gt; &amp;gt;&amp;amp;2
-      &lt;span class=&quot;nv&quot;&gt;flag&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;1
-      ;;
-    &lt;span class=&quot;se&quot;&gt;\?&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-      &lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;Invalid option: -$OPTARG&amp;quot;&lt;/span&gt; &amp;gt;&amp;amp;2
-      &lt;span class=&quot;nb&quot;&gt;exit &lt;/span&gt;1
-      ;;
-  &lt;span class=&quot;k&quot;&gt;esac&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;done&lt;/span&gt;
-
-&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;$flag&amp;quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;0&amp;quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;; &lt;span class=&quot;k&quot;&gt;then&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;    &lt;/span&gt;touch ~/Desktop/todo/top/&lt;span class=&quot;s2&quot;&gt;&amp;quot;$*&amp;quot;&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;fi&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
-
-
+getting the ball rolling. For those interested, here&amp;rsquo;s the &lt;a href=&quot;https://github.com/haikus-in-c/haikus-in-c/blob/master/2013.8/todo/todo&quot;&gt;full version of my adapted todo script&lt;/a&gt;.&lt;/p&gt;
 </content>
  </entry>
  
  <entry>
    <title>Can You Yodle and Juggle at the Same Time?</title>
    <link href="http://haikus-in-c.github.io/posts/jugglefest"/>
-   <updated>2013-05-24T00:00:00-03:00</updated>
+   <updated>2013-05-24T00:00:00+00:00</updated>
    <id>http://haikus-in-c.github.io/posts/jugglefest</id>
    <content type="html">&lt;p&gt;In the careers section of startup &lt;a href=&quot;http://www.yodle.com/&quot;&gt;Yodle&amp;rsquo;s&lt;/a&gt; website, there are a couple programming
 problems, one of which is called &lt;a href=&quot;http://www.yodlecareers.com/puzzles/jugglefest.html&quot;&gt;JuggleFest&lt;/a&gt;. Here&amp;rsquo;s a summary: given a
 list of x circuits and y jugglers, where each juggler has a certain number of circuit
-preferences ranked 1 &amp;ndash; n, assign the jugglers to circuits evenly such that the number of
+preferences ranked 1 - n, assign the jugglers to circuits evenly such that the number of
 jugglers in each circuit is y/x and no juggler could switch to a circuit that they prefer
 more than the one they are already assigned to &lt;em&gt;and&lt;/em&gt; be a better fit for that circuit than
 one of the other jugglers assigned to it. Whew.&lt;/p&gt;
@@ -252,7 +157,7 @@ check all Circuits for an under-full Circuit and add it there.&lt;/p&gt;&lt;/li&
  <entry>
    <title>Let's Get Funky</title>
    <link href="http://haikus-in-c.github.io/posts/spotify-programming-challenge-funk"/>
-   <updated>2013-04-26T00:00:00-03:00</updated>
+   <updated>2013-04-26T00:00:00+00:00</updated>
    <id>http://haikus-in-c.github.io/posts/spotify-programming-challenge-funk</id>
    <content type="html">&lt;p&gt;Today we return to &lt;a href=&quot;https://www.spotify.com/us/jobs/tech/&quot;&gt;Spotify&amp;rsquo;s hallowed puzzle page&lt;/a&gt; for the second of the three puzzles
 they offer there. This one, the middle brother in between &lt;a href=&quot;http://haikus-in-c.com/posts/spotify-programming-challenge-reggae/&quot;&gt;Reggae&lt;/a&gt; and &lt;a href=&quot;http://haikus-in-c.com&quot;&gt;Heavy Metal&lt;/a&gt;,
@@ -363,7 +268,7 @@ and return the first m songs (as specified in the input) in descending order of 
  <entry>
    <title>So This is What Reggae Feels Like</title>
    <link href="http://haikus-in-c.github.io/posts/spotify-programming-challenge-reggae"/>
-   <updated>2013-04-12T00:00:00-03:00</updated>
+   <updated>2013-04-12T00:00:00+00:00</updated>
    <id>http://haikus-in-c.github.io/posts/spotify-programming-challenge-reggae</id>
    <content type="html">&lt;p&gt;On &lt;a href=&quot;https://www.spotify.com/us/jobs/tech/&quot;&gt;Spotify&amp;rsquo;s puzzle page&lt;/a&gt;, they&amp;rsquo;ve got three tech puzzles for potential hires
 to play around with. This is the first of them, whose difficulty is rated &lt;em&gt;Reggae&lt;/em&gt;.&lt;/p&gt;
@@ -441,7 +346,7 @@ from the end of the String, adding increasing powers of 2 to a final result.&lt;
  <entry>
    <title>Welcome</title>
    <link href="http://haikus-in-c.github.io/posts/welcome"/>
-   <updated>2013-04-05T00:00:00-03:00</updated>
+   <updated>2013-04-05T00:00:00+00:00</updated>
    <id>http://haikus-in-c.github.io/posts/welcome</id>
    <content type="html">&lt;p&gt;Welcome to &lt;a href=&quot;https://haikus-in-c.github.io&quot;&gt;Haikus in C&lt;/a&gt;, the programming blog of Ian and Ruchir, two
 CS students at Columbia.&lt;/p&gt;
