@@ -58,6 +58,70 @@
   <section class="content">
   
 	<h1>
+	  <a href="/posts/triangle-sum">Yodle Programming Challenge: Triangle Sums</a>
+	</h1>
+	
+	<section class="byline">
+	  by Ruchir Khaitan, Aug 15, 2013
+	</section>
+
+	<p><p>Todays puzzle is an exercise in recursion and iteration, and the costs and benefits of both. The task is simple, given a triangle of numbers, here defined as an arrangement of numbers where the first row has one number, the second row has two  the nth row has n numbers, the task is to find the maximum total going from top to bottom using only adjacent numbers, or the maximum path sum. A sample such triangle and top down path are shown above. The challenge is to do this for a large triangle, with at least a hundred rows, where there are so many top down paths that brute force solutions are impossible.</p>
+
+<p>There are two key questions that need to be answered in order to solve this problem. Firstly, how are we going to represent the triangle so that the program can use the data? One initially attractive solution is to use a tree structure, since the shape of a triangle suggests a tree almost immediately and each node would only have two children. However, this approach falls short, as though each parent node would have two child nodes, most of those nodes would be shared between two parents, which would lead to either unnecessary memory usage, or a very complex data structure, where nodes have multiple children and parents, the implementation details of which quickly become difficult to sort out. Instead, lets examine what we know. We know that each triangle will only ever have n rows or lines, in which each ith row will have i numbers. This means that if the triangle is represented as a text file, then just by counting the number of lines, we know that there will be n(n+1)/2 elements, which can  be stored in an array.</p>
+
+<div class="highlight"><pre><code class="java"> <span class="kt">int</span><span class="o">*</span> <span class="n">triangle</span> <span class="o">=</span> <span class="n">malloc</span><span class="o">(</span><span class="n">sizeof</span><span class="o">(</span><span class="kt">int</span><span class="o">)*(</span><span class="n">numLine</span><span class="o">*(</span><span class="n">numLine</span><span class="o">+</span><span class="mi">1</span><span class="o">))/</span><span class="mi">2</span> <span class="o">+</span> <span class="mi">1</span><span class="o">);</span>
+            <span class="k">while</span><span class="o">(</span><span class="n">fgets</span><span class="o">(</span><span class="n">buf</span><span class="o">,</span> <span class="n">sizeof</span><span class="o">(</span><span class="n">buf</span><span class="o">),</span> <span class="n">file</span><span class="o">))</span> <span class="o">{</span>  
+                <span class="n">num</span> <span class="o">=(</span><span class="kt">int</span><span class="o">)</span>  <span class="n">strtol</span><span class="o">(</span><span class="n">buf</span><span class="o">,</span> <span class="o">&amp;</span><span class="n">numEnd</span><span class="o">,</span> <span class="mi">10</span><span class="o">);</span>
+            <span class="k">do</span> <span class="o">{</span>
+                    <span class="n">triangle</span><span class="o">[</span><span class="n">j</span><span class="o">]</span> <span class="o">=</span> <span class="n">num</span><span class="o">;</span>
+                        <span class="n">j</span><span class="o">++;</span>
+                <span class="o">}</span> <span class="k">while</span><span class="o">(</span><span class="n">num</span> <span class="o">=</span> <span class="o">(</span><span class="kt">int</span><span class="o">)</span> <span class="n">strtol</span><span class="o">(</span><span class="n">numEnd</span><span class="o">,</span> <span class="o">&amp;</span><span class="n">numEnd</span><span class="o">,</span> <span class="mi">10</span><span class="o">)</span> <span class="o">);</span>
+            <span class="o">}</span>        
+            <span class="n">fclose</span><span class="o">(</span><span class="n">file</span><span class="o">);</span>  <span class="c1">//Continued below</span>
+</code></pre></div>
+
+
+<p>So then, the second question is, whats the most efficient way to compute the maximum path? One approach is the pure recursive approach which I also like to call the top-down approach. Here, the basic procedure is: start at the top, and find the maximum path sum from the left and right children and return the greater sum + root node (the node the method was called on) value. In the base case,when a node doesnt have any children, it simply returns its own value. Here, one advantage of the array implementation is that to go from parent to child, we dont need links, we can use array offsets because once we know the array index of a node, its left childs index is the array index + its row number and the right childs index is the left childs index + 1.</p>
+
+<div class="highlight"><pre><code class="java"> <span class="kt">long</span> <span class="nf">recPathSum</span><span class="o">(</span><span class="kt">int</span><span class="o">*</span> <span class="n">root</span><span class="o">,</span><span class="kt">int</span> <span class="n">rowNum</span><span class="o">,</span><span class="kt">int</span> <span class="n">triSize</span><span class="o">,</span><span class="kt">long</span> <span class="n">currSum</span> <span class="o">)</span> <span class="o">{</span>
+            <span class="kt">long</span> <span class="n">leftSum</span><span class="o">,</span> <span class="n">rightSum</span><span class="o">;</span>
+            <span class="k">if</span><span class="o">(</span><span class="n">rowNum</span> <span class="o">==</span> <span class="n">triSize</span><span class="o">)</span> 
+            <span class="k">return</span> <span class="n">currSum</span> <span class="o">+</span> <span class="o">*(</span><span class="n">root</span><span class="o">);</span>
+            <span class="kt">int</span><span class="o">*</span> <span class="n">child1</span> <span class="o">=</span> <span class="n">root</span> <span class="o">+</span> <span class="n">rowNum</span><span class="o">;</span>
+            <span class="kt">int</span><span class="o">*</span> <span class="n">child2</span> <span class="o">=</span> <span class="n">child1</span><span class="o">+</span> <span class="mi">1</span><span class="o">;</span>
+            <span class="n">currSum</span> <span class="o">+=</span> <span class="o">*</span><span class="n">root</span><span class="o">;</span>
+
+            <span class="n">leftSum</span> <span class="o">=</span> <span class="n">recPathSum</span><span class="o">(</span><span class="n">child1</span><span class="o">,</span> <span class="n">rowNum</span><span class="o">+</span><span class="mi">1</span><span class="o">,</span><span class="n">triSize</span><span class="o">,</span><span class="n">currSum</span><span class="o">);</span>
+            <span class="n">rightSum</span> <span class="o">=</span> <span class="n">recPathSum</span><span class="o">(</span><span class="n">child2</span><span class="o">,</span> <span class="n">rowNum</span><span class="o">+</span><span class="mi">1</span><span class="o">,</span> <span class="n">triSize</span><span class="o">,</span> <span class="n">currSum</span><span class="o">);</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">leftSum</span> <span class="o">&gt;</span> <span class="n">rightSum</span><span class="o">)</span> 
+            <span class="k">return</span> <span class="n">leftSum</span><span class="o">;</span>
+            <span class="k">return</span> <span class="n">rightSum</span><span class="o">;</span>
+    <span class="o">}</span>
+</code></pre></div>
+
+
+<p>This algorithm works for small triangles but it takes far too long for larger ones. Why? Here recursion fails because the program doesnt reduce the amount of computation needed with each recursive step. Say we have a 100 row triangle and we run this function. After one level of recursion, we have two 99 row triangles. Another level of recursion deeper, we get four 98 row triangles. Thus, in this instance, recursion is actually making the problem exponentially larger.</p>
+
+<p>Another, much faster solution is the bottom-up way, which I also call the iterative solution. The key insight is that the second to last row of numbers is also a row of small triangles each with only two rows. For those, finding the maximum path sum is easy. Note - Theres no need to write new code for that computation, we can reuse the recursive method. So, we replace each sub-triangles root node with a number representing the maximum path sum through it. Thus, the bottom two rows can be resolved into one row of numbers corresponding to the maximum path sums from each of the nodes on that row. From there, we can move up to the next row being careful to always look only one row below the one we are currently on, and we can quickly work our way up to the top. Eventually, the root node will contain the maximum path sum.</p>
+
+<div class="highlight"><pre><code class="java"> <span class="kt">long</span> <span class="nf">iterativePathSum</span><span class="o">(</span><span class="kt">int</span><span class="o">*</span> <span class="n">root</span><span class="o">,</span> <span class="kt">int</span> <span class="n">triSize</span><span class="o">)</span> <span class="o">{</span> 
+        <span class="kt">int</span> <span class="n">i</span><span class="o">,</span> <span class="n">j</span> <span class="o">,</span> <span class="n">k</span><span class="o">;</span>
+            <span class="k">for</span> <span class="o">(</span><span class="n">i</span> <span class="o">=</span> <span class="n">triSize</span> <span class="o">-</span> <span class="mi">1</span><span class="o">;</span> <span class="n">i</span><span class="o">&gt;</span><span class="mi">0</span><span class="o">;</span> <span class="n">i</span><span class="o">--)</span> <span class="o">{</span>
+                <span class="kt">int</span><span class="o">*</span> <span class="n">offset</span> <span class="o">=</span> <span class="n">root</span> <span class="o">+</span> <span class="o">(</span><span class="n">i</span><span class="o">*(</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="o">))/</span><span class="mi">2</span><span class="o">;</span>   
+                <span class="k">for</span><span class="o">(</span><span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">j</span><span class="o">&lt;</span><span class="n">i</span><span class="o">;</span> <span class="n">j</span><span class="o">++)</span> <span class="o">{</span>
+                        <span class="o">*(</span><span class="n">offset</span><span class="o">+</span><span class="n">j</span><span class="o">)</span> <span class="o">=</span> <span class="o">(</span><span class="kt">int</span><span class="o">)</span><span class="n">recPathSum</span><span class="o">((</span><span class="n">offset</span><span class="o">+</span><span class="n">j</span><span class="o">),</span><span class="n">i</span><span class="o">,</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="o">,</span><span class="mi">0</span><span class="o">);</span> 
+                <span class="o">}</span>
+            <span class="o">}</span>
+            <span class="k">return</span> <span class="o">*(</span><span class="n">root</span><span class="o">);</span>
+
+    <span class="o">}</span> 
+</code></pre></div>
+
+
+<p>Obviously, this approach is destructive and totally overwrites the data stored in the array, but copying over an array of elements doesnt take too much time or space, and so, in this case, the benefits far outweigh the costs.</p>
+</p>
+  
+	<h1>
 	  <a href="/posts/bash-todo-list-tool">todo -t write-todo-blog-post</a>
 	</h1>
 	

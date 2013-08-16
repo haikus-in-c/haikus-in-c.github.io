@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+  <meta charset="utf-8">
+  <title>
+    
+      Yodle Programming Challenge: Triangle Sums &ndash;
+    
+    Haikus in C
+  </title>
+
+  <meta name="author" content="Haikus in C" />
+  <meta name="description" content="a place where two columbia cs students share code and talk about their projects" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <link rel="alternate" type="application/rss+xml" href="/atom.xml" />
+
+  <link rel="stylesheet" href="/css/fontawesome.min.css" type="text/css" media="screen, projection" />
+  <link rel="stylesheet" href="/css/base.css" type="text/css" media="screen, projection" />
+  <link rel="stylesheet" href="/css/pygments.css" type="text/css" />
+  <link media="only screen and (max-device-width: 480px)" href="/css/mobile.css" type="text/css" rel="stylesheet" />
+  <link media="only screen and (device-width: 768px)" href="/css/mobile.css" type="text/css" rel="stylesheet" />
+  <link href='http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz' rel='stylesheet' type='text/css'>
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+  <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+  <script type="text/javascript" src="/js/application.js"></script>
+</head>
+
+<body>
+  <section class="header">
+	<h1>
+	  <a href="/">Haikus in C</a>
+	</h1>
+  </section>
+
+  <section class="sidebar">
+
+    <section class="meta">
+      <a href="https://github.com/haikus-in-c" target="_blank"><i class="icon icon-github"></i></a>
+    </section>
+
+    <section class="sections">
+      <ul>
+		<li><a href="/">home</a><li>
+        <li><a href="/about.html">about</a></li>
+        <li><a href="/posts.html">posts</a></li>
+      </ul>
+    </section>
+
+	<section class="shoutout">
+	  <p>made with help from <a href="https://github.com/mojombo/jekyll">jekyll</a> and an adapted theme from
+		<a href="http://zachholman.com/">zach holman</a>.</p>
+	</section>
+
+  </section>
+
+  <section class="content">
+  <h1>
+    <a href="/posts/triangle-sum">Yodle Programming Challenge: Triangle Sums</a>
+  </h1>
+
+  <section class="byline">
+    by Ruchir Khaitan, August 15, 2013
+  </section>
+
+  <p>Todays puzzle is an exercise in recursion and iteration, and the costs and benefits of both. The task is simple, given a triangle of numbers, here defined as an arrangement of numbers where the first row has one number, the second row has two  the nth row has n numbers, the task is to find the maximum total going from top to bottom using only adjacent numbers, or the maximum path sum. A sample such triangle and top down path are shown above. The challenge is to do this for a large triangle, with at least a hundred rows, where there are so many top down paths that brute force solutions are impossible.</p>
+
+<p>There are two key questions that need to be answered in order to solve this problem. Firstly, how are we going to represent the triangle so that the program can use the data? One initially attractive solution is to use a tree structure, since the shape of a triangle suggests a tree almost immediately and each node would only have two children. However, this approach falls short, as though each parent node would have two child nodes, most of those nodes would be shared between two parents, which would lead to either unnecessary memory usage, or a very complex data structure, where nodes have multiple children and parents, the implementation details of which quickly become difficult to sort out. Instead, lets examine what we know. We know that each triangle will only ever have n rows or lines, in which each ith row will have i numbers. This means that if the triangle is represented as a text file, then just by counting the number of lines, we know that there will be n(n+1)/2 elements, which can  be stored in an array.</p>
+
+<div class="highlight"><pre><code class="java"> <span class="kt">int</span><span class="o">*</span> <span class="n">triangle</span> <span class="o">=</span> <span class="n">malloc</span><span class="o">(</span><span class="n">sizeof</span><span class="o">(</span><span class="kt">int</span><span class="o">)*(</span><span class="n">numLine</span><span class="o">*(</span><span class="n">numLine</span><span class="o">+</span><span class="mi">1</span><span class="o">))/</span><span class="mi">2</span> <span class="o">+</span> <span class="mi">1</span><span class="o">);</span>
+            <span class="k">while</span><span class="o">(</span><span class="n">fgets</span><span class="o">(</span><span class="n">buf</span><span class="o">,</span> <span class="n">sizeof</span><span class="o">(</span><span class="n">buf</span><span class="o">),</span> <span class="n">file</span><span class="o">))</span> <span class="o">{</span>  
+                <span class="n">num</span> <span class="o">=(</span><span class="kt">int</span><span class="o">)</span>  <span class="n">strtol</span><span class="o">(</span><span class="n">buf</span><span class="o">,</span> <span class="o">&amp;</span><span class="n">numEnd</span><span class="o">,</span> <span class="mi">10</span><span class="o">);</span>
+            <span class="k">do</span> <span class="o">{</span>
+                    <span class="n">triangle</span><span class="o">[</span><span class="n">j</span><span class="o">]</span> <span class="o">=</span> <span class="n">num</span><span class="o">;</span>
+                        <span class="n">j</span><span class="o">++;</span>
+                <span class="o">}</span> <span class="k">while</span><span class="o">(</span><span class="n">num</span> <span class="o">=</span> <span class="o">(</span><span class="kt">int</span><span class="o">)</span> <span class="n">strtol</span><span class="o">(</span><span class="n">numEnd</span><span class="o">,</span> <span class="o">&amp;</span><span class="n">numEnd</span><span class="o">,</span> <span class="mi">10</span><span class="o">)</span> <span class="o">);</span>
+            <span class="o">}</span>        
+            <span class="n">fclose</span><span class="o">(</span><span class="n">file</span><span class="o">);</span>  <span class="c1">//Continued below</span>
+</code></pre></div>
+
+
+<p>So then, the second question is, whats the most efficient way to compute the maximum path? One approach is the pure recursive approach which I also like to call the top-down approach. Here, the basic procedure is: start at the top, and find the maximum path sum from the left and right children and return the greater sum + root node (the node the method was called on) value. In the base case,when a node doesnt have any children, it simply returns its own value. Here, one advantage of the array implementation is that to go from parent to child, we dont need links, we can use array offsets because once we know the array index of a node, its left childs index is the array index + its row number and the right childs index is the left childs index + 1.</p>
+
+<div class="highlight"><pre><code class="java"> <span class="kt">long</span> <span class="nf">recPathSum</span><span class="o">(</span><span class="kt">int</span><span class="o">*</span> <span class="n">root</span><span class="o">,</span><span class="kt">int</span> <span class="n">rowNum</span><span class="o">,</span><span class="kt">int</span> <span class="n">triSize</span><span class="o">,</span><span class="kt">long</span> <span class="n">currSum</span> <span class="o">)</span> <span class="o">{</span>
+            <span class="kt">long</span> <span class="n">leftSum</span><span class="o">,</span> <span class="n">rightSum</span><span class="o">;</span>
+            <span class="k">if</span><span class="o">(</span><span class="n">rowNum</span> <span class="o">==</span> <span class="n">triSize</span><span class="o">)</span> 
+            <span class="k">return</span> <span class="n">currSum</span> <span class="o">+</span> <span class="o">*(</span><span class="n">root</span><span class="o">);</span>
+            <span class="kt">int</span><span class="o">*</span> <span class="n">child1</span> <span class="o">=</span> <span class="n">root</span> <span class="o">+</span> <span class="n">rowNum</span><span class="o">;</span>
+            <span class="kt">int</span><span class="o">*</span> <span class="n">child2</span> <span class="o">=</span> <span class="n">child1</span><span class="o">+</span> <span class="mi">1</span><span class="o">;</span>
+            <span class="n">currSum</span> <span class="o">+=</span> <span class="o">*</span><span class="n">root</span><span class="o">;</span>
+
+            <span class="n">leftSum</span> <span class="o">=</span> <span class="n">recPathSum</span><span class="o">(</span><span class="n">child1</span><span class="o">,</span> <span class="n">rowNum</span><span class="o">+</span><span class="mi">1</span><span class="o">,</span><span class="n">triSize</span><span class="o">,</span><span class="n">currSum</span><span class="o">);</span>
+            <span class="n">rightSum</span> <span class="o">=</span> <span class="n">recPathSum</span><span class="o">(</span><span class="n">child2</span><span class="o">,</span> <span class="n">rowNum</span><span class="o">+</span><span class="mi">1</span><span class="o">,</span> <span class="n">triSize</span><span class="o">,</span> <span class="n">currSum</span><span class="o">);</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">leftSum</span> <span class="o">&gt;</span> <span class="n">rightSum</span><span class="o">)</span> 
+            <span class="k">return</span> <span class="n">leftSum</span><span class="o">;</span>
+            <span class="k">return</span> <span class="n">rightSum</span><span class="o">;</span>
+    <span class="o">}</span>
+</code></pre></div>
+
+
+<p>This algorithm works for small triangles but it takes far too long for larger ones. Why? Here recursion fails because the program doesnt reduce the amount of computation needed with each recursive step. Say we have a 100 row triangle and we run this function. After one level of recursion, we have two 99 row triangles. Another level of recursion deeper, we get four 98 row triangles. Thus, in this instance, recursion is actually making the problem exponentially larger.</p>
+
+<p>Another, much faster solution is the bottom-up way, which I also call the iterative solution. The key insight is that the second to last row of numbers is also a row of small triangles each with only two rows. For those, finding the maximum path sum is easy. Note - Theres no need to write new code for that computation, we can reuse the recursive method. So, we replace each sub-triangles root node with a number representing the maximum path sum through it. Thus, the bottom two rows can be resolved into one row of numbers corresponding to the maximum path sums from each of the nodes on that row. From there, we can move up to the next row being careful to always look only one row below the one we are currently on, and we can quickly work our way up to the top. Eventually, the root node will contain the maximum path sum.</p>
+
+<div class="highlight"><pre><code class="java"> <span class="kt">long</span> <span class="nf">iterativePathSum</span><span class="o">(</span><span class="kt">int</span><span class="o">*</span> <span class="n">root</span><span class="o">,</span> <span class="kt">int</span> <span class="n">triSize</span><span class="o">)</span> <span class="o">{</span> 
+        <span class="kt">int</span> <span class="n">i</span><span class="o">,</span> <span class="n">j</span> <span class="o">,</span> <span class="n">k</span><span class="o">;</span>
+            <span class="k">for</span> <span class="o">(</span><span class="n">i</span> <span class="o">=</span> <span class="n">triSize</span> <span class="o">-</span> <span class="mi">1</span><span class="o">;</span> <span class="n">i</span><span class="o">&gt;</span><span class="mi">0</span><span class="o">;</span> <span class="n">i</span><span class="o">--)</span> <span class="o">{</span>
+                <span class="kt">int</span><span class="o">*</span> <span class="n">offset</span> <span class="o">=</span> <span class="n">root</span> <span class="o">+</span> <span class="o">(</span><span class="n">i</span><span class="o">*(</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="o">))/</span><span class="mi">2</span><span class="o">;</span>   
+                <span class="k">for</span><span class="o">(</span><span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">j</span><span class="o">&lt;</span><span class="n">i</span><span class="o">;</span> <span class="n">j</span><span class="o">++)</span> <span class="o">{</span>
+                        <span class="o">*(</span><span class="n">offset</span><span class="o">+</span><span class="n">j</span><span class="o">)</span> <span class="o">=</span> <span class="o">(</span><span class="kt">int</span><span class="o">)</span><span class="n">recPathSum</span><span class="o">((</span><span class="n">offset</span><span class="o">+</span><span class="n">j</span><span class="o">),</span><span class="n">i</span><span class="o">,</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="o">,</span><span class="mi">0</span><span class="o">);</span> 
+                <span class="o">}</span>
+            <span class="o">}</span>
+            <span class="k">return</span> <span class="o">*(</span><span class="n">root</span><span class="o">);</span>
+
+    <span class="o">}</span> 
+</code></pre></div>
+
+
+<p>Obviously, this approach is destructive and totally overwrites the data stored in the array, but copying over an array of elements doesnt take too much time or space, and so, in this case, the benefits far outweigh the costs.</p>
+
+
+<!-- possibly update this later
+   TODO: bio here
+  <section class="meta">
+    <h3>Discussion, links, and tweets</h3>
+    <section class="copy">
+      <a href="https://twitter.com/" target="_blank">
+        <img src="?s=142" height="50" width="50" />
+      </a>
+
+      <p>
+        I'm a developer at GitHub. <a href="https://twitter.com/" target="_blank">Follow me on Twitter</a>;
+        you'll enjoy my tweets. I take care to carefully craft each one. Or at least aim to make
+        you giggle. Or offended. One of those two&mdash; I haven't decided which yet.
+      </p>
+
+      <a href="http://twitter.com/share" class="twitter-share-button" data-count="none" data-via="">Tweet</a>
+      <a href="http://twitter.com/" class="twitter-follow-button" data-show-count="false">Follow @</a>
+      <script src="http://platform.twitter.com/widgets.js" type="text/javascript"></script>
+    </section>
+  </section>
+-->
+
+<hr>
+  
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+      /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+      var disqus_shortname = 'haikus'; // required: replace example with your forum shortname
+
+      /* * * DON'T EDIT BELOW THIS LINE * * */
+      (function() {
+          var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+          dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+  
+
+</section>
+
+
+</body>
+
+</html>
