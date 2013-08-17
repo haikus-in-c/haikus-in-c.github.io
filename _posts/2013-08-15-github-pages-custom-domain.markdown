@@ -44,26 +44,21 @@ Github Pages reasons, and it is important. Now, set up a version on your local m
 
 Excellent. Now you have a repository on your local machine pointing to your-username.github.io on
 Github's servers. This directory will hold the body of your site, and it's kind of like a more advanced
-version of a public\_html directory.
+version of a public\_html directory. I say more advanced because Github Pages repositories are also capable of building [Jekyll][jekylldocs] sites. *A lot* of Github Pages users use Jekyll, which is a ruby based platform 
+that transforms text files into static websites and blogs, because Github itself actually uses Jekyll 
+to serve every page it hosts. If you are setting up a blog but haven't yet considered using Jekyll, 
+I recommend [looking into it][jekylldocs].
 
-I say more advanced because Github Pages repositories are also capable of building Jekyll sites. 
-I'm going to make a bold assumption that your site is powered by [Jekyll][jekyll], but if it's not,
-have no fear. I only make this assumption because *a lot* of Github Pages users use Jekyll, because
-Github actually uses Jekyll to serve every page it hosts. If you are using Jekyll, I'll assume you've
-already set it up (if you haven't there's [great documentation][jekylldocs] out there). I recommend
-using the [Jekyll test site][jekylltest] to get started with Github Pages, because it's guaranteed to
-build every time.
-	
-If you're not using Jekyll, or even if you are and don't want to deal with the test site, just load a 
-simple index.html file into your your-username.github.io directory with some test content in it. This
-is just there to test that everything is functioning properly with Github Pages before we move on. Once
-index.html is added and edited, add, commit, and push from the github pages directory:
+Regardless of whether or not you're using Jekyll, the next step is to add your site files, or better yet
+a simple test site that you know will build (a single index.html file with some test content will work fine,
+or you could use the [Jekyll test site][jekylltest]. Once your site files are in your site directory like
+you want them, git add, commit, and push up to the master branch of your-username.github.io:
 	
 	$ git add *
 	$ git commit -m 'added test site'
 	$ git push origin master
 
-Now, in your web browser of choice navigate to www.your-username.github.io. If you're looking at the 
+Now, in your web browser navigate to www.your-username.github.io. If you're looking at the 
 result of whatever HTML, Jekyll, or other types of files you just pushed to the your-username.github.io 
 repository, then you're ready to move on. If you're looking at a 404 page, or some other type of error, it's
 probably one of two things. Either the Github servers haven't updated to see your freshly pushed data yet
