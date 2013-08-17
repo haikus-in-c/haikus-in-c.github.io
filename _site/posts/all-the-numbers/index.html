@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+  <meta charset="utf-8">
+  <title>
+    
+      All the Numbers &ndash;
+    
+    Haikus in C
+  </title>
+
+  <meta name="author" content="Haikus in C" />
+  <meta name="description" content="a place where two columbia cs students share code and talk about their projects" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <link rel="alternate" type="application/rss+xml" href="/atom.xml" />
+
+  <link rel="stylesheet" href="/css/fontawesome.min.css" type="text/css" media="screen, projection" />
+  <link rel="stylesheet" href="/css/base.css" type="text/css" media="screen, projection" />
+  <link rel="stylesheet" href="/css/pygments.css" type="text/css" />
+  <link media="only screen and (max-device-width: 480px)" href="/css/mobile.css" type="text/css" rel="stylesheet" />
+  <link media="only screen and (device-width: 768px)" href="/css/mobile.css" type="text/css" rel="stylesheet" />
+  <link href='http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz' rel='stylesheet' type='text/css'>
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+  <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+  <script type="text/javascript" src="/js/application.js"></script>
+</head>
+
+<body>
+  <section class="header">
+	<h1>
+	  <a href="/">Haikus in C</a>
+	</h1>
+  </section>
+
+  <section class="sidebar">
+
+    <section class="meta">
+      <a href="https://github.com/haikus-in-c" target="_blank"><i class="icon icon-github"></i></a>
+    </section>
+
+    <section class="sections">
+      <ul>
+		<li><a href="/">home</a><li>
+        <li><a href="/about.html">about</a></li>
+        <li><a href="/posts.html">posts</a></li>
+      </ul>
+    </section>
+
+	<section class="shoutout">
+	  <p>made with help from <a href="https://github.com/mojombo/jekyll">jekyll</a> and an adapted theme from
+		<a href="http://zachholman.com/">zach holman</a>.</p>
+	</section>
+
+  </section>
+
+  <section class="content">
+  <h1>
+    <a href="/posts/all-the-numbers">All the Numbers</a>
+  </h1>
+
+  <section class="byline">
+    by Ian Zapolsky, August 17, 2013
+  </section>
+
+  <p>Finding a great solution to a computer science problem is more about the journey
+than the final destination. The process of working through this challenge is a good
+example of how our initial instincs about how do something can be (read: usually
+are) wrong, and require deeper thought and fine-tuning.</p>
+
+<p>Here&rsquo;s a challenge: find the sum of all the four-digit numbers made up from 1, 2, 3,
+and 4, non-repeating. Initially, this problem seems to have two steps in my mind:</p>
+
+<ol>
+<li>find/generate all the numbers</li>
+<li>sum them.</li>
+</ol>
+
+
+<p>Below is C code that does just this. I generate all the numbers with nested for
+loops, then run them each through a quick comparison method that checks for repeats.</p>
+
+<div class="highlight"><pre><code class="c"><span class="kt">int</span> <span class="nf">find_sum_slow</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kt">int</span><span class="o">*</span> <span class="n">arr</span> <span class="o">=</span> <span class="n">mallow</span><span class="p">(</span><span class="mi">24</span><span class="o">*</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="kt">int</span><span class="p">)));</span>
+    <span class="kt">char</span><span class="o">*</span> <span class="n">cur</span> <span class="o">=</span> <span class="n">mallow</span><span class="p">(</span><span class="mi">4</span><span class="o">*</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="kt">char</span><span class="p">)));</span>
+    <span class="kt">char</span> <span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">c</span><span class="p">,</span><span class="n">d</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">sum</span><span class="p">,</span> <span class="n">cursor</span><span class="p">;</span>
+    <span class="n">sum</span> <span class="o">=</span> <span class="n">cursor</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+    <span class="k">for</span> <span class="p">(</span><span class="n">a</span> <span class="o">=</span> <span class="sc">&#39;1&#39;</span><span class="p">;</span> <span class="n">a</span> <span class="o">&lt;</span> <span class="sc">&#39;5&#39;</span><span class="p">;</span> <span class="n">a</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">cur</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">a</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="n">b</span> <span class="o">=</span> <span class="sc">&#39;1&#39;</span><span class="p">;</span> <span class="n">b</span> <span class="o">&lt;</span> <span class="sc">&#39;5&#39;</span><span class="p">;</span> <span class="n">b</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">cur</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">b</span><span class="p">;</span>
+            <span class="k">for</span> <span class="p">(</span><span class="n">c</span> <span class="o">=</span> <span class="sc">&#39;1&#39;</span><span class="p">;</span> <span class="n">c</span> <span class="o">&lt;</span> <span class="sc">&#39;5&#39;</span><span class="p">;</span> <span class="n">c</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">cur</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">c</span><span class="p">;</span>
+                <span class="k">for</span> <span class="p">(</span><span class="n">d</span> <span class="o">=</span> <span class="sc">&#39;1&#39;</span><span class="p">;</span> <span class="n">d</span> <span class="o">&lt;</span> <span class="sc">&#39;5&#39;</span><span class="p">;</span> <span class="n">d</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="n">cur</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">d</span><span class="p">;</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="n">check_repeat</span><span class="p">(</span><span class="o">&amp;</span><span class="n">cur</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+                        <span class="n">arr</span><span class="p">[</span><span class="n">cursor</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">atoi</span><span class="p">(</span><span class="n">cur</span><span class="p">);</span>
+                        <span class="n">printf</span><span class="p">(</span><span class="s">&quot;%d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">atoi</span><span class="p">(</span><span class="n">cur</span><span class="p">));</span>
+                    <span class="p">}</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">cursor</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">cursor</span> <span class="o">&lt;</span> <span class="mi">24</span><span class="p">;</span> <span class="n">cursor</span><span class="o">++</span><span class="p">)</span>
+        <span class="n">sum</span> <span class="o">+=</span> <span class="n">arr</span><span class="p">[</span><span class="n">cursor</span><span class="p">];</span>
+    <span class="k">return</span> <span class="n">sum</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">check_repeat</span><span class="p">(</span><span class="kt">char</span><span class="o">**</span> <span class="n">cur</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">((</span><span class="o">*</span><span class="n">cur</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="p">(</span><span class="o">*</span><span class="n">cur</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span> <span class="o">||</span> <span class="p">(</span><span class="o">*</span><span class="n">cur</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="p">(</span><span class="o">*</span><span class="n">cur</span><span class="p">)[</span><span class="mi">2</span><span class="p">]</span> <span class="o">||</span>
+        <span class="p">(</span><span class="o">*</span><span class="n">cur</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="p">(</span><span class="o">*</span><span class="n">cur</span><span class="p">)[</span><span class="mi">3</span><span class="p">]</span> <span class="o">||</span> <span class="p">(</span><span class="o">*</span><span class="n">cur</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="p">(</span><span class="o">*</span><span class="n">cur</span><span class="p">)[</span><span class="mi">2</span><span class="p">]</span> <span class="o">||</span>
+        <span class="p">(</span><span class="o">*</span><span class="n">cur</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="p">(</span><span class="o">*</span><span class="n">cur</span><span class="p">)[</span><span class="mi">3</span><span class="p">]</span> <span class="o">||</span> <span class="p">(</span><span class="o">*</span><span class="n">cur</span><span class="p">)[</span><span class="mi">2</span><span class="p">]</span> <span class="o">==</span> <span class="p">(</span><span class="o">*</span><span class="n">cur</span><span class="p">)[</span><span class="mi">3</span><span class="p">])</span>
+        <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="k">else</span>
+        <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+
+<p>There are a couple things to note. First, we can tell that there will be 4! = 24 four-digit numbers because a non-repeating four-digit number made up of only four distinct integers can be comprised of 4*3*2*1 combinations of digits. Second, we can take advantage of the fact that ASCII characters are
+ordered sequentially to get get chars 1-4 by incrementing the integer representation of that char.</p>
+
+<p>However, after a bit more thought, and a helpful conversation with Ruchir, I realized that this
+is actually a pretty horrible way of finding this sum. Let&rsquo;s think about the challenge in a
+different way. We know there will be 4! of these four-digit non-repeating numbers. Now let&rsquo;s
+take that knowledge a step further: if there are 4! total numbers, it follows that for each
+given digit there will by 24/4 = 6 numbers that contain that digit in a given place. In other
+words, if we fix one digit of the four-digit number, there will be 3! = 6 different numbers
+that can be made with the other digits arranged in various ways around the single fixed number.</p>
+
+<p>For example, there will be 6 numbers in the set of 24 that have the digit 1 in the 1s place,
+6 more that have 1 in the 10s, 6 more with 1 in the 100s, and the final 6 will have a 1 in
+the 1000s place. This idea expressed in math terms for our 4-digit example looks like this:</p>
+
+<div class="highlight"><pre><code class="latex">sum = (1+2+3+4) * (10<span class="nb">^</span>0 + 10<span class="nb">^</span>1 + 10<span class="nb">^</span>2 +10<span class="nb">^</span>3) * (3!)
+</code></pre></div>
+
+
+<p>Using this observation, we can skip the memory and time intensive process of generating these
+four-digit numbers and simply find the sum with the following simple algorithm, which uses
+the idea from above to calculate the sum of all the n-digit numbers made up of integers
+1-n non-repeating.</p>
+
+<div class="highlight"><pre><code class="c"><span class="kt">int</span> <span class="nf">find_sum_fast</span><span class="p">(</span><span class="kt">int</span> <span class="n">digits</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">sum</span><span class="p">;</span>
+    <span class="n">sum</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">a</span> <span class="o">=</span> <span class="n">digits</span><span class="p">;</span> <span class="n">a</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">;</span> <span class="n">a</span><span class="o">--</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">for</span> <span class="p">(</span><span class="n">b</span> <span class="o">=</span> <span class="n">digits</span><span class="o">-</span><span class="mi">1</span><span class="p">;</span> <span class="n">b</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">b</span><span class="o">--</span><span class="p">)</span>
+            <span class="n">sum</span> <span class="o">+=</span> <span class="p">(</span><span class="n">a</span><span class="o">*</span><span class="n">pow</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="n">b</span><span class="p">));</span>
+    <span class="p">}</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">b</span> <span class="o">=</span> <span class="n">digits</span><span class="o">-</span><span class="mi">1</span><span class="p">;</span> <span class="n">b</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">;</span> <span class="n">b</span><span class="o">--</span><span class="p">)</span>
+        <span class="n">sum</span> <span class="o">*=</span> <span class="n">b</span><span class="p">;</span>
+
+    <span class="k">return</span> <span class="n">sum</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+
+<p>This post is a great example of why I wanted to start this blog in the first place: to explore
+answers to problems like this and find them on my own, instead of just reading them off
+sites like careercup.</p>
+
+
+<!-- possibly update this later
+   TODO: bio here
+  <section class="meta">
+    <h3>Discussion, links, and tweets</h3>
+    <section class="copy">
+      <a href="https://twitter.com/" target="_blank">
+        <img src="?s=142" height="50" width="50" />
+      </a>
+
+      <p>
+        I'm a developer at GitHub. <a href="https://twitter.com/" target="_blank">Follow me on Twitter</a>;
+        you'll enjoy my tweets. I take care to carefully craft each one. Or at least aim to make
+        you giggle. Or offended. One of those two&mdash; I haven't decided which yet.
+      </p>
+
+      <a href="http://twitter.com/share" class="twitter-share-button" data-count="none" data-via="">Tweet</a>
+      <a href="http://twitter.com/" class="twitter-follow-button" data-show-count="false">Follow @</a>
+      <script src="http://platform.twitter.com/widgets.js" type="text/javascript"></script>
+    </section>
+  </section>
+-->
+
+<hr>
+  
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+      /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+      var disqus_shortname = 'haikus'; // required: replace example with your forum shortname
+
+      /* * * DON'T EDIT BELOW THIS LINE * * */
+      (function() {
+          var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+          dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+  
+
+</section>
+
+
+</body>
+
+</html>
