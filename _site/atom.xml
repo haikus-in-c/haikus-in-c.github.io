@@ -4,7 +4,7 @@
  <title>Haikus in C</title>
  <link href="http://haikus-in-c.github.io/atom.xml" rel="self"/>
  <link href="http://haikus-in-c.github.io/"/>
- <updated>2013-08-16T02:25:28+00:00</updated>
+ <updated>2013-08-16T21:04:20-03:00</updated>
  <id>http://haikus-in-c.github.io</id>
  <author>
    <name>Haikus in C</name>
@@ -14,11 +14,18 @@
  <entry>
    <title>Yodle Programming Challenge: Triangle Sums</title>
    <link href="http://haikus-in-c.github.io/posts/triangle-sum"/>
-   <updated>2013-08-15T00:00:00+00:00</updated>
+   <updated>2013-08-15T00:00:00-03:00</updated>
    <id>http://haikus-in-c.github.io/posts/triangle-sum</id>
-   <content type="html">&lt;p&gt;Todays puzzle is an exercise in recursion and iteration, and the costs and benefits of both. The task is simple, given a triangle of numbers, here defined as an arrangement of numbers where the first row has one number, the second row has two  the nth row has n numbers, the task is to find the maximum total going from top to bottom using only adjacent numbers, or the maximum path sum. A sample such triangle and top down path are shown above. The challenge is to do this for a large triangle, with at least a hundred rows, where there are so many top down paths that brute force solutions are impossible.&lt;/p&gt;
+   <content type="html">&lt;p&gt;Today&amp;rsquo;s puzzle is an exercise in recursion and iteration, and the costs and benefits of both. The task is simple, given a triangle of numbers, here defined as an arrangement of numbers where the first row has one number, the second row has two, and the nth row has n numbers, the task is to find the maximum total going from top to bottom using only adjacent numbers, or the maximum path sum. A sample triangle and top down path are shown below. The challenge is to do this for a large triangle, with at least a hundred rows, where there are so many top down paths that brute force solutions are impossible.&lt;/p&gt;
 
-&lt;p&gt;There are two key questions that need to be answered in order to solve this problem. Firstly, how are we going to represent the triangle so that the program can use the data? One initially attractive solution is to use a tree structure, since the shape of a triangle suggests a tree almost immediately and each node would only have two children. However, this approach falls short, as though each parent node would have two child nodes, most of those nodes would be shared between two parents, which would lead to either unnecessary memory usage, or a very complex data structure, where nodes have multiple children and parents, the implementation details of which quickly become difficult to sort out. Instead, lets examine what we know. We know that each triangle will only ever have n rows or lines, in which each ith row will have i numbers. This means that if the triangle is represented as a text file, then just by counting the number of lines, we know that there will be n(n+1)/2 elements, which can  be stored in an array.&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;latex&quot;&gt;        1           max path: 1
+      3   5                   5 
+    6   7   2                 7
+                    total:   13 
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;There are two key questions that need to be answered in order to solve this problem. Firstly, how are we going to represent the triangle so that the program can use the data? One initially attractive solution is to use a tree structure, since the shape of a triangle suggests a tree almost immediately and each node would only have two children. However, this approach falls short, as though each parent node would have two child nodes, most of those nodes would be shared between two parents, which could lead to memory usage and implementation complications. Instead, lets examine what we know. We know that each triangle will only ever have n rows, and that each nth row will have n numbers. This means that if the triangle is represented as a text file, then just by counting the number of lines we can know that there will be n(n+1)/2 elements, which can be stored in an array.&lt;/p&gt;
 
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;java&quot;&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;triangle&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;malloc&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sizeof&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)*(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;numLine&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;numLine&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;))/&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
             &lt;span class=&quot;k&quot;&gt;while&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;fgets&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;buf&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sizeof&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;buf&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;),&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;file&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;))&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;  
@@ -32,7 +39,7 @@
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;p&gt;So then, the second question is, whats the most efficient way to compute the maximum path? One approach is the pure recursive approach which I also like to call the top-down approach. Here, the basic procedure is: start at the top, and find the maximum path sum from the left and right children and return the greater sum + root node (the node the method was called on) value. In the base case,when a node doesnt have any children, it simply returns its own value. Here, one advantage of the array implementation is that to go from parent to child, we dont need links, we can use array offsets because once we know the array index of a node, its left childs index is the array index + its row number and the right childs index is the left childs index + 1.&lt;/p&gt;
+&lt;p&gt;So then the second question is whats the most efficient way to compute the maximum path? One approach is the pure recursive approach which I also like to call the top-down approach. Here, the basic procedure is: start at the top, and find the maximum path sum from the left and right children and return the greater sum + root node (the node the method was called on) value. In the base case, when a node doesn&amp;rsquo;t have any children, it simply returns its own value. One advantage of the array implementation is that to go from parent to child, we dont need links, we can use array offsets because once we know the array index of a node, its left child&amp;rsquo;s index is the array index + its row number and the right child&amp;rsquo;s index is the left child&amp;rsquo;s index + 1.&lt;/p&gt;
 
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;java&quot;&gt; &lt;span class=&quot;kt&quot;&gt;long&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;recPathSum&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;root&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;rowNum&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;triSize&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;long&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;currSum&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
             &lt;span class=&quot;kt&quot;&gt;long&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;leftSum&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;rightSum&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
@@ -51,9 +58,9 @@
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;p&gt;This algorithm works for small triangles but it takes far too long for larger ones. Why? Here recursion fails because the program doesnt reduce the amount of computation needed with each recursive step. Say we have a 100 row triangle and we run this function. After one level of recursion, we have two 99 row triangles. Another level of recursion deeper, we get four 98 row triangles. Thus, in this instance, recursion is actually making the problem exponentially larger.&lt;/p&gt;
+&lt;p&gt;This algorithm works for small triangles but it takes far too long for larger ones. Why? Here recursion fails because the program doesn&amp;rsquo;t reduce the amount of computation needed with each recursive step. Say we have a 100 row triangle and we run this function. After one level of recursion, we have two 99 row triangles. Another level of recursion deeper, we get four 98 row triangles. Thus, in this instance, recursion is actually making the problem exponentially larger.&lt;/p&gt;
 
-&lt;p&gt;Another, much faster solution is the bottom-up way, which I also call the iterative solution. The key insight is that the second to last row of numbers is also a row of small triangles each with only two rows. For those, finding the maximum path sum is easy. Note - Theres no need to write new code for that computation, we can reuse the recursive method. So, we replace each sub-triangles root node with a number representing the maximum path sum through it. Thus, the bottom two rows can be resolved into one row of numbers corresponding to the maximum path sums from each of the nodes on that row. From there, we can move up to the next row being careful to always look only one row below the one we are currently on, and we can quickly work our way up to the top. Eventually, the root node will contain the maximum path sum.&lt;/p&gt;
+&lt;p&gt;Another, much faster solution is the bottom-up way, which I also call the iterative solution. The key insight is that the second to last row of numbers is also a row of small triangles each with only two rows. For those, finding the maximum path sum is easy. Note &amp;ndash; Theres no need to write new code for that computation, we can reuse the recursive method. So, we replace each sub-triangle&amp;rsquo;s root node with a number representing the maximum path sum through it. Thus, the bottom two rows can be resolved into one row of numbers corresponding to the maximum path sums from each of the nodes on that row. From there, we can move up to the next row being careful to always look only one row below the one we are currently on, and we can quickly work our way up to the top. Eventually, the root node will contain the maximum path sum.&lt;/p&gt;
 
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;java&quot;&gt; &lt;span class=&quot;kt&quot;&gt;long&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;iterativePathSum&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;root&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;triSize&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt; 
         &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;j&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;k&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
@@ -76,7 +83,7 @@
  <entry>
    <title>todo -t write-todo-blog-post</title>
    <link href="http://haikus-in-c.github.io/posts/bash-todo-list-tool"/>
-   <updated>2013-08-11T00:00:00+00:00</updated>
+   <updated>2013-08-11T00:00:00-03:00</updated>
    <id>http://haikus-in-c.github.io/posts/bash-todo-list-tool</id>
    <content type="html">&lt;p&gt;Recently I read an &lt;a href=&quot;http://zachholman.com/posts/inbox-zero-everything-zero/&quot;&gt;article by Zach Holman&lt;/a&gt;, an engineer at Github and the guy
 whose jekyll theme I adapted to build this site, about a simple (read: &lt;em&gt;very&lt;/em&gt; simple)
@@ -104,7 +111,7 @@ desktop as a kind of bucket I need to empty&amp;hellip;.&lt;/p&gt;&lt;/blockquot
 &lt;p&gt;Unfortunately, my desktop isn&amp;rsquo;t so clean. I&amp;rsquo;ve got all sorts of music and image files lying around,
 in addition to miscellaneous stuff that&amp;rsquo;s not related at all to programming. So, I decided to heavily
 edit this todo script to accept several command line options that allow a user to set a priority for
-a task (top - mid - low), print all the tasks in the todo list, organized by priority, and remove any
+a task (top &amp;ndash; mid &amp;ndash; low), print all the tasks in the todo list, organized by priority, and remove any
 task. All the task files, which are the exact same empty files created with the touch command as in
 Holman&amp;rsquo;s original, are organized under one directory at ~/Desktop/todo. Within todo, there are three
 more directories, todo/top, todo/mid, and todo/low. Each of these represents one priority category.&lt;/p&gt;
@@ -155,12 +162,12 @@ getting the ball rolling. For those interested, here&amp;rsquo;s the &lt;a href=
  <entry>
    <title>Can You Yodle and Juggle at the Same Time?</title>
    <link href="http://haikus-in-c.github.io/posts/jugglefest"/>
-   <updated>2013-05-24T00:00:00+00:00</updated>
+   <updated>2013-05-24T00:00:00-03:00</updated>
    <id>http://haikus-in-c.github.io/posts/jugglefest</id>
    <content type="html">&lt;p&gt;In the careers section of startup &lt;a href=&quot;http://www.yodle.com/&quot;&gt;Yodle&amp;rsquo;s&lt;/a&gt; website, there are a couple programming
 problems, one of which is called &lt;a href=&quot;http://www.yodlecareers.com/puzzles/jugglefest.html&quot;&gt;JuggleFest&lt;/a&gt;. Here&amp;rsquo;s a summary: given a
 list of x circuits and y jugglers, where each juggler has a certain number of circuit
-preferences ranked 1 - n, assign the jugglers to circuits evenly such that the number of
+preferences ranked 1 &amp;ndash; n, assign the jugglers to circuits evenly such that the number of
 jugglers in each circuit is y/x and no juggler could switch to a circuit that they prefer
 more than the one they are already assigned to &lt;em&gt;and&lt;/em&gt; be a better fit for that circuit than
 one of the other jugglers assigned to it. Whew.&lt;/p&gt;
@@ -219,7 +226,7 @@ check all Circuits for an under-full Circuit and add it there.&lt;/p&gt;&lt;/li&
  <entry>
    <title>Let's Get Funky</title>
    <link href="http://haikus-in-c.github.io/posts/spotify-programming-challenge-funk"/>
-   <updated>2013-04-26T00:00:00+00:00</updated>
+   <updated>2013-04-26T00:00:00-03:00</updated>
    <id>http://haikus-in-c.github.io/posts/spotify-programming-challenge-funk</id>
    <content type="html">&lt;p&gt;Today we return to &lt;a href=&quot;https://www.spotify.com/us/jobs/tech/&quot;&gt;Spotify&amp;rsquo;s hallowed puzzle page&lt;/a&gt; for the second of the three puzzles
 they offer there. This one, the middle brother in between &lt;a href=&quot;http://haikus-in-c.com/posts/spotify-programming-challenge-reggae/&quot;&gt;Reggae&lt;/a&gt; and &lt;a href=&quot;http://haikus-in-c.com&quot;&gt;Heavy Metal&lt;/a&gt;,
@@ -330,7 +337,7 @@ and return the first m songs (as specified in the input) in descending order of 
  <entry>
    <title>So This is What Reggae Feels Like</title>
    <link href="http://haikus-in-c.github.io/posts/spotify-programming-challenge-reggae"/>
-   <updated>2013-04-12T00:00:00+00:00</updated>
+   <updated>2013-04-12T00:00:00-03:00</updated>
    <id>http://haikus-in-c.github.io/posts/spotify-programming-challenge-reggae</id>
    <content type="html">&lt;p&gt;On &lt;a href=&quot;https://www.spotify.com/us/jobs/tech/&quot;&gt;Spotify&amp;rsquo;s puzzle page&lt;/a&gt;, they&amp;rsquo;ve got three tech puzzles for potential hires
 to play around with. This is the first of them, whose difficulty is rated &lt;em&gt;Reggae&lt;/em&gt;.&lt;/p&gt;
@@ -408,7 +415,7 @@ from the end of the String, adding increasing powers of 2 to a final result.&lt;
  <entry>
    <title>Welcome</title>
    <link href="http://haikus-in-c.github.io/posts/welcome"/>
-   <updated>2013-04-05T00:00:00+00:00</updated>
+   <updated>2013-04-05T00:00:00-03:00</updated>
    <id>http://haikus-in-c.github.io/posts/welcome</id>
    <content type="html">&lt;p&gt;Welcome to &lt;a href=&quot;https://haikus-in-c.github.io&quot;&gt;Haikus in C&lt;/a&gt;, the programming blog of Ian and Ruchir, two
 CS students at Columbia.&lt;/p&gt;
