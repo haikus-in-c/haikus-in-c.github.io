@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+  <meta charset="utf-8">
+  <title>
+    
+      Foolproof Guide to Github Pages with a Custom Domain &ndash;
+    
+    Haikus in C
+  </title>
+
+  <meta name="author" content="Haikus in C" />
+  <meta name="description" content="a place where two columbia cs students share code and talk about their projects" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <link rel="alternate" type="application/rss+xml" href="/atom.xml" />
+
+  <link rel="stylesheet" href="/css/fontawesome.min.css" type="text/css" media="screen, projection" />
+  <link rel="stylesheet" href="/css/base.css" type="text/css" media="screen, projection" />
+  <link rel="stylesheet" href="/css/pygments.css" type="text/css" />
+  <link media="only screen and (max-device-width: 480px)" href="/css/mobile.css" type="text/css" rel="stylesheet" />
+  <link media="only screen and (device-width: 768px)" href="/css/mobile.css" type="text/css" rel="stylesheet" />
+  <link href='http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz' rel='stylesheet' type='text/css'>
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+  <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+  <script type="text/javascript" src="/js/application.js"></script>
+</head>
+
+<body>
+  <section class="header">
+	<h1>
+	  <a href="/">Haikus in C</a>
+	</h1>
+  </section>
+
+  <section class="sidebar">
+
+    <section class="meta">
+      <a href="https://github.com/haikus-in-c" target="_blank"><i class="icon icon-github"></i></a>
+    </section>
+
+    <section class="sections">
+      <ul>
+		<li><a href="/">home</a><li>
+        <li><a href="/about.html">about</a></li>
+        <li><a href="/posts.html">posts</a></li>
+      </ul>
+    </section>
+
+	<section class="shoutout">
+	  <p>made with help from <a href="https://github.com/mojombo/jekyll">jekyll</a> and an adapted theme from
+		<a href="http://zachholman.com/">zach holman</a>.</p>
+	</section>
+
+  </section>
+
+  <section class="content">
+  <h1>
+    <a href="/posts/github-pages-custom-domain">Foolproof Guide to Github Pages with a Custom Domain</a>
+  </h1>
+
+  <section class="byline">
+    by Ian Zapolsky, August 15, 2013
+  </section>
+
+  <p>Recently I spent some time wading through the internet&rsquo;s primordial soup of CS help sources &ndash; Stack
+Overflow commments, random blogs (like this one!), and source documentation that leaves something to
+be desired &ndash; to set up this site, which is hosted on Github Pages with a custom domain. I&rsquo;ve since
+decided to migrate the hosting of my <a href="http://ianzapolsky.com/">personal website</a> to Github Pages as well,
+because it&rsquo;s such a great platform and allows for almost instantatneous editing and changing. Instead
+of using clumsy cPanels and browser-based editors, you can just make edits to your site files
+locally in whatever text editor you want, add, commit, push, and it&rsquo;s live. However, there are
+a couple tricky spots to getting your custom domain Github Pages hosted site up and running.
+But since I&rsquo;ve done this setup process twice now, I&rsquo;m going to cover it from scratch,
+so I can garuntee that by the end of this, your website will work too!</p>
+
+<p>I&rsquo;m only going to assume one thing for this tutorial: that you already have a Github account. If you
+don&rsquo;t that&rsquo;s no problem, just go set one up and follow their super clear instructions verbatim. Then
+come back here.</p>
+
+<p>Now, first thing&rsquo;s first. If you don&rsquo;t own the domain you want to use, go buy it.  Having used
+<a href="http://www.godaddy.com/">GoDaddy</a> before, I can tell you that it kind of sucks, and is in no way meant for
+anyone who considers themself to be even a shadow of a hacker. I&rsquo;ve also tried <a href="http://www.dreamhost.com/">DreamHost</a>
+which has a much cleaner interface than GoDaddy, but doesn&rsquo;t offer that much more in the way of
+features. Finally, I&rsquo;ve read good things about <a href="http://www.namecheap.com/">Namecheap</a>, but have never personally
+tried it. Ultimately, these services all do the same things, and where you buy your domain from
+doesn&rsquo;t matter, as long as they aren&rsquo;t some scam company.</p>
+
+<p>Once you own your domain, pull up your Github account page and create a new repository. Name
+it your-username.github.io. The Github account for this blog is haikus-in-c, so the Github repository
+that this site is hosted out of is named haikus-in-c.github.io. It must be named this way for
+Github Pages reasons, and it is important. Now, set up a version on your local machine:</p>
+
+<pre><code>$ mkdir ~/your-username.github.io
+$ cd ~/your-username.github.io
+$ git init
+$ touch CNAME   // add this file, but leave it blank for now
+$ git commit -m 'first commit'
+$ git remote add origin https://github.com/your-username/your-username.github.io.git
+$ git push origin master
+</code></pre>
+
+<p>Excellent. Now you have a repository on your local machine pointing to your-username.github.io on
+Github&rsquo;s servers. This directory will hold the body of your site, and it&rsquo;s kind of like a more advanced
+version of a public_html directory.</p>
+
+<p>I say more advanced because Github Pages repositories are also capable of building Jekyll sites.
+I&rsquo;m going to make a bold assumption that your site is powered by <a href="http://jekyllrb.com/">Jekyll</a>, but if it&rsquo;s not,
+have no fear. I only make this assumption because <em>a lot</em> of Github Pages users use Jekyll, because
+Github actually uses Jekyll to serve every page it hosts. If you are using Jekyll, I&rsquo;ll assume you&rsquo;ve
+already set it up (if you haven&rsquo;t there&rsquo;s <a href="http://jekyllrb.com/docs/home/">great documentation</a> out there). I recommend
+using the <a href="https://github.com/jekyll/test-site">Jekyll test site</a> to get started with Github Pages, because it&rsquo;s guaranteed to
+build every time.</p>
+
+<p>If you&rsquo;re not using Jekyll, or even if you are and don&rsquo;t want to deal with the test site, just load a
+simple index.html file into your your-username.github.io directory with some test content in it. This
+is just there to test that everything is functioning properly with Github Pages before we move on. Once
+index.html is added and edited, add, commit, and push from the github pages directory:</p>
+
+<pre><code>$ git add *
+$ git commit -m 'added test site'
+$ git push origin master
+</code></pre>
+
+<p>Now, in your web browser of choice navigate to www.your-username.github.io. If you&rsquo;re looking at the
+result of whatever HTML, Jekyll, or other types of files you just pushed to the your-username.github.io
+repository, then you&rsquo;re ready to move on. If you&rsquo;re looking at a 404 page, or some other type of error, it&rsquo;s
+probably one of two things. Either the Github servers haven&rsquo;t updated to see your freshly pushed data yet
+(though in my experience this always happens really quickly), or your site didn&rsquo;t build for some reason. You
+should also recieve an email from Github when this happens. There are a number of possible problems that
+can cause this to happen: check the <a href="https://github.com/github/pages-gem/blob/master/github-pages.gemspec#L16">software versions</a> that the Github Pages' servers use
+and make sure they&rsquo;re not causing any problems with your site. If that&rsquo;s not it, try building your site
+on your local machine (if you&rsquo;re using Jekyll this is really easy). See the <a href="https://help.github.com/categories/20/articles">github docs</a> for
+more troubleshooting.</p>
+
+<p>Once you&rsquo;ve got a site showing at www.your-username.github.io you&rsquo;re finally ready to add your custom domain.
+cd back into your-username.github.io and, using your favorite text editor, change CNAME to contain your
+domain name. Use <a href="https://github.com/haikus-in-c/haikus-in-c.github.io/blob/master/CNAME">ours</a> as an example. Then type:</p>
+
+<pre><code>$ git add *
+$ git commit -m 'added domain to CNAME'
+$ git push origin master
+</code></pre>
+
+<p>Now, go back to the site where you bought your domain from and navigate to whichever account page allows you to
+manage your domains. Then click on the link that says something like &ldquo;DNS&rdquo; or &ldquo;Edit DNS&rdquo;. You can learn more
+about DNS <a href="http://en.wikipedia.org/wiki/Domain_Name_System">here</a>, but basically what we&rsquo;re doing here is telling the internet that anytime it recieves
+a request for your domain name, it should point whoever is sending that request to the Github Pages
+servers, which is where your site now lives.</p>
+
+<p>Using the DNS editing options, add an A record from your domain&rsquo;s root apex that points to the IP address 204.232.175.78,
+which is Github Pages' server, and a CNAME record from www that points to your root apex (or the hostname of your site).</p>
+
+<p>Note that there is a difference between the way GoDaddy and DreamHost handle the root apex and the www.
+If you&rsquo;re using GoDaddy, you must add an A record from &lsquo;@&rsquo; (the root) pointing to the IP address given above, and
+a CNAME record pointing from &lsquo;www&rsquo; to @. If you&rsquo;re using DreamHost, you have to add an A record with no name (which
+DreamHost automatically interprets to be the root apex) that points to the Github IP address, and then
+a CNAME record pointing from &lsquo;www&rsquo; to your-username.github.com (as opposed to @). Below are screenshots of the DNS edit screens looking the way they should for GoDaddy, then DreamHost.</p>
+
+<p>GoDaddy: note that &lsquo;@&rsquo; (top) is set to point to 204.232.175.78 and &lsquo;www&rsquo; (bottom) points to &lsquo;@&rsquo;
+<img src="/images/godaddy_img.png" alt="GoDaddy" />
+DreamHost: note that there&rsquo;s an A record with a blank name pointing to 204.232.175.78 (which means the same
+as GoDaddy&rsquo;s &lsquo;@&rsquo;) and a CNAME record pointing from &lsquo;www&rsquo; to ianzapolsky.github.com.
+<img src="/images/dreamhost_img.png" alt="DreamHost" /></p>
+
+<p>Wait a while for these DNS changes to propogate through the system, and your Github Pages hosted site should
+be live on your custom domain!</p>
+
+
+<!-- possibly update this later
+   TODO: bio here
+  <section class="meta">
+    <h3>Discussion, links, and tweets</h3>
+    <section class="copy">
+      <a href="https://twitter.com/" target="_blank">
+        <img src="?s=142" height="50" width="50" />
+      </a>
+
+      <p>
+        I'm a developer at GitHub. <a href="https://twitter.com/" target="_blank">Follow me on Twitter</a>;
+        you'll enjoy my tweets. I take care to carefully craft each one. Or at least aim to make
+        you giggle. Or offended. One of those two&mdash; I haven't decided which yet.
+      </p>
+
+      <a href="http://twitter.com/share" class="twitter-share-button" data-count="none" data-via="">Tweet</a>
+      <a href="http://twitter.com/" class="twitter-follow-button" data-show-count="false">Follow @</a>
+      <script src="http://platform.twitter.com/widgets.js" type="text/javascript"></script>
+    </section>
+  </section>
+-->
+
+<hr>
+  
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+      /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+      var disqus_shortname = 'haikus'; // required: replace example with your forum shortname
+
+      /* * * DON'T EDIT BELOW THIS LINE * * */
+      (function() {
+          var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+          dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+  
+
+</section>
+
+
+</body>
+
+</html>

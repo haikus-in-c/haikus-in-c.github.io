@@ -1,32 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
-        <loc>http://haikus-in-c.github.io</loc>
+        <loc>http://haikus-in-c.com</loc>
     </url>
     
     
     <url>
-        <loc>http://haikus-in-c.github.io/posts/triangle-sum</loc>
+        <loc>http://haikus-in-c.com/posts/triangle-sum</loc>
     </url>
     
     <url>
-        <loc>http://haikus-in-c.github.io/posts/bash-todo-list-tool</loc>
+        <loc>http://haikus-in-c.com/posts/github-pages-custom-domain</loc>
     </url>
     
     <url>
-        <loc>http://haikus-in-c.github.io/posts/jugglefest</loc>
+        <loc>http://haikus-in-c.com/posts/bash-todo-list-tool</loc>
     </url>
     
     <url>
-        <loc>http://haikus-in-c.github.io/posts/spotify-programming-challenge-funk</loc>
+        <loc>http://haikus-in-c.com/posts/jugglefest</loc>
     </url>
     
     <url>
-        <loc>http://haikus-in-c.github.io/posts/spotify-programming-challenge-reggae</loc>
+        <loc>http://haikus-in-c.com/posts/spotify-programming-challenge-funk</loc>
     </url>
     
     <url>
-        <loc>http://haikus-in-c.github.io/posts/welcome</loc>
+        <loc>http://haikus-in-c.com/posts/spotify-programming-challenge-reggae</loc>
+    </url>
+    
+    <url>
+        <loc>http://haikus-in-c.com/posts/welcome</loc>
     </url>
     
 </urlset>

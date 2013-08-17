@@ -5,6 +5,6 @@ rdiscount:
   extensions: [smart]
 
 name: Haikus in C
-url: http://haikus-in-c.github.io
+url: http://haikus-in-c.com
 description: a place where two columbia cs students share code and talk about their projects
 github: haikus-in-c
