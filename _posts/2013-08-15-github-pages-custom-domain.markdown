@@ -84,13 +84,13 @@ a request for your domain name, it should point whoever is sending that request 
 servers, which is where your site now lives.
 
 Using the DNS editing options, add an A record from your domain's root apex that points to the IP address 204.232.175.78, 
-which is Github Pages' server, and a CNAME record from www that points to your root apex (or the hostname of your site).
+which is Github Pages' server, and a CNAME record from 'www' that points to your root apex (or the hostname of your site).
 
 Note that there is a difference between the way GoDaddy and DreamHost handle the root apex and the www. 
 If you're using GoDaddy, you must add an A record from '@' (the root) pointing to the IP address given above, and 
-a CNAME record pointing from 'www' to @. If you're using DreamHost, you have to add an A record with no name (which
+a CNAME record pointing from 'www' to '@'. If you're using DreamHost, you have to add an A record with no name (which
 DreamHost automatically interprets to be the root apex) that points to the Github IP address, and then 
-a CNAME record pointing from 'www' to your-username.github.com (as opposed to @). Below are screenshots of the DNS edit screens looking the way they should for GoDaddy, then DreamHost.
+a CNAME record pointing from 'www' to your-username.github.com (as opposed to '@'). Below are screenshots of the DNS edit screens looking the way they should for GoDaddy, then DreamHost.
 
 GoDaddy: note that '@' (top) is set to point to 204.232.175.78 and 'www' (bottom) points to '@'
 ![GoDaddy](/images/godaddy_img.png)

@@ -4,7 +4,7 @@
  <title>Haikus in C</title>
  <link href="http://haikus-in-c.com/atom.xml" rel="self"/>
  <link href="http://haikus-in-c.com/"/>
- <updated>2013-08-17T11:55:22-03:00</updated>
+ <updated>2013-08-17T11:58:33-03:00</updated>
  <id>http://haikus-in-c.com</id>
  <author>
    <name>Haikus in C</name>
@@ -166,13 +166,13 @@ a request for your domain name, it should point whoever is sending that request 
 servers, which is where your site now lives.&lt;/p&gt;
 
 &lt;p&gt;Using the DNS editing options, add an A record from your domain&amp;rsquo;s root apex that points to the IP address 204.232.175.78,
-which is Github Pages' server, and a CNAME record from www that points to your root apex (or the hostname of your site).&lt;/p&gt;
+which is Github Pages' server, and a CNAME record from &amp;lsquo;www&amp;rsquo; that points to your root apex (or the hostname of your site).&lt;/p&gt;
 
 &lt;p&gt;Note that there is a difference between the way GoDaddy and DreamHost handle the root apex and the www.
 If you&amp;rsquo;re using GoDaddy, you must add an A record from &amp;lsquo;@&amp;rsquo; (the root) pointing to the IP address given above, and
-a CNAME record pointing from &amp;lsquo;www&amp;rsquo; to @. If you&amp;rsquo;re using DreamHost, you have to add an A record with no name (which
+a CNAME record pointing from &amp;lsquo;www&amp;rsquo; to &amp;lsquo;@&amp;rsquo;. If you&amp;rsquo;re using DreamHost, you have to add an A record with no name (which
 DreamHost automatically interprets to be the root apex) that points to the Github IP address, and then
-a CNAME record pointing from &amp;lsquo;www&amp;rsquo; to your-username.github.com (as opposed to @). Below are screenshots of the DNS edit screens looking the way they should for GoDaddy, then DreamHost.&lt;/p&gt;
+a CNAME record pointing from &amp;lsquo;www&amp;rsquo; to your-username.github.com (as opposed to &amp;lsquo;@&amp;rsquo;). Below are screenshots of the DNS edit screens looking the way they should for GoDaddy, then DreamHost.&lt;/p&gt;
 
 &lt;p&gt;GoDaddy: note that &amp;lsquo;@&amp;rsquo; (top) is set to point to 204.232.175.78 and &amp;lsquo;www&amp;rsquo; (bottom) points to &amp;lsquo;@&amp;rsquo;
 &lt;img src=&quot;/images/godaddy_img.png&quot; alt=&quot;GoDaddy&quot; /&gt;
