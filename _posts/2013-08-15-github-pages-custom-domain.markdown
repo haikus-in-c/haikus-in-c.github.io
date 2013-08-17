@@ -51,7 +51,7 @@ I recommend [looking into it][jekylldocs].
 
 Regardless of whether or not you're using Jekyll, the next step is to add your site files, or better yet
 a simple test site that you know will build (a single index.html file with some test content will work fine,
-or you could use the [Jekyll test site][jekylltest]. Once your site files are in your site directory like
+or you could use the [Jekyll test site][jekylltest]). Once your site files are in your site directory like
 you want them, git add, commit, and push up to the master branch of your-username.github.io:
 	
 	$ git add *
