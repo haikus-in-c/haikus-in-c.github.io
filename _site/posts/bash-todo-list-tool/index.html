@@ -88,12 +88,10 @@ it just wouldn&rsquo;t be feasible to keep track of all the todo files. In his o
 desktop as a kind of bucket I need to empty&hellip;.</p></blockquote>
 
 <p>Unfortunately, my desktop isn&rsquo;t so clean. I&rsquo;ve got all sorts of music and image files lying around,
-in addition to miscellaneous stuff that&rsquo;s not related at all to programming. So, I decided to heavily
-edit this todo script to accept several command line options that allow a user to set a priority for
-a task (top &ndash; mid &ndash; low), print all the tasks in the todo list, organized by priority, and remove any
-task. All the task files, which are the exact same empty files created with the touch command as in
-Holman&rsquo;s original, are organized under one directory at ~/Desktop/todo. Within todo, there are three
-more directories, todo/top, todo/mid, and todo/low. Each of these represents one priority category.</p>
+and I&rsquo;m too lazy to clean it all up. So, I decided to heavily edit this todo script to keep all the
+task files, which are the exact same emtpy files created with the touch command as in Holman&rsquo;s original,
+organized by priority under one directory at ~/Desktop/todo. Within todo, there are more directories, todo/top,
+todo/mid, and todo/low. Each of these represents one priority category.</p>
 
 <p>With my script, any time you&rsquo;re at the shell you can type:</p>
 
@@ -104,10 +102,9 @@ $ todo other-top-priority-thing
 </code></pre>
 
 <p>The options -t, -m, and -l add a given task to directories top, mid, and low, respectively. If we run
-todo without any option, our task will be automatically added to the top priority category. This is all
-good, but we still have a problem when we want to peruse our list. It&rsquo;s all bundled up inside directories,
-and none of us want to cd back and forth or fiddle with finder to see everything. That&rsquo;s where this
-prompt comes in, which prints the todo list to the shell in an organized manner.</p>
+todo without any option, our task will be automatically added to the top priority category.</p>
+
+<p>The -p option prints the todo list to the shell in an organized manner</p>
 
 <pre><code>$ todo -p
 </code></pre>
@@ -126,11 +123,12 @@ prompt comes in, which prints the todo list to the shell in an organized manner.
 </code></pre></div>
 
 
-<p>Boom! Finally, one last thing. Removing tasks is probably the easiest operation to complete using just
-regular command line tools. However, for those who are lazy, there&rsquo;s this command, which deletes
-any task you want, so long as you provide the priority directory.</p>
+<p>Boom! Finally, removing tasks is probably the easiest operation to complete using just
+regular command line tools. But since laziness was a major design principle in this
+project I added the -r option, which searches the priority directories for a file and
+deletes it if it finds it.</p>
 
-<pre><code>$ todo -r mid/mid-priority-thing
+<pre><code>$ todo -r mid-priority-thing
 </code></pre>
 
 <p>That&rsquo;s all, a little todo tool to help you keep track of the stuff you&rsquo;re doing. Thanks to Zach for
