@@ -58,6 +58,199 @@
   <section class="content">
   
 	<h1>
+	  <a href="/posts/cats-vs-dogs">Cats vs Dogs</a>
+	</h1>
+	
+	<section class="byline">
+	  by Ruchir Khaitan, Aug 19, 2013
+	</section>
+
+	<p><p>The final <a href="https://www.spotify.com/us/jobs/tech/">Spotify</a> puzzle is a heavy metal showdown that brings together two beloved pets, and a wide variety of computer science topics. Unfortunately, problem took a lot longer than it should have, because I was stubborn, and refused to let go of preconceived ideas of how to solve it even when I could clearly see that my approach was incorrect. Basically, I was looking at it all wrong. The general premise, explained in more detail <a href="https://www.spotify.com/us/jobs/tech/catvsdog/">here</a>, is that in a TV game show for cats and dogs where as each week, a pet is removed based on a vote. Each person watching votes for one pet that they want to keep on the show, and one that they want to remove, and people cannot choose members of the same species for both. Most importantly, the producers will remove pets in an effort to maximize viewership, and so the question is: what is the maximum number of voters that can be satisfied, meaning that both their choices have been carried out, given a set of votes (and assuming that those votes dont change over time).</p>
+
+<p>My initial idea was simplistic and based on a flawed assumption. I inferred, purely on intuition, that the removed pets would be the ones with the least positive votes, and the most negative votes and created a data structure to represent pets and voters characterizing each pet by fitness which was the number of upvotes - the number of downvotes. I like to call this the &ldquo;Reddit&rdquo; solution.</p>
+
+<div class="highlight"><pre><code class="c">    <span class="k">struct</span> <span class="n">pet</span> <span class="p">{</span>
+            <span class="kt">int</span> <span class="n">fitness</span><span class="p">;</span> <span class="c1">//running tally of upvotes - downvotes</span>
+            <span class="kt">int</span> <span class="n">contending</span><span class="p">;</span> <span class="c1">//whether this pet is still in</span>
+    <span class="p">};</span>
+    <span class="k">struct</span> <span class="n">voter</span> <span class="p">{</span>
+            <span class="k">struct</span> <span class="n">pet</span><span class="o">*</span> <span class="n">keep</span><span class="p">;</span>
+            <span class="k">struct</span> <span class="n">pet</span><span class="o">*</span> <span class="n">reject</span><span class="p">;</span>   
+    <span class="p">};</span> 
+</code></pre></div>
+
+
+<p>Then I simulated the game by removing the least fit pets and keeping track of the number of people satisfied at each step, and then returning the maximum number.</p>
+
+<div class="highlight"><pre><code class="c">    <span class="k">struct</span> <span class="n">pet</span><span class="o">*</span> <span class="nf">find_min</span><span class="p">(</span><span class="k">struct</span> <span class="n">pet</span><span class="o">*</span> <span class="n">c_addr</span><span class="p">,</span> <span class="kt">int</span> <span class="n">c</span><span class="p">,</span><span class="k">struct</span> <span class="n">pet</span><span class="o">*</span> <span class="n">d_addr</span><span class="p">,</span> <span class="kt">int</span> <span class="n">d</span><span class="p">)</span> <span class="p">{</span>
+        <span class="c1">//returns weakest pet out of array of c cats and d dogs in O(n)</span>
+            <span class="kt">int</span> <span class="n">min</span> <span class="o">=</span> <span class="mi">1000</span><span class="p">;</span> <span class="c1">//random large number </span>
+            <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+            <span class="k">struct</span> <span class="n">pet</span><span class="o">*</span> <span class="n">min_addr</span><span class="p">,</span> <span class="o">*</span><span class="n">curr</span><span class="p">;</span>
+            <span class="k">for</span><span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span> <span class="n">c</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">curr</span> <span class="o">=</span> <span class="n">c_addr</span><span class="o">+</span> <span class="n">i</span><span class="p">;</span>
+            <span class="k">if</span><span class="p">(</span><span class="n">curr</span> <span class="o">-&gt;</span><span class="n">fitness</span> <span class="o">&lt;</span> <span class="n">min</span> <span class="o">&amp;&amp;</span> <span class="n">curr</span><span class="o">-&gt;</span><span class="n">contending</span> <span class="o">!=</span> <span class="mi">0</span> <span class="p">)</span> <span class="p">{</span>
+                    <span class="n">min</span> <span class="o">=</span> <span class="n">curr</span><span class="o">-&gt;</span><span class="n">fitness</span><span class="p">;</span>
+                    <span class="n">min_addr</span> <span class="o">=</span> <span class="n">curr</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="p">}</span>    
+            <span class="k">for</span><span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span> <span class="n">d</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">curr</span> <span class="o">=</span> <span class="n">d_addr</span> <span class="o">+</span> <span class="n">i</span><span class="p">;</span>
+                <span class="k">if</span><span class="p">(</span><span class="n">curr</span><span class="o">-&gt;</span><span class="n">fitness</span><span class="o">&lt;</span> <span class="n">min</span> <span class="o">&amp;&amp;</span> <span class="n">curr</span><span class="o">-&gt;</span><span class="n">contending</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+                        <span class="n">min</span> <span class="o">=</span> <span class="n">curr</span> <span class="o">-&gt;</span><span class="n">fitness</span><span class="p">;</span>
+                        <span class="n">min_addr</span> <span class="o">=</span> <span class="n">curr</span><span class="p">;</span>
+                <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="n">min_addr</span><span class="o">-&gt;</span><span class="n">contending</span> <span class="o">=</span>  <span class="mi">0</span><span class="p">;</span>   
+        <span class="k">return</span> <span class="n">min_addr</span><span class="p">;</span>   
+    <span class="p">}</span> 
+    <span class="kt">int</span> <span class="nf">sim_game</span><span class="p">(</span><span class="k">struct</span> <span class="n">voter</span><span class="o">*</span> <span class="n">v_addr</span><span class="p">,</span><span class="kt">int</span> <span class="n">v</span><span class="p">,</span><span class="k">struct</span> <span class="n">pet</span><span class="o">*</span><span class="n">c_addr</span><span class="p">,</span><span class="kt">int</span> <span class="n">c</span><span class="p">,</span><span class="k">struct</span> <span class="n">pet</span><span class="o">*</span><span class="n">d_addr</span><span class="p">,</span><span class="kt">int</span> <span class="n">d</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kt">int</span> <span class="n">num_satisfied</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> 
+            <span class="kt">int</span> <span class="n">max_satisfied</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+            <span class="kt">int</span> <span class="n">pets_remain</span> <span class="o">=</span> <span class="n">c</span> <span class="o">+</span> <span class="n">d</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
+            <span class="k">struct</span> <span class="n">pet</span><span class="o">*</span> <span class="n">weakest</span><span class="p">;</span>
+            <span class="k">while</span><span class="p">(</span><span class="n">pets_remain</span><span class="p">){</span>
+                <span class="n">weakest</span> <span class="o">=</span> <span class="n">find_min</span><span class="p">(</span><span class="n">c_addr</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">d_addr</span><span class="p">,</span> <span class="n">d</span><span class="p">);</span> 
+            <span class="k">for</span><span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span> <span class="n">v</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span><span class="p">(</span><span class="n">v_addr</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">keep</span><span class="o">-&gt;</span><span class="n">contending</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="p">(</span><span class="n">v_addr</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">reject</span><span class="o">-&gt;</span><span class="n">contending</span><span class="p">))</span>
+                    <span class="n">num_satisfied</span><span class="o">++</span><span class="p">;</span>
+                <span class="p">}</span>
+                <span class="k">if</span><span class="p">(</span><span class="n">num_satisfied</span><span class="o">&gt;</span> <span class="n">max_satisfied</span><span class="p">)</span> 
+                    <span class="n">max_satisfied</span> <span class="o">=</span> <span class="n">num_satisfied</span><span class="p">;</span>
+
+            <span class="n">num_satisfied</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+            <span class="n">pets_remain</span><span class="o">--</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">return</span> <span class="n">max_satisfied</span><span class="p">;</span>   
+    <span class="p">}</span> 
+</code></pre></div>
+
+
+<p>Unfortunately, this approach didnt work and I was at a loss to explain why since it seemed to work for the two test inputs given, and I couldnt engineer a new test case that would break my algorithm. Eventually, I realized the flaw in my reasoning which was that I implicitly assumed that the way to maximize viewer satisfaction would be to remove the least wanted pets, which seems like the right way to go about it, except that in doing so, it shifts ones focus on the pets when it should be squarely on the pets. I realized that the voters represented a bipartite graph, with one partition being the group that liked cats, and the other being the group that liked dogs. Here the edges on the graph represented incompatible pairings, or pairs where at least one person wants to remove a pet that the other wants to keep. Such pairs cannot mutually be happy, as to give one satisfaction would be to deny the other. With this insight in hand, the problem becomes a problem of finding the maximum cardinality matching, or the maximum set of edges without any common vertices on the graph. This represents all of the incompatible people from which one person has to be removed, and so, the answer is the number of voters v - the number of edges E in the maximum cardinality matching. This method requires first splitting the voters into two arrays, representing the two partitions in the graph.</p>
+
+<div class="highlight"><pre><code class="c">    <span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span><span class="o">**</span> <span class="n">argv</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kt">int</span> <span class="n">times</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="n">k</span><span class="p">,</span> <span class="n">cats</span><span class="p">,</span> <span class="n">dogs</span><span class="p">,</span> <span class="n">voters</span><span class="p">,</span> <span class="n">prefer</span><span class="p">,</span> <span class="n">reject</span><span class="p">;</span>
+            <span class="kt">int</span> <span class="n">cats_filled</span><span class="p">,</span> <span class="n">dogs_filled</span><span class="p">;</span>
+            <span class="kt">char</span> <span class="n">buf</span><span class="p">[</span><span class="mi">256</span><span class="p">],</span> <span class="n">type</span><span class="p">,</span> <span class="o">*</span><span class="n">pch</span><span class="p">;</span>
+            <span class="k">struct</span> <span class="n">voter</span><span class="o">*</span> <span class="n">cat_voters</span><span class="p">,</span> <span class="o">*</span><span class="n">dog_voters</span><span class="p">,</span> <span class="o">*</span><span class="n">current</span><span class="p">;</span>
+            <span class="kt">int</span> <span class="o">**</span> <span class="n">edge_array</span><span class="p">,</span> <span class="o">*</span><span class="n">visited</span><span class="p">,</span> <span class="o">*</span><span class="n">match</span><span class="p">;</span>
+            <span class="n">scanf</span><span class="p">(</span><span class="s">&quot;%d&quot;</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">times</span><span class="p">);</span>
+            <span class="k">for</span><span class="p">(</span><span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span><span class="o">&lt;</span> <span class="n">times</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">scanf</span><span class="p">(</span><span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+            <span class="n">pch</span> <span class="o">=</span><span class="n">fgets</span><span class="p">(</span><span class="n">buf</span><span class="p">,</span> <span class="mi">256</span><span class="p">,</span><span class="n">stdin</span><span class="p">);</span>  
+            <span class="n">sscanf</span><span class="p">(</span><span class="n">buf</span><span class="p">,</span><span class="s">&quot; %d %d %d&quot;</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">cats</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">dogs</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">voters</span><span class="p">);</span>  
+            <span class="c1">//Malloc cat_voters &amp; dog_voters set cat_filled &amp; dog_filled to 0</span>
+            <span class="k">for</span> <span class="p">(</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span> <span class="n">voters</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>    
+                    <span class="n">pch</span> <span class="o">=</span> <span class="n">fgets</span><span class="p">(</span><span class="n">buf</span><span class="p">,</span> <span class="mi">256</span><span class="p">,</span> <span class="n">stdin</span><span class="p">);</span>
+                        <span class="n">type</span> <span class="o">=</span> <span class="o">*</span><span class="n">buf</span><span class="p">;</span>
+                    <span class="n">pch</span> <span class="o">=</span> <span class="n">strtok</span><span class="p">(</span><span class="n">buf</span><span class="p">,</span> <span class="s">&quot; &quot;</span><span class="p">);</span>
+                        <span class="n">pch</span> <span class="o">=</span> <span class="n">strtok</span><span class="p">(</span><span class="nb">NULL</span><span class="p">,</span> <span class="s">&quot; &quot;</span><span class="p">);</span>
+                        <span class="n">prefer</span> <span class="o">=</span> <span class="p">(</span><span class="n">atoi</span><span class="p">(</span><span class="n">buf</span> <span class="o">+</span> <span class="mi">1</span><span class="p">));</span>
+                        <span class="n">reject</span> <span class="o">=</span> <span class="n">atoi</span><span class="p">(</span><span class="n">pch</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="n">type</span> <span class="o">==</span> <span class="sc">&#39;C&#39;</span> <span class="o">||</span> <span class="n">type</span> <span class="o">==</span> <span class="sc">&#39;c&#39;</span> <span class="p">)</span>
+                        <span class="n">current</span> <span class="o">=</span> <span class="n">cat_voters</span> <span class="o">+</span> <span class="n">cats_filled</span><span class="o">++</span><span class="p">;</span>
+                    <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">type</span> <span class="o">==</span> <span class="sc">&#39;D&#39;</span> <span class="o">||</span> <span class="n">type</span> <span class="o">==</span><span class="sc">&#39;d&#39;</span><span class="p">)</span>
+                    <span class="n">current</span> <span class="o">=</span> <span class="n">dog_voters</span> <span class="o">+</span> <span class="n">dogs_filled</span><span class="o">++</span><span class="p">;</span>
+                    <span class="n">current</span><span class="o">-&gt;</span><span class="n">like</span> <span class="o">=</span> <span class="n">prefer</span><span class="p">;</span>    
+                    <span class="n">current</span><span class="o">-&gt;</span><span class="n">hate</span> <span class="o">=</span> <span class="n">reject</span><span class="p">;</span>
+    <span class="p">}</span>        
+        <span class="c1">//Continued below   </span>
+</code></pre></div>
+
+
+<p>This part of the code is pretty similar to the input gathering part of the first program. Besides the splitting of the voters into two seperate arrays, the only other difference is that struct voter is now just a pair of two integers, corresponding to the number of the pets they like and hate. After that, I used a modified adjacency matrix (modified because instead of storing a 1 to signify an edge, I stored the destination edges number. This will be important later).</p>
+
+<div class="highlight"><pre><code class="java"> <span class="c1">//Continued from above</span>
+        <span class="n">edge_array</span> <span class="o">=</span> <span class="o">(</span><span class="kt">int</span><span class="o">**)</span> <span class="n">malloc</span><span class="o">(</span><span class="n">cats_filled</span> <span class="o">*</span> <span class="n">sizeof</span><span class="o">(</span><span class="kt">int</span> <span class="o">*));</span>
+    <span class="k">for</span><span class="o">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span><span class="o">&lt;</span> <span class="n">cats_filled</span><span class="o">;</span> <span class="n">i</span><span class="o">++){</span>
+        <span class="n">edge_array</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">=(</span><span class="kt">int</span><span class="o">*)</span> <span class="n">malloc</span> <span class="o">(</span><span class="n">dogs_filled</span><span class="o">*</span><span class="n">sizeof</span><span class="o">(</span><span class="kt">int</span><span class="o">));</span>
+            <span class="k">for</span> <span class="o">(</span><span class="n">k</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">k</span><span class="o">&lt;</span> <span class="n">dogs_filled</span><span class="o">;</span> <span class="n">k</span><span class="o">++)</span> <span class="o">{</span>
+                <span class="n">edge_array</span><span class="o">[</span><span class="n">i</span><span class="o">][</span><span class="n">k</span><span class="o">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="o">;</span>
+            <span class="o">}</span> 
+            <span class="k">for</span><span class="o">(</span><span class="n">k</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">k</span><span class="o">&lt;</span><span class="n">dogs_filled</span><span class="o">;</span> <span class="n">k</span><span class="o">++){</span>
+                <span class="k">if</span><span class="o">(</span><span class="n">cat_voters</span><span class="o">[</span><span class="n">i</span><span class="o">].</span><span class="na">like</span> <span class="o">==</span> <span class="n">dog_voters</span><span class="o">[</span><span class="n">k</span><span class="o">].</span><span class="na">hate</span> <span class="o">||</span><span class="n">cat_voters</span><span class="o">[</span><span class="n">i</span><span class="o">].</span><span class="na">hate</span> <span class="o">==</span> <span class="n">dog_voters</span><span class="o">[</span><span class="n">k</span><span class="o">].</span><span class="na">like</span><span class="o">)</span>     
+                    <span class="n">edge_array</span><span class="o">[</span><span class="n">i</span><span class="o">][</span><span class="n">edge_filled</span><span class="o">++]</span> <span class="o">=</span> <span class="n">k</span><span class="o">;</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="c1">//Continued below</span>
+</code></pre></div>
+
+
+<p>Now finally, all I had left was to compute the maximum cardinality matching and return the correct answer. To do so, I use the augmenting path algorithm, which finds it by finding an augmenting path from each vertex in one partition to another and adding it to the matching if one exists. Basically this restructures the problem of finding a maximum cardinality matching into a maximum flow problem where there is a source (connected to all the vertices in one partition) and a sink (connected to all the vertices in another partition) and has complexity O(VE). A more efficient solution, known as the Hopcroft-Karp algorithm, is possible, but a little more complex to implement.</p>
+
+<div class="highlight"><pre><code class="c">    <span class="c1">//Continued from above</span>
+        <span class="n">match</span> <span class="o">=</span> <span class="p">(</span><span class="kt">int</span><span class="o">*</span><span class="p">)</span> <span class="n">malloc</span><span class="p">(</span><span class="n">voters</span><span class="o">*</span> <span class="k">sizeof</span><span class="p">(</span><span class="kt">int</span><span class="p">));</span>
+        <span class="n">visited</span> <span class="o">=</span> <span class="p">(</span><span class="kt">int</span><span class="o">*</span><span class="p">)</span> <span class="n">malloc</span><span class="p">(</span><span class="n">cats_filled</span> <span class="o">*</span> <span class="k">sizeof</span><span class="p">(</span><span class="kt">int</span><span class="p">));</span>
+        <span class="n">memset</span><span class="p">(</span><span class="n">match</span><span class="p">,</span> <span class="mh">0xffff</span><span class="p">,</span> <span class="n">voters</span><span class="o">*</span><span class="k">sizeof</span><span class="p">(</span><span class="kt">int</span><span class="p">));</span>
+        <span class="k">for</span><span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span> <span class="n">cats_filled</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">memset</span><span class="p">(</span><span class="n">visited</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">cats_filled</span><span class="o">*</span><span class="k">sizeof</span><span class="p">(</span><span class="kt">int</span><span class="p">));</span>
+        <span class="n">dfs</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">dogs_filled</span><span class="p">,</span> <span class="n">match</span><span class="p">,</span> <span class="n">visited</span><span class="p">,</span> <span class="n">edge_array</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="kt">int</span> <span class="n">ans</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="k">for</span><span class="p">(</span><span class="n">i</span> <span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">dogs_filled</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">ans</span><span class="o">+=</span> <span class="p">(</span><span class="n">match</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">);</span> 
+        <span class="p">}</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">&quot;%d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">voters</span><span class="o">-</span><span class="n">ans</span><span class="p">),</span> <span class="k">sizeof</span><span class="p">(</span><span class="kt">int</span><span class="p">));</span>
+        <span class="k">for</span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">cats_filled</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">free</span><span class="p">(</span><span class="o">*</span><span class="p">(</span><span class="n">edge_array</span><span class="o">+</span><span class="n">i</span><span class="p">));</span>
+        <span class="p">}</span>
+        <span class="n">free</span><span class="p">(</span><span class="n">edge_array</span><span class="p">);</span> <span class="n">free</span><span class="p">(</span><span class="n">match</span><span class="p">);</span> 
+        <span class="n">free</span><span class="p">(</span><span class="n">visited</span><span class="p">);</span> <span class="n">free</span><span class="p">(</span><span class="n">cat_voters</span><span class="p">);</span> <span class="n">free</span><span class="p">(</span><span class="n">dog_voters</span><span class="p">);</span>
+  
+<span class="p">}</span>    
+
+<span class="kt">int</span> <span class="n">dfs</span><span class="p">(</span><span class="kt">int</span> <span class="n">u</span><span class="p">,</span><span class="kt">int</span> <span class="n">dogs_filled</span><span class="p">,</span><span class="kt">int</span><span class="o">*</span> <span class="n">match</span><span class="p">,</span><span class="kt">int</span><span class="o">*</span> <span class="n">visited</span><span class="p">,</span><span class="kt">int</span><span class="o">**</span> <span class="n">edge_array</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span><span class="p">(</span><span class="o">*</span><span class="p">(</span><span class="n">visited</span> <span class="o">+</span> <span class="n">u</span><span class="p">))</span> 
+            <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="o">*</span><span class="p">(</span><span class="n">visited</span> <span class="o">+</span> <span class="n">u</span><span class="p">)</span><span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
+        <span class="k">for</span><span class="p">(</span><span class="n">i</span> <span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">dogs_filled</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span><span class="p">(</span><span class="o">*</span><span class="p">(</span><span class="o">*</span><span class="p">(</span><span class="n">edge_array</span><span class="o">+</span><span class="n">u</span><span class="p">)</span><span class="o">+</span> <span class="n">i</span><span class="p">)</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="n">match</span><span class="p">[</span> <span class="n">edge_array</span><span class="p">[</span><span class="n">u</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="p">]</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span> <span class="o">||</span> <span class="n">dfs</span><span class="p">(</span><span class="n">match</span><span class="p">[</span><span class="n">edge_array</span><span class="p">[</span><span class="n">u</span><span class="p">][</span><span class="n">i</span><span class="p">]],</span><span class="n">dogs_filled</span><span class="p">,</span><span class="n">match</span><span class="p">,</span><span class="n">visited</span><span class="p">,</span><span class="n">edge_array</span> <span class="p">))){</span>
+                <span class="n">match</span><span class="p">[</span> <span class="n">edge_array</span><span class="p">[</span><span class="n">u</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="p">]</span> <span class="o">=</span> <span class="n">u</span><span class="p">;</span>
+                <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span> 
+</code></pre></div>
+
+
+<p>Here the visited array keeps track of which vertices have been tried and is reset to zero at each iteration, while the match array keeps track of the matchings (found as augmenting paths using depth first search). Keep in mind that the for lop in main passes an i which is meant to be an index to a particular vertex in one partition (cat-lovers) while dfs() iterates through the entries in that row looking for a new path and stores it as a nonzero value in the match array. At the end the answer is simply the number of voters - the number of edges in the maximum cardinality matching.</p>
+
+<p>This solution is admittedly a bit more complex than anything presented here specifically, and even though I knew the principle behind the failure of my fist attempt, and I guessed that my first solution would typically give smaller answers than the second, correct one I wasnt sure, so I wrote a small Python script to generate a large, random set of inputs conforming to the specifications in the problem text to find out</p>
+
+<div class="highlight"><pre><code class="java"> <span class="kn">import</span> <span class="nn">random</span>
+    <span class="n">times</span> <span class="o">=</span> <span class="n">raw_input</span><span class="o">()</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="n">open</span><span class="o">(</span><span class="err">&#39;</span><span class="n">input</span><span class="o">.</span><span class="na">txt</span><span class="err">&#39;</span><span class="o">,</span> <span class="sc">&#39;w&#39;</span><span class="o">)</span>
+    <span class="n">f</span><span class="o">.</span><span class="na">write</span><span class="o">(</span><span class="n">times</span> <span class="o">+</span> <span class="sc">&#39;\n&#39;</span><span class="o">)</span>
+    <span class="k">for</span> <span class="n">j</span> <span class="n">in</span> <span class="nf">range</span><span class="o">(</span><span class="kt">int</span><span class="o">(</span><span class="n">times</span><span class="o">)):</span>
+            <span class="n">cats</span> <span class="o">=</span> <span class="n">str</span><span class="o">(</span><span class="n">random</span><span class="o">.</span><span class="na">randint</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span><span class="mi">100</span><span class="o">))</span>
+            <span class="n">dogs</span> <span class="o">=</span> <span class="n">str</span><span class="o">(</span><span class="n">random</span><span class="o">.</span><span class="na">randint</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span><span class="mi">100</span><span class="o">))</span>
+            <span class="n">voters</span> <span class="o">=</span> <span class="n">str</span><span class="o">(</span><span class="n">random</span><span class="o">.</span><span class="na">randint</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="mi">500</span><span class="o">))</span>
+            <span class="n">f</span><span class="o">.</span><span class="na">write</span><span class="o">(</span><span class="n">cats</span><span class="o">+</span><span class="sc">&#39; &#39;</span><span class="o">+</span> <span class="n">dogs</span><span class="o">+</span> <span class="sc">&#39; &#39;</span> <span class="o">+</span> <span class="n">voters</span><span class="o">+</span> <span class="sc">&#39;\n&#39;</span><span class="o">)</span>
+                <span class="k">for</span> <span class="n">i</span> <span class="n">in</span> <span class="nf">range</span><span class="o">(</span><span class="kt">int</span><span class="o">(</span><span class="n">voters</span><span class="o">)):</span>
+                    <span class="n">decider</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="na">random</span><span class="o">()</span>
+                    <span class="n">cat</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="na">randint</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span><span class="kt">int</span><span class="o">(</span><span class="n">cats</span><span class="o">))</span>
+                    <span class="n">dog</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="na">randint</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="kt">int</span><span class="o">(</span><span class="n">dogs</span><span class="o">))</span>
+                    <span class="k">if</span> <span class="o">(</span><span class="n">decider</span> <span class="o">&gt;</span> <span class="o">.</span><span class="mi">51</span><span class="o">):</span>
+                            <span class="n">f</span><span class="o">.</span><span class="na">write</span><span class="o">(</span><span class="sc">&#39;C&#39;</span> <span class="o">+</span> <span class="n">str</span><span class="o">(</span><span class="n">cat</span><span class="o">)</span> <span class="o">+</span> <span class="s">&quot; &quot;</span> <span class="o">+</span> <span class="sc">&#39;D&#39;</span><span class="o">+</span> <span class="n">str</span><span class="o">(</span><span class="n">dog</span><span class="o">)+</span> <span class="sc">&#39;\n&#39;</span><span class="o">)</span>
+                    <span class="k">else</span><span class="o">:</span>
+                            <span class="n">f</span><span class="o">.</span><span class="na">write</span><span class="o">(</span><span class="sc">&#39;D&#39;</span> <span class="o">+</span><span class="n">str</span><span class="o">(</span><span class="n">dog</span><span class="o">)</span> <span class="o">+</span> <span class="s">&quot; &quot;</span> <span class="o">+</span> <span class="sc">&#39;C&#39;</span> <span class="o">+</span> <span class="n">str</span><span class="o">(</span><span class="n">cat</span><span class="o">)+</span><span class="sc">&#39;\n&#39;</span><span class="o">)</span>
+
+    <span class="n">f</span><span class="o">.</span><span class="na">close</span><span class="o">()</span>
+</code></pre></div>
+
+
+<p>Turns out I was right, the simulation based programs answer was always a little bit lower than the bipartite matching ones. I love using Python for little test programs like this which certainly could have been implemented in C, but using Python is much more hassle-free. Note that, if you copy this code directly into your text editor, you may have to reformat it as Python is whitespace sensitive.</p>
+
+<p>At this point, you may be wondering why I included the code and lengthy description of my fist wrong attempt? I did so because I think that examining my mistakes and being forced to struggle because of them is ultimately much more educational than just getting it right the first time (though in practice that outcome is always preferred). I hope that my example serves to illustrate two somewhat contradictory propositions, that one shouldnt rush into coding the first half-baked idea that comes in his head particularly on a problem labeled Difficulty:Heavy Metal, and perhaps more importantly, one shouldnt be afraid to look at a problem in a completely new light, even if it means throwing away a lot of previously made progress and starting from scratch. Sometimes, thats the only way to get to a an answer. All in all, I think this post covered a lot of ground from failure, to graph theory, to Python and this problem was a good mix of frustrating and confusing at times, but pretty rewarding at the end.</p>
+</p>
+
+	<hr>
+
+  
+	<h1>
 	  <a href="/posts/all-the-numbers">All the Numbers</a>
 	</h1>
 	
@@ -195,7 +388,7 @@ sites like careercup.</p>
 </code></pre></div>
 
 
-<p>You&rsquo;ll notice that I named this function &ldquo;naive_find_num_unique&rdquo; for a reason. This function, while very easy to understandd and very memory efficient, has horrible performance, because of its O(n<sup>2</sup>) time complexity, which occurs because given an input of size n, for each element i in n, we need to read the remainder of the list. Since the number of steps we need to read varies from (n-1) at the front, to zero at the end, meaning an average of about n/2 steps taken n times, it&rsquo;s clear that the algorithm takes k/2 * n<sup>2</sup> + b*n +c steps &ndash; but what matters is the O(n<sup>2</sup>). While this is bad, in the context of this problem this performance actually isn&rsquo;t too far from a theoretical maximum since in order to find the answer, any solution must look at every value at least once, and therefore, the optimal solution must be O(n).
+<p>You&rsquo;ll notice that I named this function &ldquo;naive_find_num_unique&rdquo; for a reason. This function, while very easy to understandd and very memory efficient, has horrible performance, because of its O(n<sup>2</sup>) time complexity, which occurs because given an input of size n, for each element i in n, we need to read the remainder of the list. Since the number of steps we need to read varies from (n-1) at the front, to zero at the end, meaning an average of about n/2 steps taken n times, it&rsquo;s clear that the algorithm takes k/2 * n<sup>2</sup> + b*n +c steps - but what matters is the O(n<sup>2</sup>). While this is bad, in the context of this problem this performance actually isn&rsquo;t too far from a theoretical maximum since in order to find the answer, any solution must look at every value at least once, and therefore, the optimal solution must be O(n).
 Before we totally dismiss this most naive solution perhaps I should stress that it&rsquo;s still not worthless, rather this algorithm, because of its simplicity, is really good for quick and dirty initial solutions or for a system that has no memory to spare like some embedded systems. However, the question still remains: how low can you go (time complexity-wise)?</p>
 
 <p>Its clear that in order to improve the performance of this algorithm, we need to speed up the slowest step. As it stands, the slowest step is scanning the remainder of the array, to check whether an equivalent value exists. One way to speed up this process is with a bit vector,which represents sets of data using single bits, a 1 meaning the element is in the set, and a 0 meaning it isnt. Our way forward is now clear, first, we initialize an array of bits to zero. Then, for each nth element in our array of data value, we check the corresponding nth bit in the bitvector. If this bit is zero, then that indicates that this element hasn&rsquo;t yet been seen and so we raise that bit, and scan the rest of the array, looking for equivalent elements, and if any are found, raising the bits at those indices. On the other hand, if the corresponding bit is high, then that indicates that we have already seen this element and so we can move forward.</p>
@@ -463,7 +656,7 @@ At the end of this long post, I feel a bit like a man who&rsquo;d spent many hou
 
 <p>This algorithm works for small triangles but it takes far too long for larger ones. Why? Here recursion fails because the program doesn&rsquo;t reduce the amount of computation needed with each recursive step. Say we have a 100 row triangle and we run this function. After one level of recursion, we have two 99 row triangles. Another level of recursion deeper, we get four 98 row triangles. Thus, in this instance, recursion is actually making the problem exponentially larger.</p>
 
-<p>Another, much faster solution is the bottom-up way, which I also call the iterative solution. The key insight is that the second to last row of numbers is also a row of small triangles each with only two rows. For those, finding the maximum path sum is easy. Note &ndash; Theres no need to write new code for that computation, we can reuse the recursive method. So, we replace each sub-triangle&rsquo;s root node with a number representing the maximum path sum through it. Thus, the bottom two rows can be resolved into one row of numbers corresponding to the maximum path sums from each of the nodes on that row. From there, we can move up to the next row being careful to always look only one row below the one we are currently on, and we can quickly work our way up to the top. Eventually, the root node will contain the maximum path sum.</p>
+<p>Another, much faster solution is the bottom-up way, which I also call the iterative solution. The key insight is that the second to last row of numbers is also a row of small triangles each with only two rows. For those, finding the maximum path sum is easy. Note - Theres no need to write new code for that computation, we can reuse the recursive method. So, we replace each sub-triangle&rsquo;s root node with a number representing the maximum path sum through it. Thus, the bottom two rows can be resolved into one row of numbers corresponding to the maximum path sums from each of the nodes on that row. From there, we can move up to the next row being careful to always look only one row below the one we are currently on, and we can quickly work our way up to the top. Eventually, the root node will contain the maximum path sum.</p>
 
 <div class="highlight"><pre><code class="java"> <span class="kt">long</span> <span class="nf">iterativePathSum</span><span class="o">(</span><span class="kt">int</span><span class="o">*</span> <span class="n">root</span><span class="o">,</span> <span class="kt">int</span> <span class="n">triSize</span><span class="o">)</span> <span class="o">{</span> 
         <span class="kt">int</span> <span class="n">i</span><span class="o">,</span> <span class="n">j</span> <span class="o">,</span> <span class="n">k</span><span class="o">;</span>
@@ -493,9 +686,9 @@ At the end of this long post, I feel a bit like a man who&rsquo;d spent many hou
 	  by Ian Zapolsky, Aug 15, 2013
 	</section>
 
-	<p><p>Recently I spent some time wading through the internet&rsquo;s primordial soup of CS help sources &ndash; Stack
+	<p><p>Recently I spent some time wading through the internet&rsquo;s primordial soup of CS help sources - Stack
 Overflow commments, random blogs (like this one!), and source documentation that leaves something to
-be desired &ndash; to set up this site, which is hosted on Github Pages with a custom domain. I&rsquo;ve since
+be desired - to set up this site, which is hosted on Github Pages with a custom domain. I&rsquo;ve since
 decided to migrate the hosting of my <a href="http://ianzapolsky.com/">personal website</a> to Github Pages as well,
 because it&rsquo;s such a great platform and allows for almost instantatneous editing and changing. Instead
 of using clumsy cPanels and browser-based editors, you can just make edits to your site files
@@ -688,7 +881,7 @@ getting the ball rolling. For those interested, here&rsquo;s the <a href="https:
 	<p><p>In the careers section of startup <a href="http://www.yodle.com/">Yodle&rsquo;s</a> website, there are a couple programming
 problems, one of which is called <a href="http://www.yodlecareers.com/puzzles/jugglefest.html">JuggleFest</a>. Here&rsquo;s a summary: given a
 list of x circuits and y jugglers, where each juggler has a certain number of circuit
-preferences ranked 1 &ndash; n, assign the jugglers to circuits evenly such that the number of
+preferences ranked 1 - n, assign the jugglers to circuits evenly such that the number of
 jugglers in each circuit is y/x and no juggler could switch to a circuit that they prefer
 more than the one they are already assigned to <em>and</em> be a better fit for that circuit than
 one of the other jugglers assigned to it. Whew.</p>
