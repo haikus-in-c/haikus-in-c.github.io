@@ -58,6 +58,146 @@
   <section class="content">
   
 	<h1>
+	  <a href="/posts/argentinian-drinking-game">When an Argentinian Drinking Game Meets Computer Science</a>
+	</h1>
+	
+	<section class="byline">
+	  by Ian Zapolsky, Sep  1, 2013
+	</section>
+
+	<p><p>I love drinking games.</p>
+
+<p>They&rsquo;re social, they&rsquo;re entertaining, but most importantly they have the unique
+quality of making losing fun. Perhaps the most famous drinking game in the
+world is beer pong, a game of which I am a strong proponent. However, beer pong
+offers little in the way of statistics or information a computer scientist could
+analyze to gain the upper hand: it all comes down to whether or not you can make
+the shot.</p>
+
+<p>There are other, more cerebral types of drinking games of course, that <em>do</em> offer
+opportunties for <strike>cheating</strike> observation and analysis. Today I
+would like the share one with you that I learned this past weekend in
+Buenos Aires. As far as I can tell it does not have an official name, and there
+very well may be a North American/English speaking version already being played.
+It&rsquo;s great fun but, as we&rsquo;ll see in this post, it is completely unfair.</p>
+
+<p>Here&rsquo;s the premise: x people are in a circle. The person whose turn it is to start
+the round (usually the person who lost the last round) begins by saying out loud
+&ldquo;1&rdquo;. The next person in the circle (assume that we always start going in
+clockwise order, though durnkards will almost certainly switch the intial
+starting direction during the game multiple times) says &ldquo;2&rdquo;, and so on up
+until infinity.</p>
+
+<p>The catch is that on a certain set of numbers, the person whose turn it is to say
+that number claps, without saying the number, and then the direction of the turns
+reverses (e.g. counterclockwise) and the next number is called out (or clapped
+on, in which case the order reverses again). Here are the criteria for a clapping
+number:</p>
+
+<ol>
+<li>Multiple of 7 (e.g. 14)</li>
+<li>Ends with 7 (e.g. 17)</li>
+<li>Individual digits sum to 7 (e.g. 16)</li>
+<li>Palindrome, excluding single digit numbers (e.g. 11)</li>
+</ol>
+
+
+<p>Every time the circle reaches a number that necesitates a clap, the person whose
+turn happens to land on that number is in the hotseat: if they forget to clap, or
+say the number, or break the rhythm of the count, they have to drink, and everyone
+starts from 1 again.</p>
+
+<p>To wrap your head around the game here&rsquo;s a list of the numbers under 50 that need
+to be clapped on. Note that the real difficulty in this game comes when consecutive
+numbers necesitate claps, because as these numbers are not called out it is easy to
+lose your spot in the count, especially when you&rsquo;re trying to keep track of all
+the direction changes that are constantly happening.</p>
+
+<div class="highlight"><pre><code class="latex">[7, 11, 14, 16, 17, 21, 22, 25, 27, 28, 33, 34, 35, 37, 42, 43, 44, 47, 49] 
+</code></pre></div>
+
+
+<p>Here&rsquo;s the interesting part: this game is totally unfair for certain numbers of
+players. I wrote a <a href="https://github.com/haikus-in-c/haikus-in-c/blob/master/2013.9/drinking_game/game.py">simple python representation of this game</a> that allows
+you to simulate a round for any number of players, up to any number you want,
+and then find out how many claps (assuming no mistakes) each player
+would have had to make. Here are the results for just 2 players, simming up to 100.</p>
+
+<pre><code>player 1: 22
+player 2: 14    
+</code></pre>
+
+<p>Takeaway #1: it&rsquo;s almost always better not to start a round. Increasing the
+breakpoint of the game to 1000 makes the difference becomes clearer:</p>
+
+<pre><code>player 1: 206
+player 2: 126
+</code></pre>
+
+<p>Obviously we should expect this kind of behavior because a disporpotionate number
+of claps come on odd numbers. Now let&rsquo;s switch over to 4 players, a much more
+common real world case, simming up to 1000 again (which of course is uncommon: in
+the games I&rsquo;ve played the group made it past 100 once).</p>
+
+<pre><code>player 1: 103
+player 2: 64
+player 3: 103
+player 4: 62
+</code></pre>
+
+<p>Takeaway #2: you don&rsquo;t want to get stuck on the odd numbers in this game. It puts
+you on the hotseat to clap about 1.6x the number of times you get with the even
+numbers. For all games with an even number of players up to 8 we find
+this 1.6x number distinguishing the even number players from the odd.</p>
+
+<p>Now let&rsquo;s look at an odd number of players. First 3, then 5, then 7:</p>
+
+<pre><code>player 1: 130 
+player 2: 99
+player 3: 103
+
+player 1: 54
+player 2: 128
+player 3: 51
+player 4: 53
+player 5: 46
+
+player 1: 31
+player 2: 33
+player 3: 32
+player 4: 31
+player 5: 31
+player 6: 32
+player 7: 142
+</code></pre>
+
+<p>Takeaway #3: don&rsquo;t be number 7. You&rsquo;ll catch numbers that end with 7 <em>and</em> numbers
+that are multiples of 7 much more often than everyone else.</p>
+
+<p>Takeaway #4: when playing with an odd number of people up to 9, the distribution
+of claps is fairly even, except for one person who gets the shaft. This unlucky
+person will be sitting in the (number_of_players) mod 7 spot. 3%7 = 1 (player 1
+gets the shaft), 5%7 = 2 (player 2 gets the shaft), 7%7 = 0, but since there is
+no player 0, player 7 gets the shaft, and 9%7 = 7, and you can test for yourself
+that player 7 does indeed get the shaft when playing with 9 people.</p>
+
+<p>So what does this all mean? Basically nothing, apart from the fact thay you now
+know more about this game than you ever wanted to. You can use this knowledge to
+your advantage because often the person who lost the previous turn does not
+automatically start the next round because they are distracted by all the drinking
+they&rsquo;re doing. This is your opportunity to turn to your right hand neighbor kindly
+suggest that he or she start off the next round (if you&rsquo;re playing with an even
+number of people), or arrange your odd number of friends so that you never get the
+shaft.</p>
+
+<p>Then sit back and relax, knowing that your superior knowledge of the game is
+bringing you victory, which, in drinking games, actually means you&rsquo;re losing.</p>
+</p>
+
+	<hr>
+
+  
+	<h1>
 	  <a href="/posts/cats-vs-dogs">Cats vs Dogs</a>
 	</h1>
 	
@@ -65,9 +205,9 @@
 	  by Ruchir Khaitan, Aug 19, 2013
 	</section>
 
-	<p><p>The final <a href="https://www.spotify.com/us/jobs/tech/">Spotify</a> puzzle is a heavy metal showdown that brings together two beloved pets, and a wide variety of computer science topics. Unfortunately, problem took a lot longer than it should have, because I was stubborn, and refused to let go of preconceived ideas of how to solve it even when I could clearly see that my approach was incorrect. Basically, I was looking at it all wrong. The general premise, explained in more detail <a href="https://www.spotify.com/us/jobs/tech/catvsdog/">here</a>, is that in a TV game show for cats and dogs where as each week, a pet is removed based on a vote. Each person watching votes for one pet that they want to keep on the show, and one that they want to remove, and people cannot choose members of the same species for both. Most importantly, the producers will remove pets in an effort to maximize viewership, and so the question is: what is the maximum number of voters that can be satisfied, meaning that both their choices have been carried out, given a set of votes (and assuming that those votes dont change over time).</p>
+	<p><p>The final <a href="https://www.spotify.com/us/jobs/tech/">Spotify</a> puzzle is a heavy metal showdown that brings together two beloved pets and a wide variety of computer science topics. Unfortunately, this problem took a lot longer than it should have, because I was stubborn, and refused to let go of preconceived ideas of how to solve it even when I could clearly see that my approach was incorrect. Basically, I was looking at it all wrong. The general premise, explained in more detail <a href="https://www.spotify.com/us/jobs/tech/catvsdog/">here</a>, is that each week in a TV game show for cats and dogs, a pet is removed based on a vote. Each person watching votes for one pet that they want to keep on the show, and one that they want to remove, and people cannot choose members of the same species for both. Most importantly, the producers will remove pets in an effort to maximize viewership, and so the question is: what is the maximum number of voters that can be satisfied, meaning that both their choices have been carried out, given a set of votes (and assuming that those votes dont change over time).</p>
 
-<p>My initial idea was simplistic and based on a flawed assumption. I inferred, purely on intuition, that the removed pets would be the ones with the least positive votes, and the most negative votes and created a data structure to represent pets and voters characterizing each pet by fitness which was the number of upvotes - the number of downvotes. I like to call this the &ldquo;Reddit&rdquo; solution.</p>
+<p>My initial idea was simplistic and based on a flawed assumption. I inferred, purely on intuition, that the removed pets would be the ones with the least positive votes, and the most negative votes and created a data structure to represent pets and voters characterizing each pet by fitness which was the number of upvotes &ndash; the number of downvotes. I like to call this the &ldquo;Reddit&rdquo; solution.</p>
 
 <div class="highlight"><pre><code class="c">    <span class="k">struct</span> <span class="n">pet</span> <span class="p">{</span>
             <span class="kt">int</span> <span class="n">fitness</span><span class="p">;</span> <span class="c1">//running tally of upvotes - downvotes</span>
@@ -127,7 +267,7 @@
 </code></pre></div>
 
 
-<p>Unfortunately, this approach didnt work and I was at a loss to explain why since it seemed to work for the two test inputs given, and I couldnt engineer a new test case that would break my algorithm. Eventually, I realized the flaw in my reasoning which was that I implicitly assumed that the way to maximize viewer satisfaction would be to remove the least wanted pets, which seems like the right way to go about it, except that in doing so, it shifts ones focus on the pets when it should be squarely on the pets. I realized that the voters represented a bipartite graph, with one partition being the group that liked cats, and the other being the group that liked dogs. Here the edges on the graph represented incompatible pairings, or pairs where at least one person wants to remove a pet that the other wants to keep. Such pairs cannot mutually be happy, as to give one satisfaction would be to deny the other. With this insight in hand, the problem becomes a problem of finding the maximum cardinality matching, or the maximum set of edges without any common vertices on the graph. This represents all of the incompatible people from which one person has to be removed, and so, the answer is the number of voters v - the number of edges E in the maximum cardinality matching. This method requires first splitting the voters into two arrays, representing the two partitions in the graph.</p>
+<p>Unfortunately, this approach didnt work and I was at a loss to explain why since it seemed to work for the two test inputs given, and I couldnt engineer a new test case that would break my algorithm. Eventually, I realized the flaw in my reasoning which was that I implicitly assumed that the way to maximize viewer satisfaction would be to remove the least wanted pets, which seems like the right way to go about it, except that in doing so, it shifts ones focus on the pets when it should be squarely on the pets. I realized that the voters represented a bipartite graph, with one partition being the group that liked cats, and the other being the group that liked dogs. Here the edges on the graph represented incompatible pairings, or pairs where at least one person wants to remove a pet that the other wants to keep. Such pairs cannot mutually be happy, as to give one satisfaction would be to deny the other. With this insight in hand, the problem becomes a problem of finding the maximum cardinality matching, or the maximum set of edges without any common vertices on the graph. This represents all of the incompatible people from which one person has to be removed, and so, the answer is the number of voters v &ndash; the number of edges E in the maximum cardinality matching. This method requires first splitting the voters into two arrays, representing the two partitions in the graph.</p>
 
 <div class="highlight"><pre><code class="c">    <span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span><span class="o">**</span> <span class="n">argv</span><span class="p">)</span> <span class="p">{</span>
             <span class="kt">int</span> <span class="n">times</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="n">k</span><span class="p">,</span> <span class="n">cats</span><span class="p">,</span> <span class="n">dogs</span><span class="p">,</span> <span class="n">voters</span><span class="p">,</span> <span class="n">prefer</span><span class="p">,</span> <span class="n">reject</span><span class="p">;</span>
@@ -216,7 +356,7 @@
 </code></pre></div>
 
 
-<p>Here the visited array keeps track of which vertices have been tried and is reset to zero at each iteration, while the match array keeps track of the matchings (found as augmenting paths using depth first search). Keep in mind that the for lop in main passes an i which is meant to be an index to a particular vertex in one partition (cat-lovers) while dfs() iterates through the entries in that row looking for a new path and stores it as a nonzero value in the match array. At the end the answer is simply the number of voters - the number of edges in the maximum cardinality matching.</p>
+<p>Here the visited array keeps track of which vertices have been tried and is reset to zero at each iteration, while the match array keeps track of the matchings (found as augmenting paths using depth first search). Keep in mind that the for lop in main passes an i which is meant to be an index to a particular vertex in one partition (cat-lovers) while dfs() iterates through the entries in that row looking for a new path and stores it as a nonzero value in the match array. At the end the answer is simply the number of voters &ndash; the number of edges in the maximum cardinality matching.</p>
 
 <p>This solution is admittedly a bit more complex than anything presented here specifically, and even though I knew the principle behind the failure of my fist attempt, and I guessed that my first solution would typically give smaller answers than the second, correct one I wasnt sure, so I wrote a small Python script to generate a large, random set of inputs conforming to the specifications in the problem text to find out</p>
 
@@ -388,7 +528,7 @@ sites like careercup.</p>
 </code></pre></div>
 
 
-<p>You&rsquo;ll notice that I named this function &ldquo;naive_find_num_unique&rdquo; for a reason. This function, while very easy to understandd and very memory efficient, has horrible performance, because of its O(n<sup>2</sup>) time complexity, which occurs because given an input of size n, for each element i in n, we need to read the remainder of the list. Since the number of steps we need to read varies from (n-1) at the front, to zero at the end, meaning an average of about n/2 steps taken n times, it&rsquo;s clear that the algorithm takes k/2 * n<sup>2</sup> + b*n +c steps - but what matters is the O(n<sup>2</sup>). While this is bad, in the context of this problem this performance actually isn&rsquo;t too far from a theoretical maximum since in order to find the answer, any solution must look at every value at least once, and therefore, the optimal solution must be O(n).
+<p>You&rsquo;ll notice that I named this function &ldquo;naive_find_num_unique&rdquo; for a reason. This function, while very easy to understandd and very memory efficient, has horrible performance, because of its O(n<sup>2</sup>) time complexity, which occurs because given an input of size n, for each element i in n, we need to read the remainder of the list. Since the number of steps we need to read varies from (n-1) at the front, to zero at the end, meaning an average of about n/2 steps taken n times, it&rsquo;s clear that the algorithm takes k/2 * n<sup>2</sup> + b*n +c steps &ndash; but what matters is the O(n<sup>2</sup>). While this is bad, in the context of this problem this performance actually isn&rsquo;t too far from a theoretical maximum since in order to find the answer, any solution must look at every value at least once, and therefore, the optimal solution must be O(n).
 Before we totally dismiss this most naive solution perhaps I should stress that it&rsquo;s still not worthless, rather this algorithm, because of its simplicity, is really good for quick and dirty initial solutions or for a system that has no memory to spare like some embedded systems. However, the question still remains: how low can you go (time complexity-wise)?</p>
 
 <p>Its clear that in order to improve the performance of this algorithm, we need to speed up the slowest step. As it stands, the slowest step is scanning the remainder of the array, to check whether an equivalent value exists. One way to speed up this process is with a bit vector,which represents sets of data using single bits, a 1 meaning the element is in the set, and a 0 meaning it isnt. Our way forward is now clear, first, we initialize an array of bits to zero. Then, for each nth element in our array of data value, we check the corresponding nth bit in the bitvector. If this bit is zero, then that indicates that this element hasn&rsquo;t yet been seen and so we raise that bit, and scan the rest of the array, looking for equivalent elements, and if any are found, raising the bits at those indices. On the other hand, if the corresponding bit is high, then that indicates that we have already seen this element and so we can move forward.</p>
@@ -656,7 +796,7 @@ At the end of this long post, I feel a bit like a man who&rsquo;d spent many hou
 
 <p>This algorithm works for small triangles but it takes far too long for larger ones. Why? Here recursion fails because the program doesn&rsquo;t reduce the amount of computation needed with each recursive step. Say we have a 100 row triangle and we run this function. After one level of recursion, we have two 99 row triangles. Another level of recursion deeper, we get four 98 row triangles. Thus, in this instance, recursion is actually making the problem exponentially larger.</p>
 
-<p>Another, much faster solution is the bottom-up way, which I also call the iterative solution. The key insight is that the second to last row of numbers is also a row of small triangles each with only two rows. For those, finding the maximum path sum is easy. Note - Theres no need to write new code for that computation, we can reuse the recursive method. So, we replace each sub-triangle&rsquo;s root node with a number representing the maximum path sum through it. Thus, the bottom two rows can be resolved into one row of numbers corresponding to the maximum path sums from each of the nodes on that row. From there, we can move up to the next row being careful to always look only one row below the one we are currently on, and we can quickly work our way up to the top. Eventually, the root node will contain the maximum path sum.</p>
+<p>Another, much faster solution is the bottom-up way, which I also call the iterative solution. The key insight is that the second to last row of numbers is also a row of small triangles each with only two rows. For those, finding the maximum path sum is easy. Note &ndash; Theres no need to write new code for that computation, we can reuse the recursive method. So, we replace each sub-triangle&rsquo;s root node with a number representing the maximum path sum through it. Thus, the bottom two rows can be resolved into one row of numbers corresponding to the maximum path sums from each of the nodes on that row. From there, we can move up to the next row being careful to always look only one row below the one we are currently on, and we can quickly work our way up to the top. Eventually, the root node will contain the maximum path sum.</p>
 
 <div class="highlight"><pre><code class="java"> <span class="kt">long</span> <span class="nf">iterativePathSum</span><span class="o">(</span><span class="kt">int</span><span class="o">*</span> <span class="n">root</span><span class="o">,</span> <span class="kt">int</span> <span class="n">triSize</span><span class="o">)</span> <span class="o">{</span> 
         <span class="kt">int</span> <span class="n">i</span><span class="o">,</span> <span class="n">j</span> <span class="o">,</span> <span class="n">k</span><span class="o">;</span>
@@ -686,9 +826,9 @@ At the end of this long post, I feel a bit like a man who&rsquo;d spent many hou
 	  by Ian Zapolsky, Aug 15, 2013
 	</section>
 
-	<p><p>Recently I spent some time wading through the internet&rsquo;s primordial soup of CS help sources - Stack
+	<p><p>Recently I spent some time wading through the internet&rsquo;s primordial soup of CS help sources &ndash; Stack
 Overflow commments, random blogs (like this one!), and source documentation that leaves something to
-be desired - to set up this site, which is hosted on Github Pages with a custom domain. I&rsquo;ve since
+be desired &ndash; to set up this site, which is hosted on Github Pages with a custom domain. I&rsquo;ve since
 decided to migrate the hosting of my <a href="http://ianzapolsky.com/">personal website</a> to Github Pages as well,
 because it&rsquo;s such a great platform and allows for almost instantatneous editing and changing. Instead
 of using clumsy cPanels and browser-based editors, you can just make edits to your site files
@@ -881,7 +1021,7 @@ getting the ball rolling. For those interested, here&rsquo;s the <a href="https:
 	<p><p>In the careers section of startup <a href="http://www.yodle.com/">Yodle&rsquo;s</a> website, there are a couple programming
 problems, one of which is called <a href="http://www.yodlecareers.com/puzzles/jugglefest.html">JuggleFest</a>. Here&rsquo;s a summary: given a
 list of x circuits and y jugglers, where each juggler has a certain number of circuit
-preferences ranked 1 - n, assign the jugglers to circuits evenly such that the number of
+preferences ranked 1 &ndash; n, assign the jugglers to circuits evenly such that the number of
 jugglers in each circuit is y/x and no juggler could switch to a circuit that they prefer
 more than the one they are already assigned to <em>and</em> be a better fit for that circuit than
 one of the other jugglers assigned to it. Whew.</p>

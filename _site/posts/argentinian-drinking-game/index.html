@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+  <meta charset="utf-8">
+  <title>
+    
+      When an Argentinian Drinking Game Meets Computer Science &ndash;
+    
+    Haikus in C
+  </title>
+
+  <meta name="author" content="Haikus in C" />
+  <meta name="description" content="a place where two columbia cs students share code and talk about their projects" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <link rel="alternate" type="application/rss+xml" href="/atom.xml" />
+
+  <link rel="stylesheet" href="/css/fontawesome.min.css" type="text/css" media="screen, projection" />
+  <link rel="stylesheet" href="/css/base.css" type="text/css" media="screen, projection" />
+  <link rel="stylesheet" href="/css/pygments.css" type="text/css" />
+  <link media="only screen and (max-device-width: 480px)" href="/css/mobile.css" type="text/css" rel="stylesheet" />
+  <link media="only screen and (device-width: 768px)" href="/css/mobile.css" type="text/css" rel="stylesheet" />
+  <link href='http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz' rel='stylesheet' type='text/css'>
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+  <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+  <script type="text/javascript" src="/js/application.js"></script>
+</head>
+
+<body>
+  <section class="header">
+	<h1>
+	  <a href="/">Haikus in C</a>
+	</h1>
+  </section>
+
+  <section class="sidebar">
+
+    <section class="meta">
+      <a href="https://github.com/haikus-in-c" target="_blank"><i class="icon icon-github"></i></a>
+    </section>
+
+    <section class="sections">
+      <ul>
+		<li><a href="/">home</a><li>
+        <li><a href="/about.html">about</a></li>
+        <li><a href="/posts.html">posts</a></li>
+      </ul>
+    </section>
+
+	<section class="shoutout">
+	  <p>made with help from <a href="https://github.com/mojombo/jekyll">jekyll</a> and an adapted theme from
+		<a href="http://zachholman.com/">zach holman</a>.</p>
+	</section>
+
+  </section>
+
+  <section class="content">
+  <h1>
+    <a href="/posts/argentinian-drinking-game">When an Argentinian Drinking Game Meets Computer Science</a>
+  </h1>
+
+  <section class="byline">
+    by Ian Zapolsky, September  1, 2013
+  </section>
+
+  <p>I love drinking games.</p>
+
+<p>They&rsquo;re social, they&rsquo;re entertaining, but most importantly they have the unique
+quality of making losing fun. Perhaps the most famous drinking game in the
+world is beer pong, a game of which I am a strong proponent. However, beer pong
+offers little in the way of statistics or information a computer scientist could
+analyze to gain the upper hand: it all comes down to whether or not you can make
+the shot.</p>
+
+<p>There are other, more cerebral types of drinking games of course, that <em>do</em> offer
+opportunties for <strike>cheating</strike> observation and analysis. Today I
+would like the share one with you that I learned this past weekend in
+Buenos Aires. As far as I can tell it does not have an official name, and there
+very well may be a North American/English speaking version already being played.
+It&rsquo;s great fun but, as we&rsquo;ll see in this post, it is completely unfair.</p>
+
+<p>Here&rsquo;s the premise: x people are in a circle. The person whose turn it is to start
+the round (usually the person who lost the last round) begins by saying out loud
+&ldquo;1&rdquo;. The next person in the circle (assume that we always start going in
+clockwise order, though durnkards will almost certainly switch the intial
+starting direction during the game multiple times) says &ldquo;2&rdquo;, and so on up
+until infinity.</p>
+
+<p>The catch is that on a certain set of numbers, the person whose turn it is to say
+that number claps, without saying the number, and then the direction of the turns
+reverses (e.g. counterclockwise) and the next number is called out (or clapped
+on, in which case the order reverses again). Here are the criteria for a clapping
+number:</p>
+
+<ol>
+<li>Multiple of 7 (e.g. 14)</li>
+<li>Ends with 7 (e.g. 17)</li>
+<li>Individual digits sum to 7 (e.g. 16)</li>
+<li>Palindrome, excluding single digit numbers (e.g. 11)</li>
+</ol>
+
+
+<p>Every time the circle reaches a number that necesitates a clap, the person whose
+turn happens to land on that number is in the hotseat: if they forget to clap, or
+say the number, or break the rhythm of the count, they have to drink, and everyone
+starts from 1 again.</p>
+
+<p>To wrap your head around the game here&rsquo;s a list of the numbers under 50 that need
+to be clapped on. Note that the real difficulty in this game comes when consecutive
+numbers necesitate claps, because as these numbers are not called out it is easy to
+lose your spot in the count, especially when you&rsquo;re trying to keep track of all
+the direction changes that are constantly happening.</p>
+
+<div class="highlight"><pre><code class="latex">[7, 11, 14, 16, 17, 21, 22, 25, 27, 28, 33, 34, 35, 37, 42, 43, 44, 47, 49] 
+</code></pre></div>
+
+
+<p>Here&rsquo;s the interesting part: this game is totally unfair for certain numbers of
+players. I wrote a <a href="https://github.com/haikus-in-c/haikus-in-c/blob/master/2013.9/drinking_game/game.py">simple python representation of this game</a> that allows
+you to simulate a round for any number of players, up to any number you want,
+and then find out how many claps (assuming no mistakes) each player
+would have had to make. Here are the results for just 2 players, simming up to 100.</p>
+
+<pre><code>player 1: 22
+player 2: 14    
+</code></pre>
+
+<p>Takeaway #1: it&rsquo;s almost always better not to start a round. Increasing the
+breakpoint of the game to 1000 makes the difference becomes clearer:</p>
+
+<pre><code>player 1: 206
+player 2: 126
+</code></pre>
+
+<p>Obviously we should expect this kind of behavior because a disporpotionate number
+of claps come on odd numbers. Now let&rsquo;s switch over to 4 players, a much more
+common real world case, simming up to 1000 again (which of course is uncommon: in
+the games I&rsquo;ve played the group made it past 100 once).</p>
+
+<pre><code>player 1: 103
+player 2: 64
+player 3: 103
+player 4: 62
+</code></pre>
+
+<p>Takeaway #2: you don&rsquo;t want to get stuck on the odd numbers in this game. It puts
+you on the hotseat to clap about 1.6x the number of times you get with the even
+numbers. For all games with an even number of players up to 8 we find
+this 1.6x number distinguishing the even number players from the odd.</p>
+
+<p>Now let&rsquo;s look at an odd number of players. First 3, then 5, then 7:</p>
+
+<pre><code>player 1: 130 
+player 2: 99
+player 3: 103
+
+player 1: 54
+player 2: 128
+player 3: 51
+player 4: 53
+player 5: 46
+
+player 1: 31
+player 2: 33
+player 3: 32
+player 4: 31
+player 5: 31
+player 6: 32
+player 7: 142
+</code></pre>
+
+<p>Takeaway #3: don&rsquo;t be number 7. You&rsquo;ll catch numbers that end with 7 <em>and</em> numbers
+that are multiples of 7 much more often than everyone else.</p>
+
+<p>Takeaway #4: when playing with an odd number of people up to 9, the distribution
+of claps is fairly even, except for one person who gets the shaft. This unlucky
+person will be sitting in the (number_of_players) mod 7 spot. 3%7 = 1 (player 1
+gets the shaft), 5%7 = 2 (player 2 gets the shaft), 7%7 = 0, but since there is
+no player 0, player 7 gets the shaft, and 9%7 = 7, and you can test for yourself
+that player 7 does indeed get the shaft when playing with 9 people.</p>
+
+<p>So what does this all mean? Basically nothing, apart from the fact thay you now
+know more about this game than you ever wanted to. You can use this knowledge to
+your advantage because often the person who lost the previous turn does not
+automatically start the next round because they are distracted by all the drinking
+they&rsquo;re doing. This is your opportunity to turn to your right hand neighbor kindly
+suggest that he or she start off the next round (if you&rsquo;re playing with an even
+number of people), or arrange your odd number of friends so that you never get the
+shaft.</p>
+
+<p>Then sit back and relax, knowing that your superior knowledge of the game is
+bringing you victory, which, in drinking games, actually means you&rsquo;re losing.</p>
+
+
+<!-- possibly update this later
+   TODO: bio here
+  <section class="meta">
+    <h3>Discussion, links, and tweets</h3>
+    <section class="copy">
+      <a href="https://twitter.com/" target="_blank">
+        <img src="?s=142" height="50" width="50" />
+      </a>
+
+      <p>
+        I'm a developer at GitHub. <a href="https://twitter.com/" target="_blank">Follow me on Twitter</a>;
+        you'll enjoy my tweets. I take care to carefully craft each one. Or at least aim to make
+        you giggle. Or offended. One of those two&mdash; I haven't decided which yet.
+      </p>
+
+      <a href="http://twitter.com/share" class="twitter-share-button" data-count="none" data-via="">Tweet</a>
+      <a href="http://twitter.com/" class="twitter-follow-button" data-show-count="false">Follow @</a>
+      <script src="http://platform.twitter.com/widgets.js" type="text/javascript"></script>
+    </section>
+  </section>
+-->
+
+  <hr>
+  
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+      /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+      var disqus_shortname = 'haikus'; // required: replace example with your forum shortname
+
+      /* * * DON'T EDIT BELOW THIS LINE * * */
+      (function() {
+          var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+          dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+  
+
+</section>
+
+
+</body>
+
+</html>
