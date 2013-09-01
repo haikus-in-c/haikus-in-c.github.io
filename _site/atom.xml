@@ -4,7 +4,7 @@
  <title>Haikus in C</title>
  <link href="http://haikus-in-c.com/atom.xml" rel="self"/>
  <link href="http://haikus-in-c.com/"/>
- <updated>2013-09-01T14:38:25-03:00</updated>
+ <updated>2013-09-01T14:41:26-03:00</updated>
  <id>http://haikus-in-c.com</id>
  <author>
    <name>Haikus in C</name>
@@ -127,7 +127,7 @@ that are multiples of 7 much more often than everyone else.&lt;/p&gt;
 
 &lt;p&gt;Takeaway #4: when playing with an odd number of people up to 9, the distribution
 of claps is fairly even, except for one person who gets the shaft. This unlucky
-person will be sitting in the (number_of_players) mod 7 spot. 3%7 = 1 (player 1
+person will be sitting in the (number_of_players)%7 spot. 3%7 = 1 (player 1
 gets the shaft), 5%7 = 2 (player 2 gets the shaft), 7%7 = 0, but since there is
 no player 0, player 7 gets the shaft, and 9%7 = 7, and you can test for yourself
 that player 7 does indeed get the shaft when playing with 9 people.&lt;/p&gt;
