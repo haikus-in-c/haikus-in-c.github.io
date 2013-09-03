@@ -60,6 +60,7 @@ players. I wrote a [simple python representation of this game][code] that allows
 you to simulate a round for any number of players, up to any number you want, 
 and then find out how many claps (assuming no mistakes) each player
 would have had to make. Here are the results for just 2 players, simming up to 100. 
+
 	player 1: 22
 	player 2: 14	
 
@@ -114,7 +115,7 @@ gets the shaft), 5%7 = 2 (player 2 gets the shaft), 7%7 = 0, but since there is
 no player 0, player 7 gets the shaft, and 9%7 = 7, and you can test for yourself
 that player 7 does indeed get the shaft when playing with 9 people.
 
-So what does this all mean? Basically nothing, apart from the fact thay you now
+So what does this all mean? Basically nothing, apart from the fact that you now
 know more about this game than you ever wanted to. You can use this knowledge to
 your advantage because often the person who lost the previous turn does not 
 automatically start the next round because they are distracted by all the drinking
