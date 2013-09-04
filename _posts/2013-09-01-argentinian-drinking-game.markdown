@@ -65,7 +65,7 @@ would have had to make. Here are the results for just 2 players, simming up to 1
 	player 2: 14	
 
 Takeaway #1: it's almost always better not to start a round. Increasing the 
-breakpoint of the game to 1000 makes the difference becomes clearer:
+breakpoint of the game to 1000 makes the difference become clearer:
 	
 	player 1: 206
 	player 2: 126
@@ -110,9 +110,9 @@ that are multiples of 7 much more often than everyone else.
 
 Takeaway #4: when playing with an odd number of people up to 9, the distribution 
 of claps is fairly even, except for one person who gets the shaft. This unlucky
-person will be sitting in the (number\_of\_players)%7 spot. 3%7 = 1 (player 1
-gets the shaft), 5%7 = 2 (player 2 gets the shaft), 7%7 = 0, but since there is
-no player 0, player 7 gets the shaft, and 9%7 = 7, and you can test for yourself
+person will be sitting in the 7%(number\_of\_players) spot. 7%3 = 1 (player 1
+gets the shaft), 7%5 = 2 (player 2 gets the shaft), 7%7 = 0, but since there is
+no player 0, player 7 gets the shaft, and 7%9 = 7, and you can test for yourself
 that player 7 does indeed get the shaft when playing with 9 people.
 
 So what does this all mean? Basically nothing, apart from the fact that you now
