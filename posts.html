@@ -7,7 +7,8 @@ title: "Posts"
   <ul class="listing">
     {% for post in site.posts %}
     <li>
-      <span>by {{ post.author }}, {{ post.date | date: "%B %e, %Y" }}</span> <a href="{{ post.url }}">{{ post.title }}</a>
+      <!-- changed date from "%B %e, %Y" -->
+      <span>by {{ post.author }}, {{ post.date | date: "%m %e, %Y" }}</span> <a href="{{ post.url }}">{{ post.title }}</a>
     </li>
     {% endfor %}
   </ul>
