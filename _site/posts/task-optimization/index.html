@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+  <meta charset="utf-8">
+  <title>
+    
+      Dictionary Optimization with the Google Chrome Omnibox &ndash;
+    
+    Haikus in C
+  </title>
+
+  <meta name="author" content="Haikus in C" />
+  <meta name="description" content="a place where two columbia cs students share code and talk about their projects" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <link rel="alternate" type="application/rss+xml" href="/atom.xml" />
+
+  <link rel="stylesheet" href="/css/fontawesome.min.css" type="text/css" media="screen, projection" />
+  <link rel="stylesheet" href="/css/base.css" type="text/css" media="screen, projection" />
+  <link rel="stylesheet" href="/css/pygments.css" type="text/css" />
+  <link media="only screen and (max-device-width: 480px)" href="/css/mobile.css" type="text/css" rel="stylesheet" />
+  <link media="only screen and (device-width: 768px)" href="/css/mobile.css" type="text/css" rel="stylesheet" />
+  <link href='http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz' rel='stylesheet' type='text/css'>
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+  <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+  <script type="text/javascript" src="/js/application.js"></script>
+</head>
+
+<body>
+  <section class="header">
+	<h1>
+	  <a href="/">Haikus in C</a>
+	</h1>
+  </section>
+
+  <section class="sidebar">
+
+    <section class="meta">
+      <a href="https://github.com/haikus-in-c" target="_blank"><i class="icon icon-github"></i></a>
+    </section>
+
+    <section class="sections">
+      <ul>
+		<li><a href="/">home</a><li>
+        <li><a href="/about.html">about</a></li>
+        <li><a href="/posts.html">posts</a></li>
+      </ul>
+    </section>
+
+	<section class="shoutout">
+	  <p>made with help from <a href="https://github.com/mojombo/jekyll">jekyll</a> and an adapted theme from
+		<a href="http://zachholman.com/">zach holman</a>.</p>
+	</section>
+
+  </section>
+
+  <section class="content">
+  <h1>
+    <a href="/posts/task-optimization">Dictionary Optimization with the Google Chrome Omnibox</a>
+  </h1>
+
+  <section class="byline">
+    by Ian Zapolsky, November 13, 2013
+  </section>
+
+  <p>Here&rsquo;s a fairly common scenario I have been running into this semester: I&rsquo;m
+reading something in Spanish at the computer, I come across a word I don&rsquo;t know.
+I look at it, contemplate looking it up, and continue reading. It&rsquo;s borderline
+terrifying that I&rsquo;m so spoiled by the speed of modern technology that I consider
+the time it takes to open a new browser tab, google my favorite Spanish-English
+dictionary site, and enter the word I&rsquo;m looking for to be prohibitive, but I do.</p>
+
+<p>But perhaps this superhuman level of laziness is what will ultimately drive the
+next wave of technological advances necessary to achieve the ultimate informational nirvana
+toward which the internet and modern search engine power is moving, a world
+in which you can instantly recieve information about things you look at in real
+time.</p>
+
+<p>I recently decided to take my own small step toward this goal by writing two
+simple but effective Google Chrome extensions to help optimize the process
+of translating words and phrases between Spanish and English, and conjugating
+Spanish and English verbs.</p>
+
+<p>Both extensions utilize the Chrome Omnibox, the URL bar at the top of the browser,
+and a builtin API object of Javascript written for Chrom extensions.
+By specifying a keyword, we can reserve a namespace to interact with some Javascript
+code that we provide. In this case, our Javascript will do nothing more than URLize
+our query and open a new tab with that query on either a Spanish-English dictionary
+site, or a Spanish-English verb conjugation site.</p>
+
+<p>Take a look at the code below for FastTranslate. First we create the manifest file,
+which Chrome uses to gather basic information from all extensions. In this file
+we also specify the reserved Omnibox keyword which will trigger the Javascript
+contained in background.js.</p>
+
+<div class="highlight"><pre><code class="yaml"><span class="p-Indicator">{</span>
+  <span class="s">&quot;name&quot;</span><span class="p-Indicator">:</span> <span class="s">&quot;Fast</span><span class="nv"> </span><span class="s">Translate&quot;</span><span class="p-Indicator">,</span>
+  <span class="s">&quot;description&quot;</span> <span class="p-Indicator">:</span> <span class="s">&quot;To</span><span class="nv"> </span><span class="s">use,</span><span class="nv"> </span><span class="s">type</span><span class="nv"> </span><span class="s">&#39;trans&#39;,</span><span class="nv"> </span><span class="s">then</span><span class="nv"> </span><span class="s">two</span><span class="nv"> </span><span class="s">spaces,</span><span class="nv"> </span><span class="s">and</span><span class="nv"> </span><span class="s">then</span><span class="nv"> </span><span class="s">a</span><span class="nv"> </span><span class="s">word</span><span class="nv"> </span><span class="s">or</span><span class="nv"> </span><span class="s">phrase</span>
+                   <span class="s">in</span><span class="nv"> </span><span class="s">either</span><span class="nv"> </span><span class="s">spanish</span><span class="nv"> </span><span class="s">or</span><span class="nv"> </span><span class="s">english</span><span class="nv"> </span><span class="s">that</span><span class="nv"> </span><span class="s">you</span><span class="nv"> </span><span class="s">want</span><span class="nv"> </span><span class="s">to</span><span class="nv"> </span><span class="s">translate.&quot;</span><span class="p-Indicator">,</span>
+  <span class="s">&quot;version&quot;</span><span class="p-Indicator">:</span> <span class="s">&quot;1.0&quot;</span><span class="p-Indicator">,</span>
+  <span class="s">&quot;permissions&quot;</span><span class="p-Indicator">:</span> <span class="p-Indicator">[</span> <span class="s">&quot;tabs&quot;</span><span class="p-Indicator">,</span> <span class="s">&quot;http://www.linguee.es/&quot;</span> <span class="p-Indicator">],</span>
+  <span class="s">&quot;background&quot;</span><span class="p-Indicator">:</span> <span class="p-Indicator">{</span>
+    <span class="s">&quot;scripts&quot;</span><span class="p-Indicator">:</span> <span class="p-Indicator">[</span><span class="s">&quot;background.js&quot;</span><span class="p-Indicator">]</span>
+  <span class="p-Indicator">},</span>
+  <span class="s">&quot;omnibox&quot;</span><span class="p-Indicator">:</span> <span class="p-Indicator">{</span> <span class="s">&quot;keyword&quot;</span> <span class="p-Indicator">:</span> <span class="s">&quot;trans&quot;</span> <span class="p-Indicator">},</span>
+  <span class="s">&quot;manifest_version&quot;</span><span class="p-Indicator">:</span> <span class="nv">2</span>
+<span class="p-Indicator">}</span>
+</code></pre></div>
+
+
+<p>Now when a user types &ldquo;trans&rdquo; into the URL bar, the Omnibox will effectively
+transform into the equivalent of a query bar on any site we specifiy in our
+Javascript file. In this case, we will use a Spanish-English dictionary site.</p>
+
+<div class="highlight"><pre><code class="javascript"><span class="c1">// background for fast_translate</span>
+<span class="c1">// by Ian Zapolsky (09.10.13)</span>
+
+<span class="c1">// quick omnibox extension that links any query directly to a query</span>
+<span class="c1">// on linguee, my favorite online translator</span>
+
+
+<span class="nx">chrome</span><span class="p">.</span><span class="nx">omnibox</span><span class="p">.</span><span class="nx">onInputChanged</span><span class="p">.</span><span class="nx">addListener</span><span class="p">(</span>
+  <span class="kd">function</span><span class="p">(</span><span class="nx">text</span><span class="p">,</span> <span class="nx">suggest</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;inputChanged: &#39;</span> <span class="o">+</span> <span class="nx">text</span><span class="p">);</span>
+    <span class="nx">suggest</span><span class="p">([</span>
+      <span class="p">{</span><span class="nx">content</span><span class="o">:</span> <span class="nx">text</span> <span class="o">+</span> <span class="s2">&quot;hola&quot;</span><span class="p">,</span> <span class="nx">description</span><span class="o">:</span> <span class="s2">&quot; spanish word: hola&quot;</span><span class="p">},</span>
+      <span class="p">{</span><span class="nx">content</span><span class="o">:</span> <span class="nx">text</span> <span class="o">+</span> <span class="s2">&quot;hello&quot;</span><span class="p">,</span> <span class="nx">description</span><span class="o">:</span> <span class="s2">&quot; english word: hello&quot;</span><span class="p">},</span>
+      <span class="p">{</span><span class="nx">content</span><span class="o">:</span> <span class="nx">text</span> <span class="o">+</span> <span class="s2">&quot;como estás&quot;</span><span class="p">,</span> <span class="nx">description</span><span class="o">:</span> <span class="s2">&quot; spanish phrase: como estás&quot;</span><span class="p">},</span>
+      <span class="p">{</span><span class="nx">content</span><span class="o">:</span> <span class="nx">text</span> <span class="o">+</span> <span class="s2">&quot;how are you&quot;</span><span class="p">,</span> <span class="nx">description</span><span class="o">:</span> <span class="s2">&quot; english phrase: how are you&quot;</span><span class="p">}</span>
+    <span class="p">]);</span>
+  <span class="p">});</span>
+
+<span class="nx">chrome</span><span class="p">.</span><span class="nx">omnibox</span><span class="p">.</span><span class="nx">onInputEntered</span><span class="p">.</span><span class="nx">addListener</span><span class="p">(</span>
+  <span class="kd">function</span><span class="p">(</span><span class="nx">text</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;inputEntered: &#39;</span> <span class="o">+</span> <span class="nx">text</span><span class="p">);</span>
+    <span class="kd">var</span> <span class="nx">url</span> <span class="o">=</span> <span class="s2">&quot;http://www.linguee.es/espanol-ingles/search?source=auto&amp;query=&quot;</span><span class="o">+</span><span class="nx">text</span><span class="p">;</span>
+    <span class="nx">chrome</span><span class="p">.</span><span class="nx">tabs</span><span class="p">.</span><span class="nx">create</span><span class="p">({</span> <span class="nx">url</span><span class="o">:</span><span class="nx">url</span> <span class="p">});</span>
+  <span class="p">});</span>
+</code></pre></div>
+
+
+<p>The code behind FastConjugate, the conjugation extension I wrote, is almost identical,
+with the query URL changed to the conjugation website. Check out both of these
+tools, and download packaged .crx versions to use yourself, <a href="https://github.com/ianzapolsky/spanish_extensions">here</a>.</p>
+
+<p>While simple, these tools are really effective at optimizing a simple task, one
+that due to the internet and the power of computers is getting closer and closer
+to being instantaneous.</p>
+
+
+<!-- possibly update this later
+   TODO: bio here
+  <section class="meta">
+    <h3>Discussion, links, and tweets</h3>
+    <section class="copy">
+      <a href="https://twitter.com/" target="_blank">
+        <img src="?s=142" height="50" width="50" />
+      </a>
+
+      <p>
+        I'm a developer at GitHub. <a href="https://twitter.com/" target="_blank">Follow me on Twitter</a>;
+        you'll enjoy my tweets. I take care to carefully craft each one. Or at least aim to make
+        you giggle. Or offended. One of those two&mdash; I haven't decided which yet.
+      </p>
+
+      <a href="http://twitter.com/share" class="twitter-share-button" data-count="none" data-via="">Tweet</a>
+      <a href="http://twitter.com/" class="twitter-follow-button" data-show-count="false">Follow @</a>
+      <script src="http://platform.twitter.com/widgets.js" type="text/javascript"></script>
+    </section>
+  </section>
+-->
+
+  <hr>
+  
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+      /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+      var disqus_shortname = 'haikus'; // required: replace example with your forum shortname
+
+      /* * * DON'T EDIT BELOW THIS LINE * * */
+      (function() {
+          var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+          dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+  
+
+</section>
+
+
+</body>
+
+</html>

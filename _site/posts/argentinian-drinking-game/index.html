@@ -127,7 +127,7 @@ player 2: 14
 </code></pre>
 
 <p>Takeaway #1: it&rsquo;s almost always better not to start a round. Increasing the
-breakpoint of the game to 1000 makes the difference becomes clearer:</p>
+breakpoint of the game to 1000 makes the difference become clearer:</p>
 
 <pre><code>player 1: 206
 player 2: 126
@@ -175,12 +175,12 @@ that are multiples of 7 much more often than everyone else.</p>
 
 <p>Takeaway #4: when playing with an odd number of people up to 9, the distribution
 of claps is fairly even, except for one person who gets the shaft. This unlucky
-person will be sitting in the (number_of_players)%7 spot. 3%7 = 1 (player 1
-gets the shaft), 5%7 = 2 (player 2 gets the shaft), 7%7 = 0, but since there is
-no player 0, player 7 gets the shaft, and 9%7 = 7, and you can test for yourself
+person will be sitting in the 7%(number_of_players) spot. 7%3 = 1 (player 1
+gets the shaft), 7%5 = 2 (player 2 gets the shaft), 7%7 = 0, but since there is
+no player 0, player 7 gets the shaft, and 7%9 = 7, and you can test for yourself
 that player 7 does indeed get the shaft when playing with 9 people.</p>
 
-<p>So what does this all mean? Basically nothing, apart from the fact thay you now
+<p>So what does this all mean? Basically nothing, apart from the fact that you now
 know more about this game than you ever wanted to. You can use this knowledge to
 your advantage because often the person who lost the previous turn does not
 automatically start the next round because they are distracted by all the drinking

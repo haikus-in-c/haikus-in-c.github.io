@@ -76,16 +76,16 @@ But since I&rsquo;ve done this setup process twice now, I&rsquo;m going to cover
 so I can garuntee that by the end of this, your website will work too!</p>
 
 <p>I&rsquo;m only going to assume one thing for this tutorial: that you already have a Github account. If you
-don&rsquo;t that&rsquo;s no problem, just go set one up and follow their super clear instructions verbatim. Then
+don&rsquo;t that&rsquo;s no problem, just go set one up and follow their instructions verbatim. Then
 come back here.</p>
 
-<p>Now, first thing&rsquo;s first. If you don&rsquo;t own the domain you want to use, go buy it.  Having used
-<a href="http://www.godaddy.com/">GoDaddy</a> before, I can tell you that it kind of sucks, and is in no way meant for
-anyone who considers themself to be even a shadow of a hacker. I&rsquo;ve also tried <a href="http://www.dreamhost.com/">DreamHost</a>
-which has a much cleaner interface than GoDaddy, but doesn&rsquo;t offer that much more in the way of
-features. Finally, I&rsquo;ve read good things about <a href="http://www.namecheap.com/">Namecheap</a>, but have never personally
-tried it. Ultimately, these services all do the same things, and where you buy your domain from
-doesn&rsquo;t matter, as long as they aren&rsquo;t some scam company.</p>
+<p>First thing&rsquo;s first. If you don&rsquo;t own the domain you want to use, go buy it.  Having used
+<a href="http://www.godaddy.com/">GoDaddy</a> before, I can tell you that its user interaces are kind of like quicksand
+because they&rsquo;re designed for someone who doesn&rsquo;t know anything about computers. I&rsquo;ve also tried
+<a href="http://www.dreamhost.com/">DreamHost</a> which has a much cleaner interface than GoDaddy, but doesn&rsquo;t seem to do
+anything that GoDaddy doesn&rsquo;t. Finally, I&rsquo;ve read good things about <a href="http://www.namecheap.com/">Namecheap</a>,
+but have never personally tried it. Ultimately, these services all do the same things, and
+where you buy your domain from doesn&rsquo;t matter, as long as they aren&rsquo;t some scam company.</p>
 
 <p>Once you own your domain, pull up your Github account page and create a new repository. Name
 it your-username.github.io. The Github account for this blog is haikus-in-c, so the Github repository
@@ -122,16 +122,15 @@ $ git push origin master
 result of whatever HTML, Jekyll, or other types of files you just pushed to the your-username.github.io
 repository, then you&rsquo;re ready to move on. If you&rsquo;re looking at a 404 page, or some other type of error, it&rsquo;s
 probably one of two things. Either the Github servers haven&rsquo;t updated to see your freshly pushed data yet
-(though in my experience this always happens really quickly), or your site didn&rsquo;t build for some reason. You
-should also recieve an email from Github when this happens. There are a number of possible problems that
-can cause this to happen: check the <a href="https://github.com/github/pages-gem/blob/master/github-pages.gemspec#L16">software versions</a> that the Github Pages' servers use
-and make sure they&rsquo;re not causing any problems with your site. If that&rsquo;s not it, try building your site
+(though in my experience this always happens really quickly), or your site didn&rsquo;t build for some reason. If
+you&rsquo;re using Jekyll you should also recieve an email from Github when this happens. There are a number of possible problems that can cause this to happen: check the <a href="https://github.com/github/pages-gem/blob/master/github-pages.gemspec#L16">software versions</a> that the Github Pages'
+servers use and make sure they&rsquo;re not causing any problems with your site. If that&rsquo;s not it, try building your site
 on your local machine (if you&rsquo;re using Jekyll this is really easy). See the <a href="https://help.github.com/categories/20/articles">github docs</a> for
 more troubleshooting.</p>
 
 <p>Once you&rsquo;ve got a site showing at www.your-username.github.io you&rsquo;re finally ready to add your custom domain.
-cd back into your-username.github.io and, using your favorite text editor, change CNAME to contain your
-domain name. Use <a href="https://github.com/haikus-in-c/haikus-in-c.github.io/blob/master/CNAME">ours</a> as an example. Then type:</p>
+cd back into your-username.github.io and edit CNAME to contain your
+domain name. See <a href="https://github.com/haikus-in-c/haikus-in-c.github.io/blob/master/CNAME">ours</a> for an example. Then type:</p>
 
 <pre><code>$ git add *
 $ git commit -m 'added domain to CNAME'

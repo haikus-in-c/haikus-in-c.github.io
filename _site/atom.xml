@@ -4,12 +4,103 @@
  <title>Haikus in C</title>
  <link href="http://haikus-in-c.com/atom.xml" rel="self"/>
  <link href="http://haikus-in-c.com/"/>
- <updated>2013-09-01T14:41:26-03:00</updated>
+ <updated>2013-11-13T02:50:13-03:00</updated>
  <id>http://haikus-in-c.com</id>
  <author>
    <name>Haikus in C</name>
  </author>
  
+ 
+ <entry>
+   <title>Dictionary Optimization with the Google Chrome Omnibox</title>
+   <link href="http://haikus-in-c.com/posts/task-optimization"/>
+   <updated>2013-11-13T00:00:00-03:00</updated>
+   <id>http://haikus-in-c.com/posts/task-optimization</id>
+   <content type="html">&lt;p&gt;Here&amp;rsquo;s a fairly common scenario I have been running into this semester: I&amp;rsquo;m
+reading something in Spanish at the computer, I come across a word I don&amp;rsquo;t know.
+I look at it, contemplate looking it up, and continue reading. It&amp;rsquo;s borderline
+terrifying that I&amp;rsquo;m so spoiled by the speed of modern technology that I consider
+the time it takes to open a new browser tab, google my favorite Spanish-English
+dictionary site, and enter the word I&amp;rsquo;m looking for to be prohibitive, but I do.&lt;/p&gt;
+
+&lt;p&gt;But perhaps this superhuman level of laziness is what will ultimately drive the
+next wave of technological advances necessary to achieve the ultimate informational nirvana
+toward which the internet and modern search engine power is moving, a world
+in which you can instantly recieve information about things you look at in real
+time.&lt;/p&gt;
+
+&lt;p&gt;I recently decided to take my own small step toward this goal by writing two
+simple but effective Google Chrome extensions to help optimize the process
+of translating words and phrases between Spanish and English, and conjugating
+Spanish and English verbs.&lt;/p&gt;
+
+&lt;p&gt;Both extensions utilize the Chrome Omnibox, the URL bar at the top of the browser,
+and a builtin API object of Javascript written for Chrom extensions.
+By specifying a keyword, we can reserve a namespace to interact with some Javascript
+code that we provide. In this case, our Javascript will do nothing more than URLize
+our query and open a new tab with that query on either a Spanish-English dictionary
+site, or a Spanish-English verb conjugation site.&lt;/p&gt;
+
+&lt;p&gt;Take a look at the code below for FastTranslate. First we create the manifest file,
+which Chrome uses to gather basic information from all extensions. In this file
+we also specify the reserved Omnibox keyword which will trigger the Javascript
+contained in background.js.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;yaml&quot;&gt;&lt;span class=&quot;p-Indicator&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;s&quot;&gt;&amp;quot;name&amp;quot;&lt;/span&gt;&lt;span class=&quot;p-Indicator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;Fast&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s&quot;&gt;Translate&amp;quot;&lt;/span&gt;&lt;span class=&quot;p-Indicator&quot;&gt;,&lt;/span&gt;
+  &lt;span class=&quot;s&quot;&gt;&amp;quot;description&amp;quot;&lt;/span&gt; &lt;span class=&quot;p-Indicator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;To&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s&quot;&gt;use,&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s&quot;&gt;type&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;#39;trans&amp;#39;,&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s&quot;&gt;then&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s&quot;&gt;two&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s&quot;&gt;spaces,&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s&quot;&gt;and&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s&quot;&gt;then&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s&quot;&gt;word&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s&quot;&gt;or&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s&quot;&gt;phrase&lt;/span&gt;
+                   &lt;span class=&quot;s&quot;&gt;in&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s&quot;&gt;either&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s&quot;&gt;spanish&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s&quot;&gt;or&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s&quot;&gt;english&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s&quot;&gt;that&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s&quot;&gt;you&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s&quot;&gt;want&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s&quot;&gt;to&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s&quot;&gt;translate.&amp;quot;&lt;/span&gt;&lt;span class=&quot;p-Indicator&quot;&gt;,&lt;/span&gt;
+  &lt;span class=&quot;s&quot;&gt;&amp;quot;version&amp;quot;&lt;/span&gt;&lt;span class=&quot;p-Indicator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;1.0&amp;quot;&lt;/span&gt;&lt;span class=&quot;p-Indicator&quot;&gt;,&lt;/span&gt;
+  &lt;span class=&quot;s&quot;&gt;&amp;quot;permissions&amp;quot;&lt;/span&gt;&lt;span class=&quot;p-Indicator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p-Indicator&quot;&gt;[&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;tabs&amp;quot;&lt;/span&gt;&lt;span class=&quot;p-Indicator&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;http://www.linguee.es/&amp;quot;&lt;/span&gt; &lt;span class=&quot;p-Indicator&quot;&gt;],&lt;/span&gt;
+  &lt;span class=&quot;s&quot;&gt;&amp;quot;background&amp;quot;&lt;/span&gt;&lt;span class=&quot;p-Indicator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p-Indicator&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;s&quot;&gt;&amp;quot;scripts&amp;quot;&lt;/span&gt;&lt;span class=&quot;p-Indicator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p-Indicator&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;background.js&amp;quot;&lt;/span&gt;&lt;span class=&quot;p-Indicator&quot;&gt;]&lt;/span&gt;
+  &lt;span class=&quot;p-Indicator&quot;&gt;},&lt;/span&gt;
+  &lt;span class=&quot;s&quot;&gt;&amp;quot;omnibox&amp;quot;&lt;/span&gt;&lt;span class=&quot;p-Indicator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p-Indicator&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;keyword&amp;quot;&lt;/span&gt; &lt;span class=&quot;p-Indicator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;trans&amp;quot;&lt;/span&gt; &lt;span class=&quot;p-Indicator&quot;&gt;},&lt;/span&gt;
+  &lt;span class=&quot;s&quot;&gt;&amp;quot;manifest_version&amp;quot;&lt;/span&gt;&lt;span class=&quot;p-Indicator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;2&lt;/span&gt;
+&lt;span class=&quot;p-Indicator&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Now when a user types &amp;ldquo;trans&amp;rdquo; into the URL bar, the Omnibox will effectively
+transform into the equivalent of a query bar on any site we specifiy in our
+Javascript file. In this case, we will use a Spanish-English dictionary site.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;javascript&quot;&gt;&lt;span class=&quot;c1&quot;&gt;// background for fast_translate&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;// by Ian Zapolsky (09.10.13)&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;// quick omnibox extension that links any query directly to a query&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;// on linguee, my favorite online translator&lt;/span&gt;
+
+
+&lt;span class=&quot;nx&quot;&gt;chrome&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;omnibox&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;onInputChanged&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;addListener&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
+  &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;text&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;suggest&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;nx&quot;&gt;console&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;log&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;inputChanged: &amp;#39;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;text&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;nx&quot;&gt;suggest&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;([&lt;/span&gt;
+      &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;content&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;text&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;hola&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;description&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot; spanish word: hola&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;
+      &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;content&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;text&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;hello&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;description&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot; english word: hello&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;
+      &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;content&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;text&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;como estás&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;description&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot; spanish phrase: como estás&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;
+      &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;content&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;text&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;how are you&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;description&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot; english phrase: how are you&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;]);&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;
+
+&lt;span class=&quot;nx&quot;&gt;chrome&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;omnibox&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;onInputEntered&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;addListener&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
+  &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;text&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;nx&quot;&gt;console&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;log&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;inputEntered: &amp;#39;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;text&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;url&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;http://www.linguee.es/espanol-ingles/search?source=auto&amp;amp;query=&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;text&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;nx&quot;&gt;chrome&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;tabs&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;create&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;({&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;url&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;url&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;The code behind FastConjugate, the conjugation extension I wrote, is almost identical,
+with the query URL changed to the conjugation website. Check out both of these
+tools, and download packaged .crx versions to use yourself, &lt;a href=&quot;https://github.com/ianzapolsky/spanish_extensions&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;While simple, these tools are really effective at optimizing a simple task, one
+that due to the internet and the power of computers is getting closer and closer
+to being instantaneous.&lt;/p&gt;
+</content>
+ </entry>
  
  <entry>
    <title>When an Argentinian Drinking Game Meets Computer Science</title>
@@ -79,7 +170,7 @@ player 2: 14
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;Takeaway #1: it&amp;rsquo;s almost always better not to start a round. Increasing the
-breakpoint of the game to 1000 makes the difference becomes clearer:&lt;/p&gt;
+breakpoint of the game to 1000 makes the difference become clearer:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code&gt;player 1: 206
 player 2: 126
@@ -127,12 +218,12 @@ that are multiples of 7 much more often than everyone else.&lt;/p&gt;
 
 &lt;p&gt;Takeaway #4: when playing with an odd number of people up to 9, the distribution
 of claps is fairly even, except for one person who gets the shaft. This unlucky
-person will be sitting in the (number_of_players)%7 spot. 3%7 = 1 (player 1
-gets the shaft), 5%7 = 2 (player 2 gets the shaft), 7%7 = 0, but since there is
-no player 0, player 7 gets the shaft, and 9%7 = 7, and you can test for yourself
+person will be sitting in the 7%(number_of_players) spot. 7%3 = 1 (player 1
+gets the shaft), 7%5 = 2 (player 2 gets the shaft), 7%7 = 0, but since there is
+no player 0, player 7 gets the shaft, and 7%9 = 7, and you can test for yourself
 that player 7 does indeed get the shaft when playing with 9 people.&lt;/p&gt;
 
-&lt;p&gt;So what does this all mean? Basically nothing, apart from the fact thay you now
+&lt;p&gt;So what does this all mean? Basically nothing, apart from the fact that you now
 know more about this game than you ever wanted to. You can use this knowledge to
 your advantage because often the person who lost the previous turn does not
 automatically start the next round because they are distracted by all the drinking
@@ -764,16 +855,16 @@ But since I&amp;rsquo;ve done this setup process twice now, I&amp;rsquo;m going 
 so I can garuntee that by the end of this, your website will work too!&lt;/p&gt;
 
 &lt;p&gt;I&amp;rsquo;m only going to assume one thing for this tutorial: that you already have a Github account. If you
-don&amp;rsquo;t that&amp;rsquo;s no problem, just go set one up and follow their super clear instructions verbatim. Then
+don&amp;rsquo;t that&amp;rsquo;s no problem, just go set one up and follow their instructions verbatim. Then
 come back here.&lt;/p&gt;
 
-&lt;p&gt;Now, first thing&amp;rsquo;s first. If you don&amp;rsquo;t own the domain you want to use, go buy it.  Having used
-&lt;a href=&quot;http://www.godaddy.com/&quot;&gt;GoDaddy&lt;/a&gt; before, I can tell you that it kind of sucks, and is in no way meant for
-anyone who considers themself to be even a shadow of a hacker. I&amp;rsquo;ve also tried &lt;a href=&quot;http://www.dreamhost.com/&quot;&gt;DreamHost&lt;/a&gt;
-which has a much cleaner interface than GoDaddy, but doesn&amp;rsquo;t offer that much more in the way of
-features. Finally, I&amp;rsquo;ve read good things about &lt;a href=&quot;http://www.namecheap.com/&quot;&gt;Namecheap&lt;/a&gt;, but have never personally
-tried it. Ultimately, these services all do the same things, and where you buy your domain from
-doesn&amp;rsquo;t matter, as long as they aren&amp;rsquo;t some scam company.&lt;/p&gt;
+&lt;p&gt;First thing&amp;rsquo;s first. If you don&amp;rsquo;t own the domain you want to use, go buy it.  Having used
+&lt;a href=&quot;http://www.godaddy.com/&quot;&gt;GoDaddy&lt;/a&gt; before, I can tell you that its user interaces are kind of like quicksand
+because they&amp;rsquo;re designed for someone who doesn&amp;rsquo;t know anything about computers. I&amp;rsquo;ve also tried
+&lt;a href=&quot;http://www.dreamhost.com/&quot;&gt;DreamHost&lt;/a&gt; which has a much cleaner interface than GoDaddy, but doesn&amp;rsquo;t seem to do
+anything that GoDaddy doesn&amp;rsquo;t. Finally, I&amp;rsquo;ve read good things about &lt;a href=&quot;http://www.namecheap.com/&quot;&gt;Namecheap&lt;/a&gt;,
+but have never personally tried it. Ultimately, these services all do the same things, and
+where you buy your domain from doesn&amp;rsquo;t matter, as long as they aren&amp;rsquo;t some scam company.&lt;/p&gt;
 
 &lt;p&gt;Once you own your domain, pull up your Github account page and create a new repository. Name
 it your-username.github.io. The Github account for this blog is haikus-in-c, so the Github repository
@@ -810,16 +901,15 @@ $ git push origin master
 result of whatever HTML, Jekyll, or other types of files you just pushed to the your-username.github.io
 repository, then you&amp;rsquo;re ready to move on. If you&amp;rsquo;re looking at a 404 page, or some other type of error, it&amp;rsquo;s
 probably one of two things. Either the Github servers haven&amp;rsquo;t updated to see your freshly pushed data yet
-(though in my experience this always happens really quickly), or your site didn&amp;rsquo;t build for some reason. You
-should also recieve an email from Github when this happens. There are a number of possible problems that
-can cause this to happen: check the &lt;a href=&quot;https://github.com/github/pages-gem/blob/master/github-pages.gemspec#L16&quot;&gt;software versions&lt;/a&gt; that the Github Pages' servers use
-and make sure they&amp;rsquo;re not causing any problems with your site. If that&amp;rsquo;s not it, try building your site
+(though in my experience this always happens really quickly), or your site didn&amp;rsquo;t build for some reason. If
+you&amp;rsquo;re using Jekyll you should also recieve an email from Github when this happens. There are a number of possible problems that can cause this to happen: check the &lt;a href=&quot;https://github.com/github/pages-gem/blob/master/github-pages.gemspec#L16&quot;&gt;software versions&lt;/a&gt; that the Github Pages'
+servers use and make sure they&amp;rsquo;re not causing any problems with your site. If that&amp;rsquo;s not it, try building your site
 on your local machine (if you&amp;rsquo;re using Jekyll this is really easy). See the &lt;a href=&quot;https://help.github.com/categories/20/articles&quot;&gt;github docs&lt;/a&gt; for
 more troubleshooting.&lt;/p&gt;
 
 &lt;p&gt;Once you&amp;rsquo;ve got a site showing at www.your-username.github.io you&amp;rsquo;re finally ready to add your custom domain.
-cd back into your-username.github.io and, using your favorite text editor, change CNAME to contain your
-domain name. Use &lt;a href=&quot;https://github.com/haikus-in-c/haikus-in-c.github.io/blob/master/CNAME&quot;&gt;ours&lt;/a&gt; as an example. Then type:&lt;/p&gt;
+cd back into your-username.github.io and edit CNAME to contain your
+domain name. See &lt;a href=&quot;https://github.com/haikus-in-c/haikus-in-c.github.io/blob/master/CNAME&quot;&gt;ours&lt;/a&gt; for an example. Then type:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code&gt;$ git add *
 $ git commit -m 'added domain to CNAME'

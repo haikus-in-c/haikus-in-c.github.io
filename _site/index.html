@@ -58,11 +58,107 @@
   <section class="content">
   
 	<h1>
+	  <a href="/posts/task-optimization">Dictionary Optimization with the Google Chrome Omnibox</a>
+	</h1>
+	
+	<section class="byline">
+	  by Ian Zapolsky, November 13, 2013
+	</section>
+
+	<p><p>Here&rsquo;s a fairly common scenario I have been running into this semester: I&rsquo;m
+reading something in Spanish at the computer, I come across a word I don&rsquo;t know.
+I look at it, contemplate looking it up, and continue reading. It&rsquo;s borderline
+terrifying that I&rsquo;m so spoiled by the speed of modern technology that I consider
+the time it takes to open a new browser tab, google my favorite Spanish-English
+dictionary site, and enter the word I&rsquo;m looking for to be prohibitive, but I do.</p>
+
+<p>But perhaps this superhuman level of laziness is what will ultimately drive the
+next wave of technological advances necessary to achieve the ultimate informational nirvana
+toward which the internet and modern search engine power is moving, a world
+in which you can instantly recieve information about things you look at in real
+time.</p>
+
+<p>I recently decided to take my own small step toward this goal by writing two
+simple but effective Google Chrome extensions to help optimize the process
+of translating words and phrases between Spanish and English, and conjugating
+Spanish and English verbs.</p>
+
+<p>Both extensions utilize the Chrome Omnibox, the URL bar at the top of the browser,
+and a builtin API object of Javascript written for Chrom extensions.
+By specifying a keyword, we can reserve a namespace to interact with some Javascript
+code that we provide. In this case, our Javascript will do nothing more than URLize
+our query and open a new tab with that query on either a Spanish-English dictionary
+site, or a Spanish-English verb conjugation site.</p>
+
+<p>Take a look at the code below for FastTranslate. First we create the manifest file,
+which Chrome uses to gather basic information from all extensions. In this file
+we also specify the reserved Omnibox keyword which will trigger the Javascript
+contained in background.js.</p>
+
+<div class="highlight"><pre><code class="yaml"><span class="p-Indicator">{</span>
+  <span class="s">&quot;name&quot;</span><span class="p-Indicator">:</span> <span class="s">&quot;Fast</span><span class="nv"> </span><span class="s">Translate&quot;</span><span class="p-Indicator">,</span>
+  <span class="s">&quot;description&quot;</span> <span class="p-Indicator">:</span> <span class="s">&quot;To</span><span class="nv"> </span><span class="s">use,</span><span class="nv"> </span><span class="s">type</span><span class="nv"> </span><span class="s">&#39;trans&#39;,</span><span class="nv"> </span><span class="s">then</span><span class="nv"> </span><span class="s">two</span><span class="nv"> </span><span class="s">spaces,</span><span class="nv"> </span><span class="s">and</span><span class="nv"> </span><span class="s">then</span><span class="nv"> </span><span class="s">a</span><span class="nv"> </span><span class="s">word</span><span class="nv"> </span><span class="s">or</span><span class="nv"> </span><span class="s">phrase</span>
+                   <span class="s">in</span><span class="nv"> </span><span class="s">either</span><span class="nv"> </span><span class="s">spanish</span><span class="nv"> </span><span class="s">or</span><span class="nv"> </span><span class="s">english</span><span class="nv"> </span><span class="s">that</span><span class="nv"> </span><span class="s">you</span><span class="nv"> </span><span class="s">want</span><span class="nv"> </span><span class="s">to</span><span class="nv"> </span><span class="s">translate.&quot;</span><span class="p-Indicator">,</span>
+  <span class="s">&quot;version&quot;</span><span class="p-Indicator">:</span> <span class="s">&quot;1.0&quot;</span><span class="p-Indicator">,</span>
+  <span class="s">&quot;permissions&quot;</span><span class="p-Indicator">:</span> <span class="p-Indicator">[</span> <span class="s">&quot;tabs&quot;</span><span class="p-Indicator">,</span> <span class="s">&quot;http://www.linguee.es/&quot;</span> <span class="p-Indicator">],</span>
+  <span class="s">&quot;background&quot;</span><span class="p-Indicator">:</span> <span class="p-Indicator">{</span>
+    <span class="s">&quot;scripts&quot;</span><span class="p-Indicator">:</span> <span class="p-Indicator">[</span><span class="s">&quot;background.js&quot;</span><span class="p-Indicator">]</span>
+  <span class="p-Indicator">},</span>
+  <span class="s">&quot;omnibox&quot;</span><span class="p-Indicator">:</span> <span class="p-Indicator">{</span> <span class="s">&quot;keyword&quot;</span> <span class="p-Indicator">:</span> <span class="s">&quot;trans&quot;</span> <span class="p-Indicator">},</span>
+  <span class="s">&quot;manifest_version&quot;</span><span class="p-Indicator">:</span> <span class="nv">2</span>
+<span class="p-Indicator">}</span>
+</code></pre></div>
+
+
+<p>Now when a user types &ldquo;trans&rdquo; into the URL bar, the Omnibox will effectively
+transform into the equivalent of a query bar on any site we specifiy in our
+Javascript file. In this case, we will use a Spanish-English dictionary site.</p>
+
+<div class="highlight"><pre><code class="javascript"><span class="c1">// background for fast_translate</span>
+<span class="c1">// by Ian Zapolsky (09.10.13)</span>
+
+<span class="c1">// quick omnibox extension that links any query directly to a query</span>
+<span class="c1">// on linguee, my favorite online translator</span>
+
+
+<span class="nx">chrome</span><span class="p">.</span><span class="nx">omnibox</span><span class="p">.</span><span class="nx">onInputChanged</span><span class="p">.</span><span class="nx">addListener</span><span class="p">(</span>
+  <span class="kd">function</span><span class="p">(</span><span class="nx">text</span><span class="p">,</span> <span class="nx">suggest</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;inputChanged: &#39;</span> <span class="o">+</span> <span class="nx">text</span><span class="p">);</span>
+    <span class="nx">suggest</span><span class="p">([</span>
+      <span class="p">{</span><span class="nx">content</span><span class="o">:</span> <span class="nx">text</span> <span class="o">+</span> <span class="s2">&quot;hola&quot;</span><span class="p">,</span> <span class="nx">description</span><span class="o">:</span> <span class="s2">&quot; spanish word: hola&quot;</span><span class="p">},</span>
+      <span class="p">{</span><span class="nx">content</span><span class="o">:</span> <span class="nx">text</span> <span class="o">+</span> <span class="s2">&quot;hello&quot;</span><span class="p">,</span> <span class="nx">description</span><span class="o">:</span> <span class="s2">&quot; english word: hello&quot;</span><span class="p">},</span>
+      <span class="p">{</span><span class="nx">content</span><span class="o">:</span> <span class="nx">text</span> <span class="o">+</span> <span class="s2">&quot;como estás&quot;</span><span class="p">,</span> <span class="nx">description</span><span class="o">:</span> <span class="s2">&quot; spanish phrase: como estás&quot;</span><span class="p">},</span>
+      <span class="p">{</span><span class="nx">content</span><span class="o">:</span> <span class="nx">text</span> <span class="o">+</span> <span class="s2">&quot;how are you&quot;</span><span class="p">,</span> <span class="nx">description</span><span class="o">:</span> <span class="s2">&quot; english phrase: how are you&quot;</span><span class="p">}</span>
+    <span class="p">]);</span>
+  <span class="p">});</span>
+
+<span class="nx">chrome</span><span class="p">.</span><span class="nx">omnibox</span><span class="p">.</span><span class="nx">onInputEntered</span><span class="p">.</span><span class="nx">addListener</span><span class="p">(</span>
+  <span class="kd">function</span><span class="p">(</span><span class="nx">text</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;inputEntered: &#39;</span> <span class="o">+</span> <span class="nx">text</span><span class="p">);</span>
+    <span class="kd">var</span> <span class="nx">url</span> <span class="o">=</span> <span class="s2">&quot;http://www.linguee.es/espanol-ingles/search?source=auto&amp;query=&quot;</span><span class="o">+</span><span class="nx">text</span><span class="p">;</span>
+    <span class="nx">chrome</span><span class="p">.</span><span class="nx">tabs</span><span class="p">.</span><span class="nx">create</span><span class="p">({</span> <span class="nx">url</span><span class="o">:</span><span class="nx">url</span> <span class="p">});</span>
+  <span class="p">});</span>
+</code></pre></div>
+
+
+<p>The code behind FastConjugate, the conjugation extension I wrote, is almost identical,
+with the query URL changed to the conjugation website. Check out both of these
+tools, and download packaged .crx versions to use yourself, <a href="https://github.com/ianzapolsky/spanish_extensions">here</a>.</p>
+
+<p>While simple, these tools are really effective at optimizing a simple task, one
+that due to the internet and the power of computers is getting closer and closer
+to being instantaneous.</p>
+</p>
+
+	<hr>
+
+  
+	<h1>
 	  <a href="/posts/argentinian-drinking-game">When an Argentinian Drinking Game Meets Computer Science</a>
 	</h1>
 	
 	<section class="byline">
-	  by Ian Zapolsky, Sep  1, 2013
+	  by Ian Zapolsky, September  1, 2013
 	</section>
 
 	<p><p>I love drinking games.</p>
@@ -128,7 +224,7 @@ player 2: 14
 </code></pre>
 
 <p>Takeaway #1: it&rsquo;s almost always better not to start a round. Increasing the
-breakpoint of the game to 1000 makes the difference becomes clearer:</p>
+breakpoint of the game to 1000 makes the difference become clearer:</p>
 
 <pre><code>player 1: 206
 player 2: 126
@@ -176,12 +272,12 @@ that are multiples of 7 much more often than everyone else.</p>
 
 <p>Takeaway #4: when playing with an odd number of people up to 9, the distribution
 of claps is fairly even, except for one person who gets the shaft. This unlucky
-person will be sitting in the (number_of_players)%7 spot. 3%7 = 1 (player 1
-gets the shaft), 5%7 = 2 (player 2 gets the shaft), 7%7 = 0, but since there is
-no player 0, player 7 gets the shaft, and 9%7 = 7, and you can test for yourself
+person will be sitting in the 7%(number_of_players) spot. 7%3 = 1 (player 1
+gets the shaft), 7%5 = 2 (player 2 gets the shaft), 7%7 = 0, but since there is
+no player 0, player 7 gets the shaft, and 7%9 = 7, and you can test for yourself
 that player 7 does indeed get the shaft when playing with 9 people.</p>
 
-<p>So what does this all mean? Basically nothing, apart from the fact thay you now
+<p>So what does this all mean? Basically nothing, apart from the fact that you now
 know more about this game than you ever wanted to. You can use this knowledge to
 your advantage because often the person who lost the previous turn does not
 automatically start the next round because they are distracted by all the drinking
@@ -202,7 +298,7 @@ bringing you victory, which, in drinking games, actually means you&rsquo;re losi
 	</h1>
 	
 	<section class="byline">
-	  by Ruchir Khaitan, Aug 19, 2013
+	  by Ruchir Khaitan, August 19, 2013
 	</section>
 
 	<p><p>The final <a href="https://www.spotify.com/us/jobs/tech/">Spotify</a> puzzle is a heavy metal showdown that brings together two beloved pets and a wide variety of computer science topics. Unfortunately, this problem took a lot longer than it should have, because I was stubborn, and refused to let go of preconceived ideas of how to solve it even when I could clearly see that my approach was incorrect. Basically, I was looking at it all wrong. The general premise, explained in more detail <a href="https://www.spotify.com/us/jobs/tech/catvsdog/">here</a>, is that each week in a TV game show for cats and dogs, a pet is removed based on a vote. Each person watching votes for one pet that they want to keep on the show, and one that they want to remove, and people cannot choose members of the same species for both. Most importantly, the producers will remove pets in an effort to maximize viewership, and so the question is: what is the maximum number of voters that can be satisfied, meaning that both their choices have been carried out, given a set of votes (and assuming that those votes dont change over time).</p>
@@ -395,7 +491,7 @@ bringing you victory, which, in drinking games, actually means you&rsquo;re losi
 	</h1>
 	
 	<section class="byline">
-	  by Ian Zapolsky, Aug 17, 2013
+	  by Ian Zapolsky, August 17, 2013
 	</section>
 
 	<p><p>Finding a great solution to a computer science problem is more about the journey
@@ -506,7 +602,7 @@ sites like careercup.</p>
 	</h1>
 	
 	<section class="byline">
-	  by Ruchir Khaitan, Aug 16, 2013
+	  by Ruchir Khaitan, August 16, 2013
 	</section>
 
 	<p><p>Today, I&rsquo;m going to subvert a key principle of this blog for a little bit, namely the idea that an educational or even interesting probem has to be somewhat complex, hence the term programming puzzles. The problem I&rsquo;m going to examine today is simply: given a list of n objects (the code is only going to handle integers but the ideas apply equally well to all data), find the number of unique elements it contains. This question is simple enough that one doesn&rsquo;t need to be a compuuter scientist to solve it. All one has to do is, at each element, scan the remainder of the list. If you can find another element that matches the one you were looking at, obviously it&rsquo;s not unique. The code below expresses this algorithm in C:</p>
@@ -749,7 +845,7 @@ At the end of this long post, I feel a bit like a man who&rsquo;d spent many hou
 	</h1>
 	
 	<section class="byline">
-	  by Ruchir Khaitan, Aug 15, 2013
+	  by Ruchir Khaitan, August 15, 2013
 	</section>
 
 	<p><p>Today&rsquo;s puzzle is an exercise in recursion and iteration, and the costs and benefits of both. The task is simple, given a triangle of numbers, here defined as an arrangement of numbers where the first row has one number, the second row has two, and the nth row has n numbers, the task is to find the maximum total going from top to bottom using only adjacent numbers, or the maximum path sum. A sample triangle and top down path are shown below. The challenge is to do this for a large triangle, with at least a hundred rows, where there are so many top down paths that brute force solutions are impossible.</p>
@@ -823,7 +919,7 @@ At the end of this long post, I feel a bit like a man who&rsquo;d spent many hou
 	</h1>
 	
 	<section class="byline">
-	  by Ian Zapolsky, Aug 15, 2013
+	  by Ian Zapolsky, August 15, 2013
 	</section>
 
 	<p><p>Recently I spent some time wading through the internet&rsquo;s primordial soup of CS help sources &ndash; Stack
@@ -838,16 +934,16 @@ But since I&rsquo;ve done this setup process twice now, I&rsquo;m going to cover
 so I can garuntee that by the end of this, your website will work too!</p>
 
 <p>I&rsquo;m only going to assume one thing for this tutorial: that you already have a Github account. If you
-don&rsquo;t that&rsquo;s no problem, just go set one up and follow their super clear instructions verbatim. Then
+don&rsquo;t that&rsquo;s no problem, just go set one up and follow their instructions verbatim. Then
 come back here.</p>
 
-<p>Now, first thing&rsquo;s first. If you don&rsquo;t own the domain you want to use, go buy it.  Having used
-<a href="http://www.godaddy.com/">GoDaddy</a> before, I can tell you that it kind of sucks, and is in no way meant for
-anyone who considers themself to be even a shadow of a hacker. I&rsquo;ve also tried <a href="http://www.dreamhost.com/">DreamHost</a>
-which has a much cleaner interface than GoDaddy, but doesn&rsquo;t offer that much more in the way of
-features. Finally, I&rsquo;ve read good things about <a href="http://www.namecheap.com/">Namecheap</a>, but have never personally
-tried it. Ultimately, these services all do the same things, and where you buy your domain from
-doesn&rsquo;t matter, as long as they aren&rsquo;t some scam company.</p>
+<p>First thing&rsquo;s first. If you don&rsquo;t own the domain you want to use, go buy it.  Having used
+<a href="http://www.godaddy.com/">GoDaddy</a> before, I can tell you that its user interaces are kind of like quicksand
+because they&rsquo;re designed for someone who doesn&rsquo;t know anything about computers. I&rsquo;ve also tried
+<a href="http://www.dreamhost.com/">DreamHost</a> which has a much cleaner interface than GoDaddy, but doesn&rsquo;t seem to do
+anything that GoDaddy doesn&rsquo;t. Finally, I&rsquo;ve read good things about <a href="http://www.namecheap.com/">Namecheap</a>,
+but have never personally tried it. Ultimately, these services all do the same things, and
+where you buy your domain from doesn&rsquo;t matter, as long as they aren&rsquo;t some scam company.</p>
 
 <p>Once you own your domain, pull up your Github account page and create a new repository. Name
 it your-username.github.io. The Github account for this blog is haikus-in-c, so the Github repository
@@ -884,16 +980,15 @@ $ git push origin master
 result of whatever HTML, Jekyll, or other types of files you just pushed to the your-username.github.io
 repository, then you&rsquo;re ready to move on. If you&rsquo;re looking at a 404 page, or some other type of error, it&rsquo;s
 probably one of two things. Either the Github servers haven&rsquo;t updated to see your freshly pushed data yet
-(though in my experience this always happens really quickly), or your site didn&rsquo;t build for some reason. You
-should also recieve an email from Github when this happens. There are a number of possible problems that
-can cause this to happen: check the <a href="https://github.com/github/pages-gem/blob/master/github-pages.gemspec#L16">software versions</a> that the Github Pages' servers use
-and make sure they&rsquo;re not causing any problems with your site. If that&rsquo;s not it, try building your site
+(though in my experience this always happens really quickly), or your site didn&rsquo;t build for some reason. If
+you&rsquo;re using Jekyll you should also recieve an email from Github when this happens. There are a number of possible problems that can cause this to happen: check the <a href="https://github.com/github/pages-gem/blob/master/github-pages.gemspec#L16">software versions</a> that the Github Pages'
+servers use and make sure they&rsquo;re not causing any problems with your site. If that&rsquo;s not it, try building your site
 on your local machine (if you&rsquo;re using Jekyll this is really easy). See the <a href="https://help.github.com/categories/20/articles">github docs</a> for
 more troubleshooting.</p>
 
 <p>Once you&rsquo;ve got a site showing at www.your-username.github.io you&rsquo;re finally ready to add your custom domain.
-cd back into your-username.github.io and, using your favorite text editor, change CNAME to contain your
-domain name. Use <a href="https://github.com/haikus-in-c/haikus-in-c.github.io/blob/master/CNAME">ours</a> as an example. Then type:</p>
+cd back into your-username.github.io and edit CNAME to contain your
+domain name. See <a href="https://github.com/haikus-in-c/haikus-in-c.github.io/blob/master/CNAME">ours</a> for an example. Then type:</p>
 
 <pre><code>$ git add *
 $ git commit -m 'added domain to CNAME'
@@ -933,7 +1028,7 @@ be live on your custom domain!</p>
 	</h1>
 	
 	<section class="byline">
-	  by Ian Zapolsky, Aug 11, 2013
+	  by Ian Zapolsky, August 11, 2013
 	</section>
 
 	<p><p>Recently I read an <a href="http://zachholman.com/posts/inbox-zero-everything-zero/">article by Zach Holman</a>, an engineer at Github and the guy
@@ -1084,7 +1179,7 @@ check all Circuits for an under-full Circuit and add it there.</p></li>
 	</h1>
 	
 	<section class="byline">
-	  by Ian Zapolsky, Apr 26, 2013
+	  by Ian Zapolsky, April 26, 2013
 	</section>
 
 	<p><p>Today we return to <a href="https://www.spotify.com/us/jobs/tech/">Spotify&rsquo;s hallowed puzzle page</a> for the second of the three puzzles
@@ -1200,7 +1295,7 @@ and return the first m songs (as specified in the input) in descending order of 
 	</h1>
 	
 	<section class="byline">
-	  by Ian Zapolsky, Apr 12, 2013
+	  by Ian Zapolsky, April 12, 2013
 	</section>
 
 	<p><p>On <a href="https://www.spotify.com/us/jobs/tech/">Spotify&rsquo;s puzzle page</a>, they&rsquo;ve got three tech puzzles for potential hires
@@ -1283,7 +1378,7 @@ from the end of the String, adding increasing powers of 2 to a final result.</p>
 	</h1>
 	
 	<section class="byline">
-	  by Ian Zapolsky, Apr  5, 2013
+	  by Ian Zapolsky, April  5, 2013
 	</section>
 
 	<p><p>Welcome to <a href="https://haikus-in-c.github.io">Haikus in C</a>, the programming blog of Ian and Ruchir, two
