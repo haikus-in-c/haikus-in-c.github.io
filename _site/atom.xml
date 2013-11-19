@@ -4,7 +4,7 @@
  <title>Haikus in C</title>
  <link href="http://haikus-in-c.com/atom.xml" rel="self"/>
  <link href="http://haikus-in-c.com/"/>
- <updated>2013-11-13T02:50:13-03:00</updated>
+ <updated>2013-11-19T12:36:21-03:00</updated>
  <id>http://haikus-in-c.com</id>
  <author>
    <name>Haikus in C</name>
@@ -34,8 +34,11 @@ simple but effective Google Chrome extensions to help optimize the process
 of translating words and phrases between Spanish and English, and conjugating
 Spanish and English verbs.&lt;/p&gt;
 
+&lt;!--more--&gt;
+
+
 &lt;p&gt;Both extensions utilize the Chrome Omnibox, the URL bar at the top of the browser,
-and a builtin API object of Javascript written for Chrom extensions.
+and a builtin API component for Javascript written for Chrome extensions.
 By specifying a keyword, we can reserve a namespace to interact with some Javascript
 code that we provide. In this case, our Javascript will do nothing more than URLize
 our query and open a new tab with that query on either a Spanish-English dictionary
@@ -122,6 +125,9 @@ would like the share one with you that I learned this past weekend in
 Buenos Aires. As far as I can tell it does not have an official name, and there
 very well may be a North American/English speaking version already being played.
 It&amp;rsquo;s great fun but, as we&amp;rsquo;ll see in this post, it is completely unfair.&lt;/p&gt;
+
+&lt;!--more--&gt;
+
 
 &lt;p&gt;Here&amp;rsquo;s the premise: x people are in a circle. The person whose turn it is to start
 the round (usually the person who lost the last round) begins by saying out loud
@@ -304,7 +310,7 @@ bringing you victory, which, in drinking games, actually means you&amp;rsquo;re 
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;p&gt;Unfortunately, this approach didnt work and I was at a loss to explain why since it seemed to work for the two test inputs given, and I couldnt engineer a new test case that would break my algorithm. Eventually, I realized the flaw in my reasoning which was that I implicitly assumed that the way to maximize viewer satisfaction would be to remove the least wanted pets, which seems like the right way to go about it, except that in doing so, it shifts ones focus on the pets when it should be squarely on the pets. I realized that the voters represented a bipartite graph, with one partition being the group that liked cats, and the other being the group that liked dogs. Here the edges on the graph represented incompatible pairings, or pairs where at least one person wants to remove a pet that the other wants to keep. Such pairs cannot mutually be happy, as to give one satisfaction would be to deny the other. With this insight in hand, the problem becomes a problem of finding the maximum cardinality matching, or the maximum set of edges without any common vertices on the graph. This represents all of the incompatible people from which one person has to be removed, and so, the answer is the number of voters v &amp;ndash; the number of edges E in the maximum cardinality matching. This method requires first splitting the voters into two arrays, representing the two partitions in the graph.&lt;/p&gt;
+&lt;p&gt;Unfortunately, this approach didnt work and I was at a loss to explain why since it seemed to work for the two test inputs given, and I couldnt engineer a new test case that would break my algorithm. &lt;!--more--&gt;Eventually, I realized the flaw in my reasoning which was that I implicitly assumed that the way to maximize viewer satisfaction would be to remove the least wanted pets, which seems like the right way to go about it, except that in doing so, it shifts ones focus on the pets when it should be squarely on the pets. I realized that the voters represented a bipartite graph, with one partition being the group that liked cats, and the other being the group that liked dogs. Here the edges on the graph represented incompatible pairings, or pairs where at least one person wants to remove a pet that the other wants to keep. Such pairs cannot mutually be happy, as to give one satisfaction would be to deny the other. With this insight in hand, the problem becomes a problem of finding the maximum cardinality matching, or the maximum set of edges without any common vertices on the graph. This represents all of the incompatible people from which one person has to be removed, and so, the answer is the number of voters v &amp;ndash; the number of edges E in the maximum cardinality matching. This method requires first splitting the voters into two arrays, representing the two partitions in the graph.&lt;/p&gt;
 
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;c&quot;&gt;    &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;argc&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;char&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;**&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;argv&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
             &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;times&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;j&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;k&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;cats&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;dogs&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;voters&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;prefer&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;reject&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
@@ -486,6 +492,11 @@ loops, then run them each through a quick comparison method that checks for repe
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 
+
+
+&lt;!--more--&gt;
+
+
 &lt;p&gt;There are a couple things to note. First, we can tell that there will be 4! = 24 four-digit numbers because a non-repeating four-digit number made up of only four distinct integers can be comprised of 4*3*2*1 combinations of digits. Second, we can take advantage of the fact that ASCII characters are
 ordered sequentially to get get chars 1-4 by incrementing the integer representation of that char.&lt;/p&gt;
 
@@ -555,7 +566,7 @@ sites like careercup.&lt;/p&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;p&gt;You&amp;rsquo;ll notice that I named this function &amp;ldquo;naive_find_num_unique&amp;rdquo; for a reason. This function, while very easy to understandd and very memory efficient, has horrible performance, because of its O(n&lt;sup&gt;2&lt;/sup&gt;) time complexity, which occurs because given an input of size n, for each element i in n, we need to read the remainder of the list. Since the number of steps we need to read varies from (n-1) at the front, to zero at the end, meaning an average of about n/2 steps taken n times, it&amp;rsquo;s clear that the algorithm takes k/2 * n&lt;sup&gt;2&lt;/sup&gt; + b*n +c steps &amp;ndash; but what matters is the O(n&lt;sup&gt;2&lt;/sup&gt;). While this is bad, in the context of this problem this performance actually isn&amp;rsquo;t too far from a theoretical maximum since in order to find the answer, any solution must look at every value at least once, and therefore, the optimal solution must be O(n).
+&lt;p&gt;You&amp;rsquo;ll notice that I named this function &amp;ldquo;naive_find_num_unique&amp;rdquo; for a reason. This function, while very easy to understandd and very memory efficient, has horrible performance, because of its O(n&lt;sup&gt;2&lt;/sup&gt;) time complexity, which occurs because given an input of size n, for each element i in n, we need to read the remainder of the list. &lt;!--more--&gt;Since the number of steps we need to read varies from (n-1) at the front, to zero at the end, meaning an average of about n/2 steps taken n times, it&amp;rsquo;s clear that the algorithm takes k/2 * n&lt;sup&gt;2&lt;/sup&gt; + b*n +c steps &amp;ndash; but what matters is the O(n&lt;sup&gt;2&lt;/sup&gt;). While this is bad, in the context of this problem this performance actually isn&amp;rsquo;t too far from a theoretical maximum since in order to find the answer, any solution must look at every value at least once, and therefore, the optimal solution must be O(n).
 Before we totally dismiss this most naive solution perhaps I should stress that it&amp;rsquo;s still not worthless, rather this algorithm, because of its simplicity, is really good for quick and dirty initial solutions or for a system that has no memory to spare like some embedded systems. However, the question still remains: how low can you go (time complexity-wise)?&lt;/p&gt;
 
 &lt;p&gt;Its clear that in order to improve the performance of this algorithm, we need to speed up the slowest step. As it stands, the slowest step is scanning the remainder of the array, to check whether an equivalent value exists. One way to speed up this process is with a bit vector,which represents sets of data using single bits, a 1 meaning the element is in the set, and a 0 meaning it isnt. Our way forward is now clear, first, we initialize an array of bits to zero. Then, for each nth element in our array of data value, we check the corresponding nth bit in the bitvector. If this bit is zero, then that indicates that this element hasn&amp;rsquo;t yet been seen and so we raise that bit, and scan the rest of the array, looking for equivalent elements, and if any are found, raising the bits at those indices. On the other hand, if the corresponding bit is high, then that indicates that we have already seen this element and so we can move forward.&lt;/p&gt;
@@ -785,6 +796,11 @@ At the end of this long post, I feel a bit like a man who&amp;rsquo;d spent many
 
 &lt;p&gt;There are two key questions that need to be answered in order to solve this problem. Firstly, how are we going to represent the triangle so that the program can use the data? One initially attractive solution is to use a tree structure, since the shape of a triangle suggests a tree almost immediately and each node would only have two children. However, this approach falls short, as though each parent node would have two child nodes, most of those nodes would be shared between two parents, which could lead to memory usage and implementation complications. Instead, lets examine what we know. We know that each triangle will only ever have n rows, and that each nth row will have n numbers. This means that if the triangle is represented as a text file, then just by counting the number of lines we can know that there will be n(n+1)/2 elements, which can be stored in an array.&lt;/p&gt;
 
+&lt;!--more--&gt;
+
+
+
+
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;java&quot;&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;triangle&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;malloc&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sizeof&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)*(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;numLine&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;numLine&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;))/&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
             &lt;span class=&quot;k&quot;&gt;while&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;fgets&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;buf&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sizeof&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;buf&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;),&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;file&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;))&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;  
                 &lt;span class=&quot;n&quot;&gt;num&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;  &lt;span class=&quot;n&quot;&gt;strtol&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;buf&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;numEnd&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
@@ -853,6 +869,9 @@ locally in whatever text editor you want, add, commit, push, and it&amp;rsquo;s 
 a couple tricky spots to getting your custom domain Github Pages hosted site up and running.
 But since I&amp;rsquo;ve done this setup process twice now, I&amp;rsquo;m going to cover it from scratch,
 so I can garuntee that by the end of this, your website will work too!&lt;/p&gt;
+
+&lt;!--more--&gt;
+
 
 &lt;p&gt;I&amp;rsquo;m only going to assume one thing for this tutorial: that you already have a Github account. If you
 don&amp;rsquo;t that&amp;rsquo;s no problem, just go set one up and follow their instructions verbatim. Then
@@ -970,7 +989,7 @@ it just wouldn&amp;rsquo;t be feasible to keep track of all the todo files. In h
 &lt;blockquote&gt;&lt;p&gt;I keep a clean desktop: under three icons at a time, preferably. It made sense to use my
 desktop as a kind of bucket I need to empty&amp;hellip;.&lt;/p&gt;&lt;/blockquote&gt;
 
-&lt;p&gt;Unfortunately, my desktop isn&amp;rsquo;t so clean. I&amp;rsquo;ve got all sorts of music and image files lying around,
+&lt;p&gt;Unfortunately, my desktop isn&amp;rsquo;t so clean. &lt;!--more--&gt;I&amp;rsquo;ve got all sorts of music and image files lying around,
 and I&amp;rsquo;m too lazy to clean it all up. So, I decided to heavily edit this todo script to keep all the
 task files, which are the exact same emtpy files created with the touch command as in Holman&amp;rsquo;s original,
 organized by priority under one directory at ~/Desktop/todo. Within todo, there are more directories, todo/top,
@@ -1037,6 +1056,9 @@ variables which they all share: Hand-eye Coordination (H), Endurance (E), and Pi
 The higher the dot product of a juggler with a specific circuit, the better fit a juggler
 is for that circuit.&lt;/p&gt;
 
+&lt;!--more--&gt;
+
+
 &lt;p&gt;This problem is a great exercise in designing an airtight algorithm from small scale to
 large scale. The sample input provided by Yodle gives us 3 circuits and 12 jugglers,
 while the actual text file required to solve the challenge has 2,000 circuits and 12,000
@@ -1100,6 +1122,9 @@ into account something called &lt;a href=&quot;http://en.wikipedia.org/wiki/Zipf
 
 &lt;p&gt;The law goes on to quantify this observation by saying that we should expect the nth song
 of an album to be played roughly 1/n the number of times as the first.&lt;/p&gt;
+
+&lt;!--more--&gt;
+
 
 &lt;p&gt;I decided to approach this problem by designing a simple Song class to hold all the information
 for a given song, including its plays, expected plays (based on Zipf&amp;rsquo;s Law), and the ratio of
@@ -1207,6 +1232,9 @@ between 1 and 1,000,000,000 (inclusive), convert it to binary form, reverse that
 string, and then convert the result back into decimal form. For example, on input 11,
 we convert to binary number 1011, reverse to get 1101, then convert back to decimal form
 to get 13 (11 &gt; 1011 &gt; 1101 &gt; 13).&lt;/p&gt;
+
+&lt;!--more--&gt;
+
 
 &lt;p&gt;Let&amp;rsquo;s continue with 11. 11 is 1011, or (1*2&lt;sup&gt;3&lt;/sup&gt; + 0*2&lt;sup&gt;2&lt;/sup&gt; + 1*2&lt;sup&gt;1&lt;/sup&gt; + 1*2&lt;sup&gt;0&lt;/sup&gt;), in binary.
 Why is this?&lt;/p&gt;

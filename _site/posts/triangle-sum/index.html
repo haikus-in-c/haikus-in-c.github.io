@@ -75,6 +75,11 @@
 
 <p>There are two key questions that need to be answered in order to solve this problem. Firstly, how are we going to represent the triangle so that the program can use the data? One initially attractive solution is to use a tree structure, since the shape of a triangle suggests a tree almost immediately and each node would only have two children. However, this approach falls short, as though each parent node would have two child nodes, most of those nodes would be shared between two parents, which could lead to memory usage and implementation complications. Instead, lets examine what we know. We know that each triangle will only ever have n rows, and that each nth row will have n numbers. This means that if the triangle is represented as a text file, then just by counting the number of lines we can know that there will be n(n+1)/2 elements, which can be stored in an array.</p>
 
+<!--more-->
+
+
+
+
 <div class="highlight"><pre><code class="java"> <span class="kt">int</span><span class="o">*</span> <span class="n">triangle</span> <span class="o">=</span> <span class="n">malloc</span><span class="o">(</span><span class="n">sizeof</span><span class="o">(</span><span class="kt">int</span><span class="o">)*(</span><span class="n">numLine</span><span class="o">*(</span><span class="n">numLine</span><span class="o">+</span><span class="mi">1</span><span class="o">))/</span><span class="mi">2</span> <span class="o">+</span> <span class="mi">1</span><span class="o">);</span>
             <span class="k">while</span><span class="o">(</span><span class="n">fgets</span><span class="o">(</span><span class="n">buf</span><span class="o">,</span> <span class="n">sizeof</span><span class="o">(</span><span class="n">buf</span><span class="o">),</span> <span class="n">file</span><span class="o">))</span> <span class="o">{</span>  
                 <span class="n">num</span> <span class="o">=(</span><span class="kt">int</span><span class="o">)</span>  <span class="n">strtol</span><span class="o">(</span><span class="n">buf</span><span class="o">,</span> <span class="o">&amp;</span><span class="n">numEnd</span><span class="o">,</span> <span class="mi">10</span><span class="o">);</span>

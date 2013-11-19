@@ -63,7 +63,7 @@ There are a couple things to note. First, we can tell that there will be 4! = 24
 ordered sequentially to get get chars 1-4 by incrementing the integer representation of that char.
 
 However, after a bit more thought, and a helpful conversation with Ruchir, I realized that this
-is actually a pretty horrible way of finding this sum. Let's think about the challenge in a 
+is actually a pretty horrible way of finding this sum. <!--more-->Let's think about the challenge in a 
 different way. We know there will be 4! of these four-digit non-repeating numbers. Now let's
 take that knowledge a step further: if there are 4! total numbers, it follows that for each
 given digit there will by 24/4 = 6 numbers that contain that digit in a given place. In other

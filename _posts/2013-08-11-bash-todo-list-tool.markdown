@@ -28,7 +28,7 @@ it just wouldn't be feasible to keep track of all the todo files. In his own wor
 > I keep a clean desktop: under three icons at a time, preferably. It made sense to use my
 > desktop as a kind of bucket I need to empty....
 
-Unfortunately, my desktop isn't so clean. I've got all sorts of music and image files lying around,
+Unfortunately, my desktop isn't so clean. <!--more-->I've got all sorts of music and image files lying around,
 and I'm too lazy to clean it all up. So, I decided to heavily edit this todo script to keep all the
 task files, which are the exact same emtpy files created with the touch command as in Holman's original,
 organized by priority under one directory at ~/Desktop/todo. Within todo, there are more directories, todo/top,

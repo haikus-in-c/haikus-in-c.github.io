@@ -15,6 +15,8 @@ string, and then convert the result back into decimal form. For example, on inpu
 we convert to binary number 1011, reverse to get 1101, then convert back to decimal form
 to get 13 (11 > 1011 > 1101 > 13).
 
+<!--more-->
+
 Let's continue with 11. 11 is 1011, or (1\*2^3 + 0\*2^2 + 1\*2^1 + 1\*2^0), in binary. 
 Why is this?
 

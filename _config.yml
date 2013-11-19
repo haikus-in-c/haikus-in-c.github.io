@@ -1,4 +1,6 @@
 markdown: rdiscount
+paginate: 3
+excerpt_separator: "<!--more-->"
 pygments: true
 permalink: /posts/:title
 rdiscount:

@@ -21,6 +21,7 @@ My initial idea was simplistic and based on a flawed assumption. I inferred, pur
 	}; 
 
 {% endhighlight %}
+
 Then I simulated the game by removing the least fit pets and keeping track of the number of people satisfied at each step, and then returning the maximum number. 
 
 {% highlight c %}
@@ -68,7 +69,7 @@ Then I simulated the game by removing the least fit pets and keeping track of th
 	} 
 {% endhighlight %}
 
-Unfortunately, this approach didnt work and I was at a loss to explain why since it seemed to work for the two test inputs given, and I couldnt engineer a new test case that would break my algorithm. Eventually, I realized the flaw in my reasoning which was that I implicitly assumed that the way to maximize viewer satisfaction would be to remove the least wanted pets, which seems like the right way to go about it, except that in doing so, it shifts ones focus on the pets when it should be squarely on the pets. I realized that the voters represented a bipartite graph, with one partition being the group that liked cats, and the other being the group that liked dogs. Here the edges on the graph represented incompatible pairings, or pairs where at least one person wants to remove a pet that the other wants to keep. Such pairs cannot mutually be happy, as to give one satisfaction would be to deny the other. With this insight in hand, the problem becomes a problem of finding the maximum cardinality matching, or the maximum set of edges without any common vertices on the graph. This represents all of the incompatible people from which one person has to be removed, and so, the answer is the number of voters v - the number of edges E in the maximum cardinality matching. This method requires first splitting the voters into two arrays, representing the two partitions in the graph.
+Unfortunately, this approach didnt work and I was at a loss to explain why since it seemed to work for the two test inputs given, and I couldnt engineer a new test case that would break my algorithm. <!--more-->Eventually, I realized the flaw in my reasoning which was that I implicitly assumed that the way to maximize viewer satisfaction would be to remove the least wanted pets, which seems like the right way to go about it, except that in doing so, it shifts ones focus on the pets when it should be squarely on the pets. I realized that the voters represented a bipartite graph, with one partition being the group that liked cats, and the other being the group that liked dogs. Here the edges on the graph represented incompatible pairings, or pairs where at least one person wants to remove a pet that the other wants to keep. Such pairs cannot mutually be happy, as to give one satisfaction would be to deny the other. With this insight in hand, the problem becomes a problem of finding the maximum cardinality matching, or the maximum set of edges without any common vertices on the graph. This represents all of the incompatible people from which one person has to be removed, and so, the answer is the number of voters v - the number of edges E in the maximum cardinality matching. This method requires first splitting the voters into two arrays, representing the two partitions in the graph.
 
 {% highlight c %}
 	int main(int argc, char** argv) {

@@ -23,6 +23,7 @@ Today's puzzle is an exercise in recursion and iteration, and the costs and bene
 
 There are two key questions that need to be answered in order to solve this problem. Firstly, how are we going to represent the triangle so that the program can use the data? One initially attractive solution is to use a tree structure, since the shape of a triangle suggests a tree almost immediately and each node would only have two children. However, this approach falls short, as though each parent node would have two child nodes, most of those nodes would be shared between two parents, which could lead to memory usage and implementation complications. Instead, lets examine what we know. We know that each triangle will only ever have n rows, and that each nth row will have n numbers. This means that if the triangle is represented as a text file, then just by counting the number of lines we can know that there will be n(n+1)/2 elements, which can be stored in an array.
 
+<!--more-->
 
 {% highlight java %}
 	int* triangle = malloc(sizeof(int)*(numLine*(numLine+1))/2 + 1);

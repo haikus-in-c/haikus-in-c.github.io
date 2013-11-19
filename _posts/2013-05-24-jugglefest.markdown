@@ -19,6 +19,8 @@ variables which they all share: Hand-eye Coordination (H), Endurance (E), and Pi
 The higher the dot product of a juggler with a specific circuit, the better fit a juggler
 is for that circuit.
 
+<!--more-->
+
 This problem is a great exercise in designing an airtight algorithm from small scale to 
 large scale. The sample input provided by Yodle gives us 3 circuits and 12 jugglers,
 while the actual text file required to solve the challenge has 2,000 circuits and 12,000

@@ -17,6 +17,8 @@ a couple tricky spots to getting your custom domain Github Pages hosted site up 
 But since I've done this setup process twice now, I'm going to cover it from scratch, 
 so I can garuntee that by the end of this, your website will work too!
 
+<!--more-->
+
 I'm only going to assume one thing for this tutorial: that you already have a Github account. If you
 don't that's no problem, just go set one up and follow their instructions verbatim. Then
 come back here.

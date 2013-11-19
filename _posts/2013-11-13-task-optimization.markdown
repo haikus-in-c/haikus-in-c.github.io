@@ -24,6 +24,8 @@ simple but effective Google Chrome extensions to help optimize the process
 of translating words and phrases between Spanish and English, and conjugating
 Spanish and English verbs.
 
+<!--more-->
+
 Both extensions utilize the Chrome Omnibox, the URL bar at the top of the browser, 
 and a builtin API component for Javascript written for Chrome extensions.
 By specifying a keyword, we can reserve a namespace to interact with some Javascript

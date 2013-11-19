@@ -19,6 +19,8 @@ into account something called [_Zipf's Law_][zipf], which states that the earlie
 The law goes on to quantify this observation by saying that we should expect the nth song
 of an album to be played roughly 1/n the number of times as the first.
 
+<!--more-->
+
 I decided to approach this problem by designing a simple Song class to hold all the information
 for a given song, including its plays, expected plays (based on Zipf's Law), and the ratio of
 plays/expected plays. This ratio turns out to be the key to this problem because it measures the

@@ -22,6 +22,8 @@ Buenos Aires. As far as I can tell it does not have an official name, and there
 very well may be a North American/English speaking version already being played.
 It's great fun but, as we'll see in this post, it is completely unfair. 
 
+<!--more-->
+
 Here's the premise: x people are in a circle. The person whose turn it is to start
 the round (usually the person who lost the last round) begins by saying out loud 
 "1". The next person in the circle (assume that we always start going in 

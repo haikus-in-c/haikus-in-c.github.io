@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+  <meta charset="utf-8">
+  <title>
+    
+      Home &ndash;
+    
+    Haikus in C
+  </title>
+
+  <meta name="author" content="Haikus in C" />
+  <meta name="description" content="a place where two columbia cs students share code and talk about their projects" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <link rel="alternate" type="application/rss+xml" href="/atom.xml" />
+
+  <link rel="stylesheet" href="/css/fontawesome.min.css" type="text/css" media="screen, projection" />
+  <link rel="stylesheet" href="/css/base.css" type="text/css" media="screen, projection" />
+  <link rel="stylesheet" href="/css/pygments.css" type="text/css" />
+  <link media="only screen and (max-device-width: 480px)" href="/css/mobile.css" type="text/css" rel="stylesheet" />
+  <link media="only screen and (device-width: 768px)" href="/css/mobile.css" type="text/css" rel="stylesheet" />
+  <link href='http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz' rel='stylesheet' type='text/css'>
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+  <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+  <script type="text/javascript" src="/js/application.js"></script>
+</head>
+
+<body>
+  <section class="header">
+	<h1>
+	  <a href="/">Haikus in C</a>
+	</h1>
+  </section>
+
+  <section class="sidebar">
+
+    <section class="meta">
+      <a href="https://github.com/haikus-in-c" target="_blank"><i class="icon icon-github"></i></a>
+    </section>
+
+    <section class="sections">
+      <ul>
+		<li><a href="/">home</a><li>
+        <li><a href="/about.html">about</a></li>
+        <li><a href="/posts.html">posts</a></li>
+      </ul>
+    </section>
+
+	<section class="shoutout">
+	  <p>made with help from <a href="https://github.com/mojombo/jekyll">jekyll</a> and an adapted theme from
+		<a href="http://zachholman.com/">zach holman</a>.</p>
+	</section>
+
+  </section>
+
+  <section class="content">
+  
+	<h1>
+	  <a href="/posts/github-pages-custom-domain">Foolproof Guide to Github Pages with a Custom Domain</a>
+	</h1>
+	
+	<section class="byline">
+	  by Ian Zapolsky, August 15, 2013
+	</section>
+
+    <p><p>Recently I spent some time wading through the internet&rsquo;s primordial soup of CS help sources &ndash; Stack
+Overflow commments, random blogs (like this one!), and source documentation that leaves something to
+be desired &ndash; to set up this site, which is hosted on Github Pages with a custom domain. I&rsquo;ve since
+decided to migrate the hosting of my <a href="http://ianzapolsky.com/">personal website</a> to Github Pages as well,
+because it&rsquo;s such a great platform and allows for almost instantatneous editing and changing. Instead
+of using clumsy cPanels and browser-based editors, you can just make edits to your site files
+locally in whatever text editor you want, add, commit, push, and it&rsquo;s live. However, there are
+a couple tricky spots to getting your custom domain Github Pages hosted site up and running.
+But since I&rsquo;ve done this setup process twice now, I&rsquo;m going to cover it from scratch,
+so I can garuntee that by the end of this, your website will work too!</p>
+</p>
+    <p style="text-align:center;"><a href="/posts/github-pages-custom-domain">read more...</a></p>
+
+	<hr>
+
+  
+	<h1>
+	  <a href="/posts/bash-todo-list-tool">todo -t write-todo-blog-post</a>
+	</h1>
+	
+	<section class="byline">
+	  by Ian Zapolsky, August 11, 2013
+	</section>
+
+    <p><p>Recently I read an <a href="http://zachholman.com/posts/inbox-zero-everything-zero/">article by Zach Holman</a>, an engineer at Github and the guy
+whose jekyll theme I adapted to build this site, about a simple (read: <em>very</em> simple)
+todo script he wrote to keep track of his tasks. Here&rsquo;s how it works: any time you&rsquo;re at
+the shell, you can type:</p>
+
+<pre><code>$ todo thing-i-have-to-do
+</code></pre>
+
+<p>This touches a file at ~/Desktop/thing-i-have-to-do. Here&rsquo;s the code of the script itself.</p>
+
+<div class="highlight"><pre><code class="bash"><span class="c">#!/bin/sh</span>
+<span class="nb">set</span> -e
+
+touch ~/Desktop/<span class="s2">&quot;$*&quot;</span>
+</code></pre></div>
+
+
+<p>Obviously, this tool assumes that the user keeps a tidy Desktop and cleans it regularly. Otherwise,
+it just wouldn&rsquo;t be feasible to keep track of all the todo files. In his own words, <a href="http://zachholman.com/posts/inbox-zero-everything-zero/">Zach writes</a>,</p>
+
+<blockquote><p>I keep a clean desktop: under three icons at a time, preferably. It made sense to use my
+desktop as a kind of bucket I need to empty&hellip;.</p></blockquote>
+
+<p>Unfortunately, my desktop isn&rsquo;t so clean.</p>
+</p>
+    <p style="text-align:center;"><a href="/posts/bash-todo-list-tool">read more...</a></p>
+
+	<hr>
+
+  
+	<h1>
+	  <a href="/posts/jugglefest">Can You Yodle and Juggle at the Same Time?</a>
+	</h1>
+	
+	<section class="byline">
+	  by Ian Zapolsky, May 24, 2013
+	</section>
+
+    <p><p>In the careers section of startup <a href="http://www.yodle.com/">Yodle&rsquo;s</a> website, there are a couple programming
+problems, one of which is called <a href="http://www.yodlecareers.com/puzzles/jugglefest.html">JuggleFest</a>. Here&rsquo;s a summary: given a
+list of x circuits and y jugglers, where each juggler has a certain number of circuit
+preferences ranked 1 &ndash; n, assign the jugglers to circuits evenly such that the number of
+jugglers in each circuit is y/x and no juggler could switch to a circuit that they prefer
+more than the one they are already assigned to <em>and</em> be a better fit for that circuit than
+one of the other jugglers assigned to it. Whew.</p>
+
+<p>We determine how good a match a juggler is for a circuit by taking the dot product of three
+variables which they all share: Hand-eye Coordination (H), Endurance (E), and Pizzazz (P).
+The higher the dot product of a juggler with a specific circuit, the better fit a juggler
+is for that circuit.</p>
+</p>
+    <p style="text-align:center;"><a href="/posts/jugglefest">read more...</a></p>
+
+	<hr>
+
+  
+
+  <div style="text-align:center;" class="pagination">
+    
+      
+      <a href="/page2" class="previous">&laquo; previous</a>
+      
+    
+    <span class="page_number ">| page 3 of 4 |</span>
+    
+      <a href="/page4" class="next">next &raquo;</a>
+    
+  </div>
+
+</section>
+
+
+</body>
+
+</html>
