@@ -1,0 +1,44 @@
+---
+layout: post
+title: "A Cool Tool I Wish I Had Found Earlier"
+author: "Ian Zapolsky"
+comments: true
+category: posts
+---
+
+Writing as someone who recently came into the world of computer 
+programming, and is still very much in the process of learning how to code, 
+I think one of the biggest barriers of entry to new computer scientists is 
+the terminal. How are you supposed to write and compile your first hello world
+program if you don't know how to navigate a filesystem without a 
+"standard" GUI? Some might say Eclipse, or another IDE, but I
+say you'd be cheating yourself out of a really important part of the general
+CS education: a deep understanding of the UNIX terminal environment.
+
+<!--more-->
+
+There is a lot of stuff that I still learn every day using the modern bash shell,
+and there are common things I do that I do not fully understand, or still have
+to glance at the man page before I can make work. For example, am I the only 
+one who types this in, without really knowing what x, z, v, and f are each 
+individually doing? 
+
+    tar xzvf archive.tar.gz
+
+I type that in because it's the custom, the way I've learned to do it, but
+that is a damaging legacy to perpetuate. It keeps you from truly learning about
+the tools we have at our fingertips in UNIX-based environments.
+
+Enter this _awesome_ website I found this weekend called 
+[explainshell.com][explainshell], created by Idan Kamara. 
+It reads terminal commands meant for a UNIX
+shell interpreter and, by parsing thousands of Ubuntu man page entries, 
+returns a beautifully organized display of exactly what your command is
+trying to do. The tool comes with support for arguments, pipes, and almost
+all the UNIX goodies you're used to using. 
+
+Check it out, and send it to your friends who are struggling to get their
+footing with the terminal. Then, find out what x, z, v, and f do.
+
+[explainshell]:http://explainshell.com/
+

@@ -120,16 +120,11 @@ loops, then run them each through a quick comparison method that checks for repe
 </code></pre></div>
 
 
-
-
-<!--more-->
-
-
 <p>There are a couple things to note. First, we can tell that there will be 4! = 24 four-digit numbers because a non-repeating four-digit number made up of only four distinct integers can be comprised of 4*3*2*1 combinations of digits. Second, we can take advantage of the fact that ASCII characters are
 ordered sequentially to get get chars 1-4 by incrementing the integer representation of that char.</p>
 
 <p>However, after a bit more thought, and a helpful conversation with Ruchir, I realized that this
-is actually a pretty horrible way of finding this sum. Let&rsquo;s think about the challenge in a
+is actually a pretty horrible way of finding this sum. <!--more-->Let&rsquo;s think about the challenge in a
 different way. We know there will be 4! of these four-digit non-repeating numbers. Now let&rsquo;s
 take that knowledge a step further: if there are 4! total numbers, it follows that for each
 given digit there will by 24/4 = 6 numbers that contain that digit in a given place. In other

@@ -58,6 +58,28 @@
   <section class="content">
   
 	<h1>
+	  <a href="/posts/cool-tool">A Cool Tool I Wish I Had Found Earlier</a>
+	</h1>
+	
+	<section class="byline">
+	  by Ian Zapolsky, December  3, 2013
+	</section>
+
+    <p><p>Writing as someone who recently came into the world of computer
+programming, and is still very much in the process of learning how to code,
+I think one of the biggest barriers of entry to new computer scientists is
+the terminal. How are you supposed to write and compile your first hello world
+program if you don&rsquo;t know how to navigate a filesystem without a
+&ldquo;standard&rdquo; GUI? Some might say Eclipse, or another IDE, but I
+say you&rsquo;d be cheating yourself out of a really important part of the general
+CS education: a deep understanding of the UNIX terminal environment.</p>
+</p>
+    <p style="text-align:center;"><a href="/posts/cool-tool">read more...</a></p>
+
+	<hr>
+
+  
+	<h1>
 	  <a href="/posts/task-optimization">Dictionary Optimization with the Google Chrome Omnibox</a>
 	</h1>
 	
@@ -117,89 +139,12 @@ It&rsquo;s great fun but, as we&rsquo;ll see in this post, it is completely unfa
 	<hr>
 
   
-	<h1>
-	  <a href="/posts/cats-vs-dogs">Cats vs Dogs</a>
-	</h1>
-	
-	<section class="byline">
-	  by Ruchir Khaitan, August 19, 2013
-	</section>
-
-    <p><p>The final <a href="https://www.spotify.com/us/jobs/tech/">Spotify</a> puzzle is a heavy metal showdown that brings together two beloved pets and a wide variety of computer science topics. Unfortunately, this problem took a lot longer than it should have, because I was stubborn, and refused to let go of preconceived ideas of how to solve it even when I could clearly see that my approach was incorrect. Basically, I was looking at it all wrong. The general premise, explained in more detail <a href="https://www.spotify.com/us/jobs/tech/catvsdog/">here</a>, is that each week in a TV game show for cats and dogs, a pet is removed based on a vote. Each person watching votes for one pet that they want to keep on the show, and one that they want to remove, and people cannot choose members of the same species for both. Most importantly, the producers will remove pets in an effort to maximize viewership, and so the question is: what is the maximum number of voters that can be satisfied, meaning that both their choices have been carried out, given a set of votes (and assuming that those votes dont change over time).</p>
-
-<p>My initial idea was simplistic and based on a flawed assumption. I inferred, purely on intuition, that the removed pets would be the ones with the least positive votes, and the most negative votes and created a data structure to represent pets and voters characterizing each pet by fitness which was the number of upvotes &ndash; the number of downvotes. I like to call this the &ldquo;Reddit&rdquo; solution.</p>
-
-<div class="highlight"><pre><code class="c">    <span class="k">struct</span> <span class="n">pet</span> <span class="p">{</span>
-            <span class="kt">int</span> <span class="n">fitness</span><span class="p">;</span> <span class="c1">//running tally of upvotes - downvotes</span>
-            <span class="kt">int</span> <span class="n">contending</span><span class="p">;</span> <span class="c1">//whether this pet is still in</span>
-    <span class="p">};</span>
-    <span class="k">struct</span> <span class="n">voter</span> <span class="p">{</span>
-            <span class="k">struct</span> <span class="n">pet</span><span class="o">*</span> <span class="n">keep</span><span class="p">;</span>
-            <span class="k">struct</span> <span class="n">pet</span><span class="o">*</span> <span class="n">reject</span><span class="p">;</span>   
-    <span class="p">};</span> 
-</code></pre></div>
-
-
-<p>Then I simulated the game by removing the least fit pets and keeping track of the number of people satisfied at each step, and then returning the maximum number.</p>
-
-<div class="highlight"><pre><code class="c">    <span class="k">struct</span> <span class="n">pet</span><span class="o">*</span> <span class="nf">find_min</span><span class="p">(</span><span class="k">struct</span> <span class="n">pet</span><span class="o">*</span> <span class="n">c_addr</span><span class="p">,</span> <span class="kt">int</span> <span class="n">c</span><span class="p">,</span><span class="k">struct</span> <span class="n">pet</span><span class="o">*</span> <span class="n">d_addr</span><span class="p">,</span> <span class="kt">int</span> <span class="n">d</span><span class="p">)</span> <span class="p">{</span>
-        <span class="c1">//returns weakest pet out of array of c cats and d dogs in O(n)</span>
-            <span class="kt">int</span> <span class="n">min</span> <span class="o">=</span> <span class="mi">1000</span><span class="p">;</span> <span class="c1">//random large number </span>
-            <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-            <span class="k">struct</span> <span class="n">pet</span><span class="o">*</span> <span class="n">min_addr</span><span class="p">,</span> <span class="o">*</span><span class="n">curr</span><span class="p">;</span>
-            <span class="k">for</span><span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span> <span class="n">c</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-                <span class="n">curr</span> <span class="o">=</span> <span class="n">c_addr</span><span class="o">+</span> <span class="n">i</span><span class="p">;</span>
-            <span class="k">if</span><span class="p">(</span><span class="n">curr</span> <span class="o">-&gt;</span><span class="n">fitness</span> <span class="o">&lt;</span> <span class="n">min</span> <span class="o">&amp;&amp;</span> <span class="n">curr</span><span class="o">-&gt;</span><span class="n">contending</span> <span class="o">!=</span> <span class="mi">0</span> <span class="p">)</span> <span class="p">{</span>
-                    <span class="n">min</span> <span class="o">=</span> <span class="n">curr</span><span class="o">-&gt;</span><span class="n">fitness</span><span class="p">;</span>
-                    <span class="n">min_addr</span> <span class="o">=</span> <span class="n">curr</span><span class="p">;</span>
-            <span class="p">}</span>
-            <span class="p">}</span>    
-            <span class="k">for</span><span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span> <span class="n">d</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-                <span class="n">curr</span> <span class="o">=</span> <span class="n">d_addr</span> <span class="o">+</span> <span class="n">i</span><span class="p">;</span>
-                <span class="k">if</span><span class="p">(</span><span class="n">curr</span><span class="o">-&gt;</span><span class="n">fitness</span><span class="o">&lt;</span> <span class="n">min</span> <span class="o">&amp;&amp;</span> <span class="n">curr</span><span class="o">-&gt;</span><span class="n">contending</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
-                        <span class="n">min</span> <span class="o">=</span> <span class="n">curr</span> <span class="o">-&gt;</span><span class="n">fitness</span><span class="p">;</span>
-                        <span class="n">min_addr</span> <span class="o">=</span> <span class="n">curr</span><span class="p">;</span>
-                <span class="p">}</span>
-        <span class="p">}</span>
-        <span class="n">min_addr</span><span class="o">-&gt;</span><span class="n">contending</span> <span class="o">=</span>  <span class="mi">0</span><span class="p">;</span>   
-        <span class="k">return</span> <span class="n">min_addr</span><span class="p">;</span>   
-    <span class="p">}</span> 
-    <span class="kt">int</span> <span class="nf">sim_game</span><span class="p">(</span><span class="k">struct</span> <span class="n">voter</span><span class="o">*</span> <span class="n">v_addr</span><span class="p">,</span><span class="kt">int</span> <span class="n">v</span><span class="p">,</span><span class="k">struct</span> <span class="n">pet</span><span class="o">*</span><span class="n">c_addr</span><span class="p">,</span><span class="kt">int</span> <span class="n">c</span><span class="p">,</span><span class="k">struct</span> <span class="n">pet</span><span class="o">*</span><span class="n">d_addr</span><span class="p">,</span><span class="kt">int</span> <span class="n">d</span><span class="p">)</span> <span class="p">{</span>
-            <span class="kt">int</span> <span class="n">num_satisfied</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> 
-            <span class="kt">int</span> <span class="n">max_satisfied</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-            <span class="kt">int</span> <span class="n">pets_remain</span> <span class="o">=</span> <span class="n">c</span> <span class="o">+</span> <span class="n">d</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
-            <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
-            <span class="k">struct</span> <span class="n">pet</span><span class="o">*</span> <span class="n">weakest</span><span class="p">;</span>
-            <span class="k">while</span><span class="p">(</span><span class="n">pets_remain</span><span class="p">){</span>
-                <span class="n">weakest</span> <span class="o">=</span> <span class="n">find_min</span><span class="p">(</span><span class="n">c_addr</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">d_addr</span><span class="p">,</span> <span class="n">d</span><span class="p">);</span> 
-            <span class="k">for</span><span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span> <span class="n">v</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">if</span><span class="p">(</span><span class="n">v_addr</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">keep</span><span class="o">-&gt;</span><span class="n">contending</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="p">(</span><span class="n">v_addr</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">reject</span><span class="o">-&gt;</span><span class="n">contending</span><span class="p">))</span>
-                    <span class="n">num_satisfied</span><span class="o">++</span><span class="p">;</span>
-                <span class="p">}</span>
-                <span class="k">if</span><span class="p">(</span><span class="n">num_satisfied</span><span class="o">&gt;</span> <span class="n">max_satisfied</span><span class="p">)</span> 
-                    <span class="n">max_satisfied</span> <span class="o">=</span> <span class="n">num_satisfied</span><span class="p">;</span>
-
-            <span class="n">num_satisfied</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-            <span class="n">pets_remain</span><span class="o">--</span><span class="p">;</span>
-            <span class="p">}</span>
-            <span class="k">return</span> <span class="n">max_satisfied</span><span class="p">;</span>   
-    <span class="p">}</span> 
-</code></pre></div>
-
-
-<p>Unfortunately, this approach didnt work and I was at a loss to explain why since it seemed to work for the two test inputs given, and I couldnt engineer a new test case that would break my algorithm.</p>
-</p>
-    <p style="text-align:center;"><a href="/posts/cats-vs-dogs">read more...</a></p>
-
-	<hr>
-
-  
 
   <div style="text-align:center;" class="pagination">
     
       <span class="previous">previous</span>
     
-    <span class="page_number ">| page 1 of 4 |</span>
+    <span class="page_number ">| page 1 of 5 |</span>
     
       <a href="/page2" class="next">next &raquo;</a>
     
