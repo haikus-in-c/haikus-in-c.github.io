@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <title>
     
-      Welcome &ndash;
+      John Conway's Game of Life with jQuery &ndash;
     
     Haikus in C
   </title>
@@ -57,17 +57,59 @@
 
   <section class="content">
   <h1>
-    <a href="/posts/welcome">Welcome</a>
+    <a href="/posts/2013-12-10-game-of-life">John Conway's Game of Life with jQuery</a>
   </h1>
 
   <section class="byline">
-    by Ian Zapolsky, April  5, 2013
+    by Ian Zapolsky, December 22, 2013
   </section>
 
-  <p>Welcome to <a href="https://haikus-in-c.github.io">Haikus in C</a>, the programming blog of Ian and Ruchir, two
-CS students at Columbia.</p>
+  <p>In casting about for some simple projects to learn more about Javascript and
+jQuery recently I came across <a href="http://en.wikipedia.org/wiki/Conway's_Game_of_Life">John Conway&rsquo;s Game of Life</a>. I had
+heard about the game before, in an introductory CS class I took in freshman
+year of college, and since it&rsquo;s a relatively simple and grid-based game I
+decided to recreate it using the two aforementioned technologies for quick
+hour-long exercise.</p>
 
-<p>Stay tuned for our migration here from <a href="https://haikusinc.tumblr.com">tumblr</a>, and some new posts too!</p>
+<p>The game isn&rsquo;t actually a game, it&rsquo;s more of a cellular life simulation. Each
+cell is represented by a square on a grid. Cells can be either dead (white), or
+alive (black). The game progresses forward in time units (call them years),
+where each unit of time updates the state of the current population of dead
+and alive cells in the following four ways:</p>
+
+<ol>
+<li>  Any live cells with &lt; 2 live neighbors die (neighbor is understood here
+to mean any cell immediately adjacent to the given cell, including
+diagonally).</li>
+<li>  Any live cells with 2 or 3 live neighbors live.</li>
+<li>  Any live cells with > 3 live neighbors die.</li>
+<li>  Any dead cells with exactly 3 live neighbors become live cells.</li>
+</ol>
+
+
+<p>So our game has three main elements: The grid, the individual cells within the
+grid, and time.</p>
+
+<p>Let&rsquo;s start with the grid and the cells within. I chose to represent these as
+HTML div elements, with descriptive IDs so that I could keep track later of
+which divs on the page were adjacent. Below is code that fills a container with
+my grid of 40x40 cells.</p>
+
+<div class="highlight"><pre><code class="javascript"><span class="kd">var</span> <span class="nx">initBoxes</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span> <span class="nx">$container</span> <span class="p">)</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">html</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">;</span>
+  <span class="kd">var</span> <span class="nx">i</span><span class="p">;</span>
+  <span class="k">for</span> <span class="p">(</span><span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="mi">40</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">for</span> <span class="p">(</span><span class="nx">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">j</span> <span class="o">&lt;</span> <span class="mi">40</span><span class="p">;</span> <span class="nx">j</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+      <span class="kd">var</span> <span class="nx">id</span> <span class="o">=</span> <span class="s1">&#39;x&#39;</span><span class="o">+</span><span class="nx">i</span><span class="o">+</span><span class="s1">&#39;y&#39;</span><span class="o">+</span><span class="nx">j</span><span class="p">;</span>
+      <span class="nx">html</span> <span class="o">+=</span> <span class="s1">&#39;&lt;div id=&quot;&#39;</span><span class="o">+</span><span class="nx">id</span><span class="o">+</span><span class="s1">&#39;&quot; class=&quot;box&quot;&gt;&lt;/div&gt;&#39;</span><span class="p">;</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+  <span class="nx">$container</span><span class="p">.</span><span class="nx">html</span><span class="p">(</span> <span class="nx">html</span> <span class="p">);</span>
+<span class="p">};</span>
+</code></pre></div>
+
+
+
 
 
 <!-- possibly update this later

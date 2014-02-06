@@ -4,7 +4,7 @@
  <title>Haikus in C</title>
  <link href="http://haikus-in-c.com/atom.xml" rel="self"/>
  <link href="http://haikus-in-c.com/"/>
- <updated>2013-12-04T00:12:27-03:00</updated>
+ <updated>2013-12-22T23:19:16-05:00</updated>
  <id>http://haikus-in-c.com</id>
  <author>
    <name>Haikus in C</name>
@@ -12,10 +12,189 @@
  
  
  <entry>
+   <title>John Conway's Game of Life with jQuery</title>
+   <link href="http://haikus-in-c.com/posts/2013-12-10-game-of-life"/>
+   <updated>2013-12-22T23:19:11-05:00</updated>
+   <id>http://haikus-in-c.com/posts/2013-12-10-game-of-life</id>
+   <content type="html">&lt;p&gt;In casting about for some simple projects to learn more about Javascript and
+jQuery recently I came across &lt;a href=&quot;http://en.wikipedia.org/wiki/Conway's_Game_of_Life&quot;&gt;John Conway&amp;rsquo;s Game of Life&lt;/a&gt;. I had
+heard about the game before, in an introductory CS class I took in freshman
+year of college, and since it&amp;rsquo;s a relatively simple and grid-based game I
+decided to recreate it using the two aforementioned technologies for quick
+hour-long exercise.&lt;/p&gt;
+
+&lt;p&gt;The game isn&amp;rsquo;t actually a game, it&amp;rsquo;s more of a cellular life simulation. Each
+cell is represented by a square on a grid. Cells can be either dead (white), or
+alive (black). The game progresses forward in time units (call them years),
+where each unit of time updates the state of the current population of dead
+and alive cells in the following four ways:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;  Any live cells with &amp;lt; 2 live neighbors die (neighbor is understood here
+to mean any cell immediately adjacent to the given cell, including
+diagonally).&lt;/li&gt;
+&lt;li&gt;  Any live cells with 2 or 3 live neighbors live.&lt;/li&gt;
+&lt;li&gt;  Any live cells with &gt; 3 live neighbors die.&lt;/li&gt;
+&lt;li&gt;  Any dead cells with exactly 3 live neighbors become live cells.&lt;/li&gt;
+&lt;/ol&gt;
+
+
+&lt;p&gt;So our game has three main elements: The grid, the individual cells within the
+grid, and time.&lt;/p&gt;
+
+&lt;p&gt;Let&amp;rsquo;s start with the grid and the cells within. I chose to represent these as
+HTML div elements, with descriptive IDs so that I could keep track later of
+which divs on the page were adjacent. Below is code that fills a container with
+my grid of 40x40 cells.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;javascript&quot;&gt;&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;initBoxes&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;$container&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;html&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;40&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;j&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;j&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;40&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;j&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+      &lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;id&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;x&amp;#39;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;y&amp;#39;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;j&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+      &lt;span class=&quot;nx&quot;&gt;html&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;&amp;lt;div id=&amp;quot;&amp;#39;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;&amp;quot; class=&amp;quot;box&amp;quot;&amp;gt;&amp;lt;/div&amp;gt;&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+  &lt;span class=&quot;nx&quot;&gt;$container&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;html&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;html&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;};&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+
+</content>
+ </entry>
+ 
+ <entry>
+   <title>Why I Don't Like Sudoku Anymore</title>
+   <link href="http://haikus-in-c.com/posts/2013-08-18-sudoku-solver"/>
+   <updated>2013-12-03T22:46:39-05:00</updated>
+   <id>http://haikus-in-c.com/posts/2013-08-18-sudoku-solver</id>
+   <content type="html">&lt;p&gt;Earlier this school year Ruchir and I kicked around the idea of trying to code a program that
+could solve sudoku puzzles. We talked about how we might do it, but in the midst of school and
+homework it fell off the map. That is until I became completely addicted to a sudoku app on my phone
+a week or so ago got inspired to take a crack at it.&lt;/p&gt;
+
+&lt;p&gt;I started to think about how a computer might play sudoku, and came up with two basic rules for
+figuring out the values of individual sudoku cells, both of which require sweeping over the entire
+puzzle first to determine all of the possible values for each open cell on the board (which
+is a task better suited for a computer than a human, trust me).&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;Obvious Elimination: if a box has only one possible value, then it can only be set to that value.&lt;/li&gt;
+&lt;li&gt;Unique Possibility: if a box has multiple possible values, but one of its possible values is not
+possible for any other open cell in that box&amp;rsquo;s row, column, or square, then it must be set to that value.&lt;/li&gt;
+&lt;/ol&gt;
+
+
+&lt;p&gt;I was sure from my pen and paper/phone testing that these two rules alone would be enough to solve at
+least some sudokus, so I started thinking about how to design a sudoku board data structure. The
+sudoku board itself initially screams out for a 2D array of some sort, because ultimately all sudoku
+boards are just 9x9 squares made up of 81 individual cells (9 rows, 9 columns, and 9 3x3 boxes of
+cells):&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/sudoku.png&quot; alt=&quot;sudoku&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;However, we can&amp;rsquo;t just use a 2D array of integers, because each cell needs to hold more
+information than just its own value; it also needs to know all of the possible values it could be set
+to based on its position, and which row, column, and box it belong to so that when we later write
+methods to populate its list of possible values we can instantly know its location on the board.&lt;/p&gt;
+
+&lt;p&gt;A simple &lt;a href=&quot;https://github.com/haikus-in-c/haikus-in-c/blob/master/2013.8/sudoku_solver/SudokuBox.java&quot;&gt;SudokuBox&lt;/a&gt; object should do the trick, with logic to determine its box number
+based on its row and column index, and methods that abstract low level interaction with its list of
+possible values (add, remove, and check if a value is present). Now we can represent the board as a
+9x9 2D array of SudokuBox objects.&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;The&lt;/em&gt; central rule of all sudoku puzzles is that each row, column, and box on the greater 9x9 board
+must contain the numbers 1-9, non-repeating. What this means from a structure design standpoint is
+that we need to be able to quickly iterate through individaul rows, columns,
+and boxes in order to determine what values are still possible for cells in a given position. Iterating
+over the cells in a box was the first tricky piece of logic that came up in this project. Rows and columns
+are easy enough flip through, because one index of the 2D array stays the same, while the other
+increments:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;&lt;span class=&quot;o&quot;&gt;...&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;SudokuBox&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[][]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;board&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;SudokuBox&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;9&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;][&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;9&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;];&lt;/span&gt; 
+
+&lt;span class=&quot;c1&quot;&gt;// picking random row and column&lt;/span&gt;
+&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;row&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;column&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;6&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;// iterate over row&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;9&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++)&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;board&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;row&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;][&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;].&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;doSomething&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;// iterate over column&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;9&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++)&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;board&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;][&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;column&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;].&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;doSomething&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;However, iterating over a single box&amp;rsquo;s cells proves to be a little more complicated because the
+cells of a box live on three separate rows and three separate columns. The key to figuring this out
+is to subdivide the boxes into columns and rows of boxes. Take another look at the picture of the
+board above. If we start in the top-left corner and work left to right, going to the next row down
+once we reach the end of a line, we get boxes 0-8. Boxes 0, 1, and 2 all begin with a row index of 0,
+boxes 3, 4, and 5 begin at row 3, and boxes 6, 7, and 8 all begin at row 6. This pattern is pretty
+clear: to find a box&amp;rsquo;s start row, divide its number by 3 (rounding down to the nearest whole number,
+as integer division does in most programming languages), and then multiply by 3.&lt;/p&gt;
+
+&lt;p&gt;We follow the same basic process to figure out our starting column index of a given box, but this time
+we subdivide along the columns: boxes 0, 3, and 6 all begin with a column index of 0, boxes 1, 4, and 7
+begin with a column index of 3, and boxes 2, 5, and 8 begin with a column index of 6. Regular division
+obviously won&amp;rsquo;t work here, but modulus divison will because each of these groups contain box numbers from
+the same equivalence class (0/3/6 mod 3 = 0, &amp;frac14;/7 mod 3 = 1, and 2/5/8 mod 3 = 2).&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;&lt;span class=&quot;o&quot;&gt;...&lt;/span&gt;
+&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;box&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;4&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;start_row&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;4&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)*&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;      &lt;span class=&quot;c1&quot;&gt;// = 3, the start row for box 4&lt;/span&gt;
+&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;start_column&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;4&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;%&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)*&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;       &lt;span class=&quot;c1&quot;&gt;// = 3, the start column for box 4&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;// iterate over box&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;row&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;start_row&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;row&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;start_row&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;row&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;column&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;start_column&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;column&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;start_column&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;column&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++)&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;board&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;row&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;][&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;column&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;].&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;doSomething&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; 
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Now we&amp;rsquo;ve got the building blocks for a data structure that represents an entire sudoku board,
+and has logic in place that allow us to quickly pinpoint the location of a cell, and then traverse
+all its related cells to figure out what values should be possible for that cell. I call this
+the &lt;a href=&quot;https://github.com/haikus-in-c/haikus-in-c/blob/master/2013.8/sudoku_solver/SudokuBoard.java&quot;&gt;SudokuBoard&lt;/a&gt;. Notable methods in the class are fillPossibleAll(), which uses our
+traversing strategies from above to fill the possible values of every cell, and checkToSetAll() which
+checks every cell to see if it fits our Obvious Elimination or Unique Possibility rules.&lt;/p&gt;
+
+&lt;p&gt;The final class in my design is &lt;a href=&quot;https://github.com/haikus-in-c/haikus-in-c/blob/master/2013.8/sudoku_solver/SudokuSolver.java&quot;&gt;SudokuSolver&lt;/a&gt;, and it controls the flow of the operations
+specified in SudokuBoard. Basically, this solver class does the following by calling methods on a
+SudokuBoard object.&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;While our puzzle is nt complete:
+
+&lt;ol&gt;
+&lt;li&gt;Sweep through the entire board, using the cells who&amp;rsquo;s values we already know to determine the possible values
+for each empty cell.&lt;/li&gt;
+&lt;li&gt;Sweep through the board again, checking every cell&amp;rsquo;s possible values against our two rules to see if we can
+fill in a cell with a definite value. If at any point we do set a cell&amp;rsquo;s value, jump back to step 1.1.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+
+
+&lt;p&gt;And it works! The program can solve the majority of puzzles that are labeled as easy and medium difficulty.
+&lt;em&gt;But&lt;/em&gt;, it can&amp;rsquo;t solve hard puzzles. Why? Well, I did some research into sudoku and I found this
+[resource][sudokustrategy], which is basically a detailed list of the most common sudoku strategies. It
+describes more advanced patterns and methods of eliminating potential possible values by looking at
+possibility subsets.&lt;/p&gt;
+</content>
+ </entry>
+ 
+ <entry>
    <title>A Cool Tool I Wish I Had Found Earlier</title>
-   <link href="http://haikus-in-c.com/posts/cool-tool"/>
-   <updated>2013-12-03T00:00:00-03:00</updated>
-   <id>http://haikus-in-c.com/posts/cool-tool</id>
+   <link href="http://haikus-in-c.com/posts/2013-12-03-cool-tool"/>
+   <updated>2013-12-03T20:18:15-05:00</updated>
+   <id>http://haikus-in-c.com/posts/2013-12-03-cool-tool</id>
    <content type="html">&lt;p&gt;Writing as someone who recently came into the world of computer
 programming, and is still very much in the process of learning how to code,
 I think one of the biggest barriers of entry to new computer scientists is
@@ -57,7 +236,7 @@ footing with the terminal. Then, find out what x, z, v, and f do.&lt;/p&gt;
  <entry>
    <title>Dictionary Optimization with the Google Chrome Omnibox</title>
    <link href="http://haikus-in-c.com/posts/task-optimization"/>
-   <updated>2013-11-13T00:00:00-03:00</updated>
+   <updated>2013-11-13T00:00:00-05:00</updated>
    <id>http://haikus-in-c.com/posts/task-optimization</id>
    <content type="html">&lt;p&gt;Here&amp;rsquo;s a fairly common scenario I have been running into this semester: I&amp;rsquo;m
 reading something in Spanish at the computer, I come across a word I don&amp;rsquo;t know.
@@ -151,7 +330,7 @@ to being instantaneous.&lt;/p&gt;
  <entry>
    <title>When an Argentinian Drinking Game Meets Computer Science</title>
    <link href="http://haikus-in-c.com/posts/argentinian-drinking-game"/>
-   <updated>2013-09-01T00:00:00-03:00</updated>
+   <updated>2013-09-01T00:00:00-04:00</updated>
    <id>http://haikus-in-c.com/posts/argentinian-drinking-game</id>
    <content type="html">&lt;p&gt;I love drinking games.&lt;/p&gt;
 
@@ -289,7 +468,7 @@ bringing you victory, which, in drinking games, actually means you&amp;rsquo;re 
  <entry>
    <title>Cats vs Dogs</title>
    <link href="http://haikus-in-c.com/posts/cats-vs-dogs"/>
-   <updated>2013-08-19T00:00:00-03:00</updated>
+   <updated>2013-08-19T00:00:00-04:00</updated>
    <id>http://haikus-in-c.com/posts/cats-vs-dogs</id>
    <content type="html">&lt;p&gt;The final &lt;a href=&quot;https://www.spotify.com/us/jobs/tech/&quot;&gt;Spotify&lt;/a&gt; puzzle is a heavy metal showdown that brings together two beloved pets and a wide variety of computer science topics. Unfortunately, this problem took a lot longer than it should have, because I was stubborn, and refused to let go of preconceived ideas of how to solve it even when I could clearly see that my approach was incorrect. Basically, I was looking at it all wrong. The general premise, explained in more detail &lt;a href=&quot;https://www.spotify.com/us/jobs/tech/catvsdog/&quot;&gt;here&lt;/a&gt;, is that each week in a TV game show for cats and dogs, a pet is removed based on a vote. Each person watching votes for one pet that they want to keep on the show, and one that they want to remove, and people cannot choose members of the same species for both. Most importantly, the producers will remove pets in an effort to maximize viewership, and so the question is: what is the maximum number of voters that can be satisfied, meaning that both their choices have been carried out, given a set of votes (and assuming that those votes dont change over time).&lt;/p&gt;
 
@@ -477,7 +656,7 @@ bringing you victory, which, in drinking games, actually means you&amp;rsquo;re 
  <entry>
    <title>All the Numbers</title>
    <link href="http://haikus-in-c.com/posts/all-the-numbers"/>
-   <updated>2013-08-17T00:00:00-03:00</updated>
+   <updated>2013-08-17T00:00:00-04:00</updated>
    <id>http://haikus-in-c.com/posts/all-the-numbers</id>
    <content type="html">&lt;p&gt;Finding a great solution to a computer science problem is more about the journey
 than the final destination. The process of working through this challenge is a good
@@ -583,7 +762,7 @@ sites like careercup.&lt;/p&gt;
  <entry>
    <title>No Easy Questions</title>
    <link href="http://haikus-in-c.com/posts/number-unique-elements"/>
-   <updated>2013-08-16T00:00:00-03:00</updated>
+   <updated>2013-08-16T00:00:00-04:00</updated>
    <id>http://haikus-in-c.com/posts/number-unique-elements</id>
    <content type="html">&lt;p&gt;Today, I&amp;rsquo;m going to subvert a key principle of this blog for a little bit, namely the idea that an educational or even interesting probem has to be somewhat complex, hence the term programming puzzles. The problem I&amp;rsquo;m going to examine today is simply: given a list of n objects (the code is only going to handle integers but the ideas apply equally well to all data), find the number of unique elements it contains. This question is simple enough that one doesn&amp;rsquo;t need to be a compuuter scientist to solve it. All one has to do is, at each element, scan the remainder of the list. If you can find another element that matches the one you were looking at, obviously it&amp;rsquo;s not unique. The code below expresses this algorithm in C:&lt;/p&gt;
 
@@ -821,7 +1000,7 @@ At the end of this long post, I feel a bit like a man who&amp;rsquo;d spent many
  <entry>
    <title>Yodle Programming Challenge: Triangle Sums</title>
    <link href="http://haikus-in-c.com/posts/triangle-sum"/>
-   <updated>2013-08-15T00:00:00-03:00</updated>
+   <updated>2013-08-15T00:00:00-04:00</updated>
    <id>http://haikus-in-c.com/posts/triangle-sum</id>
    <content type="html">&lt;p&gt;Today&amp;rsquo;s puzzle is an exercise in recursion and iteration, and the costs and benefits of both. The task is simple, given a triangle of numbers, here defined as an arrangement of numbers where the first row has one number, the second row has two, and the nth row has n numbers, the task is to find the maximum total going from top to bottom using only adjacent numbers, or the maximum path sum. A sample triangle and top down path are shown below. The challenge is to do this for a large triangle, with at least a hundred rows, where there are so many top down paths that brute force solutions are impossible.&lt;/p&gt;
 
@@ -895,7 +1074,7 @@ At the end of this long post, I feel a bit like a man who&amp;rsquo;d spent many
  <entry>
    <title>Foolproof Guide to Github Pages with a Custom Domain</title>
    <link href="http://haikus-in-c.com/posts/github-pages-custom-domain"/>
-   <updated>2013-08-15T00:00:00-03:00</updated>
+   <updated>2013-08-15T00:00:00-04:00</updated>
    <id>http://haikus-in-c.com/posts/github-pages-custom-domain</id>
    <content type="html">&lt;p&gt;Recently I spent some time wading through the internet&amp;rsquo;s primordial soup of CS help sources &amp;ndash; Stack
 Overflow commments, random blogs (like this one!), and source documentation that leaves something to
@@ -1002,7 +1181,7 @@ be live on your custom domain!&lt;/p&gt;
  <entry>
    <title>todo -t write-todo-blog-post</title>
    <link href="http://haikus-in-c.com/posts/bash-todo-list-tool"/>
-   <updated>2013-08-11T00:00:00-03:00</updated>
+   <updated>2013-08-11T00:00:00-04:00</updated>
    <id>http://haikus-in-c.com/posts/bash-todo-list-tool</id>
    <content type="html">&lt;p&gt;Recently I read an &lt;a href=&quot;http://zachholman.com/posts/inbox-zero-everything-zero/&quot;&gt;article by Zach Holman&lt;/a&gt;, an engineer at Github and the guy
 whose jekyll theme I adapted to build this site, about a simple (read: &lt;em&gt;very&lt;/em&gt; simple)
@@ -1079,7 +1258,7 @@ getting the ball rolling. For those interested, here&amp;rsquo;s the &lt;a href=
  <entry>
    <title>Can You Yodle and Juggle at the Same Time?</title>
    <link href="http://haikus-in-c.com/posts/jugglefest"/>
-   <updated>2013-05-24T00:00:00-03:00</updated>
+   <updated>2013-05-24T00:00:00-04:00</updated>
    <id>http://haikus-in-c.com/posts/jugglefest</id>
    <content type="html">&lt;p&gt;In the careers section of startup &lt;a href=&quot;http://www.yodle.com/&quot;&gt;Yodle&amp;rsquo;s&lt;/a&gt; website, there are a couple programming
 problems, one of which is called &lt;a href=&quot;http://www.yodlecareers.com/puzzles/jugglefest.html&quot;&gt;JuggleFest&lt;/a&gt;. Here&amp;rsquo;s a summary: given a
@@ -1146,7 +1325,7 @@ check all Circuits for an under-full Circuit and add it there.&lt;/p&gt;&lt;/li&
  <entry>
    <title>Let's Get Funky</title>
    <link href="http://haikus-in-c.com/posts/spotify-programming-challenge-funk"/>
-   <updated>2013-04-26T00:00:00-03:00</updated>
+   <updated>2013-04-26T00:00:00-04:00</updated>
    <id>http://haikus-in-c.com/posts/spotify-programming-challenge-funk</id>
    <content type="html">&lt;p&gt;Today we return to &lt;a href=&quot;https://www.spotify.com/us/jobs/tech/&quot;&gt;Spotify&amp;rsquo;s hallowed puzzle page&lt;/a&gt; for the second of the three puzzles
 they offer there. This one, the middle brother in between &lt;a href=&quot;http://haikus-in-c.com/posts/spotify-programming-challenge-reggae/&quot;&gt;Reggae&lt;/a&gt; and &lt;a href=&quot;http://haikus-in-c.com&quot;&gt;Heavy Metal&lt;/a&gt;,
@@ -1260,7 +1439,7 @@ and return the first m songs (as specified in the input) in descending order of 
  <entry>
    <title>So This is What Reggae Feels Like</title>
    <link href="http://haikus-in-c.com/posts/spotify-programming-challenge-reggae"/>
-   <updated>2013-04-12T00:00:00-03:00</updated>
+   <updated>2013-04-12T00:00:00-04:00</updated>
    <id>http://haikus-in-c.com/posts/spotify-programming-challenge-reggae</id>
    <content type="html">&lt;p&gt;On &lt;a href=&quot;https://www.spotify.com/us/jobs/tech/&quot;&gt;Spotify&amp;rsquo;s puzzle page&lt;/a&gt;, they&amp;rsquo;ve got three tech puzzles for potential hires
 to play around with. This is the first of them, whose difficulty is rated &lt;em&gt;Reggae&lt;/em&gt;.&lt;/p&gt;
@@ -1341,7 +1520,7 @@ from the end of the String, adding increasing powers of 2 to a final result.&lt;
  <entry>
    <title>Welcome</title>
    <link href="http://haikus-in-c.com/posts/welcome"/>
-   <updated>2013-04-05T00:00:00-03:00</updated>
+   <updated>2013-04-05T00:00:00-04:00</updated>
    <id>http://haikus-in-c.com/posts/welcome</id>
    <content type="html">&lt;p&gt;Welcome to &lt;a href=&quot;https://haikus-in-c.github.io&quot;&gt;Haikus in C&lt;/a&gt;, the programming blog of Ian and Ruchir, two
 CS students at Columbia.&lt;/p&gt;

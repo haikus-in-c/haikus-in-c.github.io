@@ -11,7 +11,7 @@
 
   <meta name="author" content="Haikus in C" />
   <meta name="description" content="a place where two columbia cs students share code and talk about their projects" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <!--<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">-->
 
   <link rel="alternate" type="application/rss+xml" href="/atom.xml" />
 
@@ -58,6 +58,115 @@
   <section class="content">
   
 	<h1>
+	  <a href="/posts/all-the-numbers">All the Numbers</a>
+	</h1>
+	
+	<section class="byline">
+	  by Ian Zapolsky, August 17, 2013
+	</section>
+
+    <p><p>Finding a great solution to a computer science problem is more about the journey
+than the final destination. The process of working through this challenge is a good
+example of how our initial instincs about how do something can be (read: usually
+are) wrong, and require deeper thought and fine-tuning.</p>
+
+<p>Here&rsquo;s a challenge: find the sum of all the four-digit numbers made up from 1, 2, 3,
+and 4, non-repeating. Initially, this problem seems to have two steps in my mind:</p>
+
+<ol>
+<li>find/generate all the numbers</li>
+<li>sum them.</li>
+</ol>
+
+
+<p>Below is C code that does just this. I generate all the numbers with nested for
+loops, then run them each through a quick comparison method that checks for repeats.</p>
+
+<div class="highlight"><pre><code class="c"><span class="kt">int</span> <span class="nf">find_sum_slow</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kt">int</span><span class="o">*</span> <span class="n">arr</span> <span class="o">=</span> <span class="n">mallow</span><span class="p">(</span><span class="mi">24</span><span class="o">*</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="kt">int</span><span class="p">)));</span>
+    <span class="kt">char</span><span class="o">*</span> <span class="n">cur</span> <span class="o">=</span> <span class="n">mallow</span><span class="p">(</span><span class="mi">4</span><span class="o">*</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="kt">char</span><span class="p">)));</span>
+    <span class="kt">char</span> <span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">c</span><span class="p">,</span><span class="n">d</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">sum</span><span class="p">,</span> <span class="n">cursor</span><span class="p">;</span>
+    <span class="n">sum</span> <span class="o">=</span> <span class="n">cursor</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+    <span class="k">for</span> <span class="p">(</span><span class="n">a</span> <span class="o">=</span> <span class="sc">&#39;1&#39;</span><span class="p">;</span> <span class="n">a</span> <span class="o">&lt;</span> <span class="sc">&#39;5&#39;</span><span class="p">;</span> <span class="n">a</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">cur</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">a</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="n">b</span> <span class="o">=</span> <span class="sc">&#39;1&#39;</span><span class="p">;</span> <span class="n">b</span> <span class="o">&lt;</span> <span class="sc">&#39;5&#39;</span><span class="p">;</span> <span class="n">b</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">cur</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">b</span><span class="p">;</span>
+            <span class="k">for</span> <span class="p">(</span><span class="n">c</span> <span class="o">=</span> <span class="sc">&#39;1&#39;</span><span class="p">;</span> <span class="n">c</span> <span class="o">&lt;</span> <span class="sc">&#39;5&#39;</span><span class="p">;</span> <span class="n">c</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">cur</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">c</span><span class="p">;</span>
+                <span class="k">for</span> <span class="p">(</span><span class="n">d</span> <span class="o">=</span> <span class="sc">&#39;1&#39;</span><span class="p">;</span> <span class="n">d</span> <span class="o">&lt;</span> <span class="sc">&#39;5&#39;</span><span class="p">;</span> <span class="n">d</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="n">cur</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">d</span><span class="p">;</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="n">check_repeat</span><span class="p">(</span><span class="o">&amp;</span><span class="n">cur</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+                        <span class="n">arr</span><span class="p">[</span><span class="n">cursor</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">atoi</span><span class="p">(</span><span class="n">cur</span><span class="p">);</span>
+                        <span class="n">printf</span><span class="p">(</span><span class="s">&quot;%d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">atoi</span><span class="p">(</span><span class="n">cur</span><span class="p">));</span>
+                    <span class="p">}</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">cursor</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">cursor</span> <span class="o">&lt;</span> <span class="mi">24</span><span class="p">;</span> <span class="n">cursor</span><span class="o">++</span><span class="p">)</span>
+        <span class="n">sum</span> <span class="o">+=</span> <span class="n">arr</span><span class="p">[</span><span class="n">cursor</span><span class="p">];</span>
+    <span class="k">return</span> <span class="n">sum</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">check_repeat</span><span class="p">(</span><span class="kt">char</span><span class="o">**</span> <span class="n">cur</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">((</span><span class="o">*</span><span class="n">cur</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="p">(</span><span class="o">*</span><span class="n">cur</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span> <span class="o">||</span> <span class="p">(</span><span class="o">*</span><span class="n">cur</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="p">(</span><span class="o">*</span><span class="n">cur</span><span class="p">)[</span><span class="mi">2</span><span class="p">]</span> <span class="o">||</span>
+        <span class="p">(</span><span class="o">*</span><span class="n">cur</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="p">(</span><span class="o">*</span><span class="n">cur</span><span class="p">)[</span><span class="mi">3</span><span class="p">]</span> <span class="o">||</span> <span class="p">(</span><span class="o">*</span><span class="n">cur</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="p">(</span><span class="o">*</span><span class="n">cur</span><span class="p">)[</span><span class="mi">2</span><span class="p">]</span> <span class="o">||</span>
+        <span class="p">(</span><span class="o">*</span><span class="n">cur</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="p">(</span><span class="o">*</span><span class="n">cur</span><span class="p">)[</span><span class="mi">3</span><span class="p">]</span> <span class="o">||</span> <span class="p">(</span><span class="o">*</span><span class="n">cur</span><span class="p">)[</span><span class="mi">2</span><span class="p">]</span> <span class="o">==</span> <span class="p">(</span><span class="o">*</span><span class="n">cur</span><span class="p">)[</span><span class="mi">3</span><span class="p">])</span>
+        <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="k">else</span>
+        <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+
+<p>There are a couple things to note. First, we can tell that there will be 4! = 24 four-digit numbers because a non-repeating four-digit number made up of only four distinct integers can be comprised of 4*3*2*1 combinations of digits. Second, we can take advantage of the fact that ASCII characters are
+ordered sequentially to get get chars 1-4 by incrementing the integer representation of that char.</p>
+
+<p>However, after a bit more thought, and a helpful conversation with Ruchir, I realized that this
+is actually a pretty horrible way of finding this sum.</p>
+</p>
+    <p style="text-align:center;"><a href="/posts/all-the-numbers">read more...</a></p>
+
+	<hr>
+
+  
+	<h1>
+	  <a href="/posts/number-unique-elements">No Easy Questions</a>
+	</h1>
+	
+	<section class="byline">
+	  by Ruchir Khaitan, August 16, 2013
+	</section>
+
+    <p><p>Today, I&rsquo;m going to subvert a key principle of this blog for a little bit, namely the idea that an educational or even interesting probem has to be somewhat complex, hence the term programming puzzles. The problem I&rsquo;m going to examine today is simply: given a list of n objects (the code is only going to handle integers but the ideas apply equally well to all data), find the number of unique elements it contains. This question is simple enough that one doesn&rsquo;t need to be a compuuter scientist to solve it. All one has to do is, at each element, scan the remainder of the list. If you can find another element that matches the one you were looking at, obviously it&rsquo;s not unique. The code below expresses this algorithm in C:</p>
+
+<div class="highlight"><pre><code class="java"> <span class="kt">int</span> <span class="nf">naive_find_num_unique</span><span class="o">(</span><span class="kt">int</span><span class="o">*</span> <span class="n">array</span><span class="o">,</span> <span class="kt">int</span> <span class="n">size</span><span class="o">){</span>
+            <span class="kt">int</span> <span class="n">i</span><span class="o">,</span> <span class="n">j</span><span class="o">,</span> <span class="n">unique</span><span class="o">,</span> <span class="n">num</span><span class="o">;</span>
+            <span class="n">num</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+            <span class="k">for</span><span class="o">(</span> <span class="n">i</span> <span class="o">=</span><span class="mi">0</span><span class="o">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">size</span><span class="o">;</span> <span class="n">i</span><span class="o">++){</span>
+                    <span class="n">unique</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span>
+                    <span class="k">for</span><span class="o">(</span><span class="n">j</span><span class="o">=</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="o">;</span> <span class="n">j</span><span class="o">&lt;</span><span class="n">size</span><span class="o">;</span> <span class="n">j</span><span class="o">++){</span>
+                            <span class="k">if</span><span class="o">(</span><span class="n">array</span><span class="o">[</span><span class="n">i</span><span class="o">]==</span> <span class="n">array</span><span class="o">[</span><span class="n">j</span><span class="o">])</span>
+                                    <span class="n">unique</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+                    <span class="o">}</span>
+                    <span class="k">if</span><span class="o">(</span><span class="n">unique</span><span class="o">)</span>
+                            <span class="n">num</span><span class="o">++;</span>
+            <span class="o">}</span>
+            <span class="k">return</span> <span class="n">num</span><span class="o">;</span>
+    <span class="o">}</span>
+</code></pre></div>
+
+
+<p>You&rsquo;ll notice that I named this function &ldquo;naive_find_num_unique&rdquo; for a reason. This function, while very easy to understandd and very memory efficient, has horrible performance, because of its O(n<sup>2</sup>) time complexity, which occurs because given an input of size n, for each element i in n, we need to read the remainder of the list.</p>
+</p>
+    <p style="text-align:center;"><a href="/posts/number-unique-elements">read more...</a></p>
+
+	<hr>
+
+  
+	<h1>
 	  <a href="/posts/triangle-sum">Yodle Programming Challenge: Triangle Sums</a>
 	</h1>
 	
@@ -77,68 +186,6 @@
 <p>There are two key questions that need to be answered in order to solve this problem. Firstly, how are we going to represent the triangle so that the program can use the data? One initially attractive solution is to use a tree structure, since the shape of a triangle suggests a tree almost immediately and each node would only have two children. However, this approach falls short, as though each parent node would have two child nodes, most of those nodes would be shared between two parents, which could lead to memory usage and implementation complications. Instead, lets examine what we know. We know that each triangle will only ever have n rows, and that each nth row will have n numbers. This means that if the triangle is represented as a text file, then just by counting the number of lines we can know that there will be n(n+1)/2 elements, which can be stored in an array.</p>
 </p>
     <p style="text-align:center;"><a href="/posts/triangle-sum">read more...</a></p>
-
-	<hr>
-
-  
-	<h1>
-	  <a href="/posts/github-pages-custom-domain">Foolproof Guide to Github Pages with a Custom Domain</a>
-	</h1>
-	
-	<section class="byline">
-	  by Ian Zapolsky, August 15, 2013
-	</section>
-
-    <p><p>Recently I spent some time wading through the internet&rsquo;s primordial soup of CS help sources &ndash; Stack
-Overflow commments, random blogs (like this one!), and source documentation that leaves something to
-be desired &ndash; to set up this site, which is hosted on Github Pages with a custom domain. I&rsquo;ve since
-decided to migrate the hosting of my <a href="http://ianzapolsky.com/">personal website</a> to Github Pages as well,
-because it&rsquo;s such a great platform and allows for almost instantatneous editing and changing. Instead
-of using clumsy cPanels and browser-based editors, you can just make edits to your site files
-locally in whatever text editor you want, add, commit, push, and it&rsquo;s live. However, there are
-a couple tricky spots to getting your custom domain Github Pages hosted site up and running.
-But since I&rsquo;ve done this setup process twice now, I&rsquo;m going to cover it from scratch,
-so I can garuntee that by the end of this, your website will work too!</p>
-</p>
-    <p style="text-align:center;"><a href="/posts/github-pages-custom-domain">read more...</a></p>
-
-	<hr>
-
-  
-	<h1>
-	  <a href="/posts/bash-todo-list-tool">todo -t write-todo-blog-post</a>
-	</h1>
-	
-	<section class="byline">
-	  by Ian Zapolsky, August 11, 2013
-	</section>
-
-    <p><p>Recently I read an <a href="http://zachholman.com/posts/inbox-zero-everything-zero/">article by Zach Holman</a>, an engineer at Github and the guy
-whose jekyll theme I adapted to build this site, about a simple (read: <em>very</em> simple)
-todo script he wrote to keep track of his tasks. Here&rsquo;s how it works: any time you&rsquo;re at
-the shell, you can type:</p>
-
-<pre><code>$ todo thing-i-have-to-do
-</code></pre>
-
-<p>This touches a file at ~/Desktop/thing-i-have-to-do. Here&rsquo;s the code of the script itself.</p>
-
-<div class="highlight"><pre><code class="bash"><span class="c">#!/bin/sh</span>
-<span class="nb">set</span> -e
-
-touch ~/Desktop/<span class="s2">&quot;$*&quot;</span>
-</code></pre></div>
-
-
-<p>Obviously, this tool assumes that the user keeps a tidy Desktop and cleans it regularly. Otherwise,
-it just wouldn&rsquo;t be feasible to keep track of all the todo files. In his own words, <a href="http://zachholman.com/posts/inbox-zero-everything-zero/">Zach writes</a>,</p>
-
-<blockquote><p>I keep a clean desktop: under three icons at a time, preferably. It made sense to use my
-desktop as a kind of bucket I need to empty&hellip;.</p></blockquote>
-
-<p>Unfortunately, my desktop isn&rsquo;t so clean.</p>
-</p>
-    <p style="text-align:center;"><a href="/posts/bash-todo-list-tool">read more...</a></p>
 
 	<hr>
 

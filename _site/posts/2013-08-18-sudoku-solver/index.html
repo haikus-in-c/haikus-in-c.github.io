@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <title>
     
-      Home &ndash;
+      Why I Don't Like Sudoku Anymore &ndash;
     
     Haikus in C
   </title>
@@ -56,76 +56,15 @@
   </section>
 
   <section class="content">
-  
-	<h1>
-	  <a href="/posts/2013-12-10-game-of-life">John Conway's Game of Life with jQuery</a>
-	</h1>
-	
-	<section class="byline">
-	  by Ian Zapolsky, December 22, 2013
-	</section>
+  <h1>
+    <a href="/posts/2013-08-18-sudoku-solver">Why I Don't Like Sudoku Anymore</a>
+  </h1>
 
-    <p><p>In casting about for some simple projects to learn more about Javascript and
-jQuery recently I came across <a href="http://en.wikipedia.org/wiki/Conway's_Game_of_Life">John Conway&rsquo;s Game of Life</a>. I had
-heard about the game before, in an introductory CS class I took in freshman
-year of college, and since it&rsquo;s a relatively simple and grid-based game I
-decided to recreate it using the two aforementioned technologies for quick
-hour-long exercise.</p>
+  <section class="byline">
+    by Ian Zapolsky, December  3, 2013
+  </section>
 
-<p>The game isn&rsquo;t actually a game, it&rsquo;s more of a cellular life simulation. Each
-cell is represented by a square on a grid. Cells can be either dead (white), or
-alive (black). The game progresses forward in time units (call them years),
-where each unit of time updates the state of the current population of dead
-and alive cells in the following four ways:</p>
-
-<ol>
-<li>  Any live cells with &lt; 2 live neighbors die (neighbor is understood here
-to mean any cell immediately adjacent to the given cell, including
-diagonally).</li>
-<li>  Any live cells with 2 or 3 live neighbors live.</li>
-<li>  Any live cells with > 3 live neighbors die.</li>
-<li>  Any dead cells with exactly 3 live neighbors become live cells.</li>
-</ol>
-
-
-<p>So our game has three main elements: The grid, the individual cells within the
-grid, and time.</p>
-
-<p>Let&rsquo;s start with the grid and the cells within. I chose to represent these as
-HTML div elements, with descriptive IDs so that I could keep track later of
-which divs on the page were adjacent. Below is code that fills a container with
-my grid of 40x40 cells.</p>
-
-<div class="highlight"><pre><code class="javascript"><span class="kd">var</span> <span class="nx">initBoxes</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span> <span class="nx">$container</span> <span class="p">)</span> <span class="p">{</span>
-  <span class="kd">var</span> <span class="nx">html</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">;</span>
-  <span class="kd">var</span> <span class="nx">i</span><span class="p">;</span>
-  <span class="k">for</span> <span class="p">(</span><span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="mi">40</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">for</span> <span class="p">(</span><span class="nx">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">j</span> <span class="o">&lt;</span> <span class="mi">40</span><span class="p">;</span> <span class="nx">j</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-      <span class="kd">var</span> <span class="nx">id</span> <span class="o">=</span> <span class="s1">&#39;x&#39;</span><span class="o">+</span><span class="nx">i</span><span class="o">+</span><span class="s1">&#39;y&#39;</span><span class="o">+</span><span class="nx">j</span><span class="p">;</span>
-      <span class="nx">html</span> <span class="o">+=</span> <span class="s1">&#39;&lt;div id=&quot;&#39;</span><span class="o">+</span><span class="nx">id</span><span class="o">+</span><span class="s1">&#39;&quot; class=&quot;box&quot;&gt;&lt;/div&gt;&#39;</span><span class="p">;</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
-  <span class="nx">$container</span><span class="p">.</span><span class="nx">html</span><span class="p">(</span> <span class="nx">html</span> <span class="p">);</span>
-<span class="p">};</span>
-</code></pre></div>
-
-
-
-</p>
-    <p style="text-align:center;"><a href="/posts/2013-12-10-game-of-life">read more...</a></p>
-
-	<hr>
-
-  
-	<h1>
-	  <a href="/posts/2013-08-18-sudoku-solver">Why I Don't Like Sudoku Anymore</a>
-	</h1>
-	
-	<section class="byline">
-	  by Ian Zapolsky, December  3, 2013
-	</section>
-
-    <p><p>Earlier this school year Ruchir and I kicked around the idea of trying to code a program that
+  <p>Earlier this school year Ruchir and I kicked around the idea of trying to code a program that
 could solve sudoku puzzles. We talked about how we might do it, but in the midst of school and
 homework it fell off the map. That is until I became completely addicted to a sudoku app on my phone
 a week or so ago got inspired to take a crack at it.</p>
@@ -242,44 +181,47 @@ fill in a cell with a definite value. If at any point we do set a cell&rsquo;s v
 [resource][sudokustrategy], which is basically a detailed list of the most common sudoku strategies. It
 describes more advanced patterns and methods of eliminating potential possible values by looking at
 possibility subsets.</p>
-</p>
-    <p style="text-align:center;"><a href="/posts/2013-08-18-sudoku-solver">read more...</a></p>
 
-	<hr>
 
+<!-- possibly update this later
+   TODO: bio here
+  <section class="meta">
+    <h3>Discussion, links, and tweets</h3>
+    <section class="copy">
+      <a href="https://twitter.com/" target="_blank">
+        <img src="?s=142" height="50" width="50" />
+      </a>
+
+      <p>
+        I'm a developer at GitHub. <a href="https://twitter.com/" target="_blank">Follow me on Twitter</a>;
+        you'll enjoy my tweets. I take care to carefully craft each one. Or at least aim to make
+        you giggle. Or offended. One of those two&mdash; I haven't decided which yet.
+      </p>
+
+      <a href="http://twitter.com/share" class="twitter-share-button" data-count="none" data-via="">Tweet</a>
+      <a href="http://twitter.com/" class="twitter-follow-button" data-show-count="false">Follow @</a>
+      <script src="http://platform.twitter.com/widgets.js" type="text/javascript"></script>
+    </section>
+  </section>
+-->
+
+  <hr>
   
-	<h1>
-	  <a href="/posts/2013-12-03-cool-tool">A Cool Tool I Wish I Had Found Earlier</a>
-	</h1>
-	
-	<section class="byline">
-	  by Ian Zapolsky, December  3, 2013
-	</section>
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+      /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+      var disqus_shortname = 'haikus'; // required: replace example with your forum shortname
 
-    <p><p>Writing as someone who recently came into the world of computer
-programming, and is still very much in the process of learning how to code,
-I think one of the biggest barriers of entry to new computer scientists is
-the terminal. How are you supposed to write and compile your first hello world
-program if you don&rsquo;t know how to navigate a filesystem without a
-&ldquo;standard&rdquo; GUI? Some might say Eclipse, or another IDE, but I
-say you&rsquo;d be cheating yourself out of a really important part of the general
-CS education: a deep understanding of the UNIX terminal environment.</p>
-</p>
-    <p style="text-align:center;"><a href="/posts/2013-12-03-cool-tool">read more...</a></p>
-
-	<hr>
-
+      /* * * DON'T EDIT BELOW THIS LINE * * */
+      (function() {
+          var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+          dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
   
-
-  <div style="text-align:center;" class="pagination">
-    
-      <span class="previous">previous</span>
-    
-    <span class="page_number ">| page 1 of 5 |</span>
-    
-      <a href="/page2" class="next">next &raquo;</a>
-    
-  </div>
 
 </section>
 

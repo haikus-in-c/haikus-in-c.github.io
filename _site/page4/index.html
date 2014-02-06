@@ -11,7 +11,7 @@
 
   <meta name="author" content="Haikus in C" />
   <meta name="description" content="a place where two columbia cs students share code and talk about their projects" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <!--<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">-->
 
   <link rel="alternate" type="application/rss+xml" href="/atom.xml" />
 
@@ -58,6 +58,68 @@
   <section class="content">
   
 	<h1>
+	  <a href="/posts/github-pages-custom-domain">Foolproof Guide to Github Pages with a Custom Domain</a>
+	</h1>
+	
+	<section class="byline">
+	  by Ian Zapolsky, August 15, 2013
+	</section>
+
+    <p><p>Recently I spent some time wading through the internet&rsquo;s primordial soup of CS help sources &ndash; Stack
+Overflow commments, random blogs (like this one!), and source documentation that leaves something to
+be desired &ndash; to set up this site, which is hosted on Github Pages with a custom domain. I&rsquo;ve since
+decided to migrate the hosting of my <a href="http://ianzapolsky.com/">personal website</a> to Github Pages as well,
+because it&rsquo;s such a great platform and allows for almost instantatneous editing and changing. Instead
+of using clumsy cPanels and browser-based editors, you can just make edits to your site files
+locally in whatever text editor you want, add, commit, push, and it&rsquo;s live. However, there are
+a couple tricky spots to getting your custom domain Github Pages hosted site up and running.
+But since I&rsquo;ve done this setup process twice now, I&rsquo;m going to cover it from scratch,
+so I can garuntee that by the end of this, your website will work too!</p>
+</p>
+    <p style="text-align:center;"><a href="/posts/github-pages-custom-domain">read more...</a></p>
+
+	<hr>
+
+  
+	<h1>
+	  <a href="/posts/bash-todo-list-tool">todo -t write-todo-blog-post</a>
+	</h1>
+	
+	<section class="byline">
+	  by Ian Zapolsky, August 11, 2013
+	</section>
+
+    <p><p>Recently I read an <a href="http://zachholman.com/posts/inbox-zero-everything-zero/">article by Zach Holman</a>, an engineer at Github and the guy
+whose jekyll theme I adapted to build this site, about a simple (read: <em>very</em> simple)
+todo script he wrote to keep track of his tasks. Here&rsquo;s how it works: any time you&rsquo;re at
+the shell, you can type:</p>
+
+<pre><code>$ todo thing-i-have-to-do
+</code></pre>
+
+<p>This touches a file at ~/Desktop/thing-i-have-to-do. Here&rsquo;s the code of the script itself.</p>
+
+<div class="highlight"><pre><code class="bash"><span class="c">#!/bin/sh</span>
+<span class="nb">set</span> -e
+
+touch ~/Desktop/<span class="s2">&quot;$*&quot;</span>
+</code></pre></div>
+
+
+<p>Obviously, this tool assumes that the user keeps a tidy Desktop and cleans it regularly. Otherwise,
+it just wouldn&rsquo;t be feasible to keep track of all the todo files. In his own words, <a href="http://zachholman.com/posts/inbox-zero-everything-zero/">Zach writes</a>,</p>
+
+<blockquote><p>I keep a clean desktop: under three icons at a time, preferably. It made sense to use my
+desktop as a kind of bucket I need to empty&hellip;.</p></blockquote>
+
+<p>Unfortunately, my desktop isn&rsquo;t so clean.</p>
+</p>
+    <p style="text-align:center;"><a href="/posts/bash-todo-list-tool">read more...</a></p>
+
+	<hr>
+
+  
+	<h1>
 	  <a href="/posts/jugglefest">Can You Yodle and Juggle at the Same Time?</a>
 	</h1>
 	
@@ -79,54 +141,6 @@ The higher the dot product of a juggler with a specific circuit, the better fit 
 is for that circuit.</p>
 </p>
     <p style="text-align:center;"><a href="/posts/jugglefest">read more...</a></p>
-
-	<hr>
-
-  
-	<h1>
-	  <a href="/posts/spotify-programming-challenge-funk">Let's Get Funky</a>
-	</h1>
-	
-	<section class="byline">
-	  by Ian Zapolsky, April 26, 2013
-	</section>
-
-    <p><p>Today we return to <a href="https://www.spotify.com/us/jobs/tech/">Spotify&rsquo;s hallowed puzzle page</a> for the second of the three puzzles
-they offer there. This one, the middle brother in between <a href="http://haikus-in-c.com/posts/spotify-programming-challenge-reggae/">Reggae</a> and <a href="http://haikus-in-c.com">Heavy Metal</a>,
-is called <em>Funk</em>.</p>
-
-<p>Here&rsquo;s the problem: based on an input consisting of n songs on some album, where each song has its
-own number of plays, we need to determine which song is the best (check the input format <a href="https://www.spotify.com/us/jobs/tech/zipfsong/">here</a>).
-However, while intuition tells us to assume the most played song to be the best, we have to take
-into account something called <a href="http://en.wikipedia.org/wiki/Zipf%27s_law"><em>Zipf&rsquo;s Law</em></a>, which states that the earlier songs on an album
-(e.g. the first and second tracks) will be played more often than the later songs by nature of their position.</p>
-
-<p>The law goes on to quantify this observation by saying that we should expect the nth song
-of an album to be played roughly 1/n the number of times as the first.</p>
-</p>
-    <p style="text-align:center;"><a href="/posts/spotify-programming-challenge-funk">read more...</a></p>
-
-	<hr>
-
-  
-	<h1>
-	  <a href="/posts/spotify-programming-challenge-reggae">So This is What Reggae Feels Like</a>
-	</h1>
-	
-	<section class="byline">
-	  by Ian Zapolsky, April 12, 2013
-	</section>
-
-    <p><p>On <a href="https://www.spotify.com/us/jobs/tech/">Spotify&rsquo;s puzzle page</a>, they&rsquo;ve got three tech puzzles for potential hires
-to play around with. This is the first of them, whose difficulty is rated <em>Reggae</em>.</p>
-
-<p>Here&rsquo;s what we need to do: write a program to take some integer in decimal form
-between 1 and 1,000,000,000 (inclusive), convert it to binary form, reverse that binary
-string, and then convert the result back into decimal form. For example, on input 11,
-we convert to binary number 1011, reverse to get 1101, then convert back to decimal form
-to get 13 (11 > 1011 > 1101 > 13).</p>
-</p>
-    <p style="text-align:center;"><a href="/posts/spotify-programming-challenge-reggae">read more...</a></p>
 
 	<hr>
 
