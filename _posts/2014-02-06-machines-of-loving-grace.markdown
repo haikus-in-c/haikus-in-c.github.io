@@ -14,7 +14,7 @@ is called Haikus in C anyways, why not get some poetry on here!
 *All Watched Over By Machines of Loving Grace*
 by Richard Brautigan
 
-{% highlight %}
+{% highlight text %}
   I like to think (and
   the sooner the better!)
   of a cybernetic meadow
