@@ -9,9 +9,12 @@ category: posts
 Here's a poem that I recently, that I like more each time I read it. This blog
 is called Haikus in C anyways, why not get some poetry on here!
 
-_All Watched Over By Machines of Loving Grace_
+<!--more-->
+
+*All Watched Over By Machines of Loving Grace*
 by Richard Brautigan
 
+{% highlight %}
   I like to think (and
   the sooner the better!)
   of a cybernetic meadow
@@ -39,3 +42,4 @@ by Richard Brautigan
   brothers and sisters,
   and all watched over
   by machines of loving grace.
+{% endhighlight %}
