@@ -58,6 +58,40 @@
   <section class="content">
   
 	<h1>
+	  <a href="/posts/number-unique-elements">No Easy Questions</a>
+	</h1>
+	
+	<section class="byline">
+	  by Ruchir Khaitan, August 16, 2013
+	</section>
+
+    <p><p>Today, I&rsquo;m going to subvert a key principle of this blog for a little bit, namely the idea that an educational or even interesting probem has to be somewhat complex, hence the term programming puzzles. The problem I&rsquo;m going to examine today is simply: given a list of n objects (the code is only going to handle integers but the ideas apply equally well to all data), find the number of unique elements it contains. This question is simple enough that one doesn&rsquo;t need to be a compuuter scientist to solve it. All one has to do is, at each element, scan the remainder of the list. If you can find another element that matches the one you were looking at, obviously it&rsquo;s not unique. The code below expresses this algorithm in C:</p>
+
+<div class="highlight"><pre><code class="java"> <span class="kt">int</span> <span class="nf">naive_find_num_unique</span><span class="o">(</span><span class="kt">int</span><span class="o">*</span> <span class="n">array</span><span class="o">,</span> <span class="kt">int</span> <span class="n">size</span><span class="o">){</span>
+            <span class="kt">int</span> <span class="n">i</span><span class="o">,</span> <span class="n">j</span><span class="o">,</span> <span class="n">unique</span><span class="o">,</span> <span class="n">num</span><span class="o">;</span>
+            <span class="n">num</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+            <span class="k">for</span><span class="o">(</span> <span class="n">i</span> <span class="o">=</span><span class="mi">0</span><span class="o">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">size</span><span class="o">;</span> <span class="n">i</span><span class="o">++){</span>
+                    <span class="n">unique</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span>
+                    <span class="k">for</span><span class="o">(</span><span class="n">j</span><span class="o">=</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="o">;</span> <span class="n">j</span><span class="o">&lt;</span><span class="n">size</span><span class="o">;</span> <span class="n">j</span><span class="o">++){</span>
+                            <span class="k">if</span><span class="o">(</span><span class="n">array</span><span class="o">[</span><span class="n">i</span><span class="o">]==</span> <span class="n">array</span><span class="o">[</span><span class="n">j</span><span class="o">])</span>
+                                    <span class="n">unique</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+                    <span class="o">}</span>
+                    <span class="k">if</span><span class="o">(</span><span class="n">unique</span><span class="o">)</span>
+                            <span class="n">num</span><span class="o">++;</span>
+            <span class="o">}</span>
+            <span class="k">return</span> <span class="n">num</span><span class="o">;</span>
+    <span class="o">}</span>
+</code></pre></div>
+
+
+<p>You&rsquo;ll notice that I named this function &ldquo;naive_find_num_unique&rdquo; for a reason. This function, while very easy to understandd and very memory efficient, has horrible performance, because of its O(n<sup>2</sup>) time complexity, which occurs because given an input of size n, for each element i in n, we need to read the remainder of the list.</p>
+</p>
+    <p style="text-align:center;"><a href="/posts/number-unique-elements">read more...</a></p>
+
+	<hr>
+
+  
+	<h1>
 	  <a href="/posts/triangle-sum">Yodle Programming Challenge: Triangle Sums</a>
 	</h1>
 	
@@ -101,44 +135,6 @@ But since I&rsquo;ve done this setup process twice now, I&rsquo;m going to cover
 so I can garuntee that by the end of this, your website will work too!</p>
 </p>
     <p style="text-align:center;"><a href="/posts/github-pages-custom-domain">read more...</a></p>
-
-	<hr>
-
-  
-	<h1>
-	  <a href="/posts/bash-todo-list-tool">todo -t write-todo-blog-post</a>
-	</h1>
-	
-	<section class="byline">
-	  by Ian Zapolsky, August 11, 2013
-	</section>
-
-    <p><p>Recently I read an <a href="http://zachholman.com/posts/inbox-zero-everything-zero/">article by Zach Holman</a>, an engineer at Github and the guy
-whose jekyll theme I adapted to build this site, about a simple (read: <em>very</em> simple)
-todo script he wrote to keep track of his tasks. Here&rsquo;s how it works: any time you&rsquo;re at
-the shell, you can type:</p>
-
-<pre><code>$ todo thing-i-have-to-do
-</code></pre>
-
-<p>This touches a file at ~/Desktop/thing-i-have-to-do. Here&rsquo;s the code of the script itself.</p>
-
-<div class="highlight"><pre><code class="bash"><span class="c">#!/bin/sh</span>
-<span class="nb">set</span> -e
-
-touch ~/Desktop/<span class="s2">&quot;$*&quot;</span>
-</code></pre></div>
-
-
-<p>Obviously, this tool assumes that the user keeps a tidy Desktop and cleans it regularly. Otherwise,
-it just wouldn&rsquo;t be feasible to keep track of all the todo files. In his own words, <a href="http://zachholman.com/posts/inbox-zero-everything-zero/">Zach writes</a>,</p>
-
-<blockquote><p>I keep a clean desktop: under three icons at a time, preferably. It made sense to use my
-desktop as a kind of bucket I need to empty&hellip;.</p></blockquote>
-
-<p>Unfortunately, my desktop isn&rsquo;t so clean.</p>
-</p>
-    <p style="text-align:center;"><a href="/posts/bash-todo-list-tool">read more...</a></p>
 
 	<hr>
 

@@ -4,12 +4,113 @@
  <title>Haikus in C</title>
  <link href="http://haikus-in-c.com/atom.xml" rel="self"/>
  <link href="http://haikus-in-c.com/"/>
- <updated>2014-02-07T14:13:10-05:00</updated>
+ <updated>2014-02-07T15:31:37-05:00</updated>
  <id>http://haikus-in-c.com</id>
  <author>
    <name>Haikus in C</name>
  </author>
  
+ 
+ <entry>
+   <title>Is Memoization Caching?</title>
+   <link href="http://haikus-in-c.com/posts/memoization"/>
+   <updated>2014-02-07T00:00:00-05:00</updated>
+   <id>http://haikus-in-c.com/posts/memoization</id>
+   <content type="html">&lt;p&gt;The concept of caching is simple: store something that is relevant to you in a
+place that is close to you so that you can access it subsequent times in way
+less time than having to go back to the original place you got it from again.&lt;/p&gt;
+
+&lt;p&gt;The world without caching would suck.&lt;/p&gt;
+
+&lt;p&gt;Imagine that you&amp;rsquo;re in the library and you&amp;rsquo;re writing an essay on someone.
+Suddenly, you need to look something up about this person, so you go into the
+stacks, find his biography on the shelf, read the information you need, put the
+biography back on the shelf, and come back to your desk. Without the book.
+This is the world without caching and it sucks because the next time you need to
+look up something about the subject of your essay, you need to walk back to the
+stacks and grab the book off the shelf again. Why not just bring the book to
+your desk! Put it in your cache!&lt;/p&gt;
+
+&lt;!--more--&gt;
+
+
+&lt;p&gt;So then, what is memoization? Memoization is a &lt;em&gt;kind&lt;/em&gt; of caching to help prevent
+functions from performing redundant work. In memoization, we cache previously
+calculated results of a function for later use by that same function. The
+clearest example we can present to decribe memoization is calculating fibonacci
+numbers. First, we look a fibonacci function, sans memoization:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;javascript&quot;&gt;&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;fibonacci_slow&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+
+  &lt;span class=&quot;c1&quot;&gt;// keep track of how many times we call fib&lt;/span&gt;
+  &lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;times&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+
+  &lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;fib&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;nx&quot;&gt;times&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;times&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;n&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;===&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;||&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;n&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;===&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;fib&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;fib&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;};&lt;/span&gt;
+
+  &lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;get_times&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;times&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;};&lt;/span&gt;
+
+  &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;fib&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;fib&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+           &lt;span class=&quot;nx&quot;&gt;get_times&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;get_times&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;};&lt;/span&gt;
+
+&lt;span class=&quot;p&quot;&gt;}();&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;For ever call to fib here, we have to recursively calculate the nth fibonacci
+number. This results in fib being called &lt;em&gt;a lot&lt;/em&gt; of times, 21891 times to be
+precise to calculate the 20th fibonacci number.&lt;/p&gt;
+
+&lt;p&gt;However, imagine we stored the nth fibonacci number in an array (cache), which we could
+then reference directly (like the book on our desk, instead of the library shelf).
+See the code below:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;javascript&quot;&gt;&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;fibonacci_fast&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+
+  &lt;span class=&quot;c1&quot;&gt;// keep track of how many times we call fib&lt;/span&gt;
+  &lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;times&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+
+  &lt;span class=&quot;c1&quot;&gt;// memoization cache to keep track of calculated values&lt;/span&gt;
+  &lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;memoization_cache&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;];&lt;/span&gt;
+
+  &lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;fib&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;nx&quot;&gt;times&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;times&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;result&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;memoization_cache&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;];&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;typeof&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;result&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!==&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;number&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+      &lt;span class=&quot;nx&quot;&gt;result&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;fib&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;fib&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+      &lt;span class=&quot;nx&quot;&gt;memoization_cache&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;result&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;result&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;};&lt;/span&gt;
+
+  &lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;get_times&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;times&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;};&lt;/span&gt;
+
+  &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;fib&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;fib&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+           &lt;span class=&quot;nx&quot;&gt;get_times&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;get_times&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;};&lt;/span&gt;
+
+&lt;span class=&quot;p&quot;&gt;}();&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;This version of fib is called only 39 steps to calculate the 20th fibonacci
+number, a huge improvement from 21891. It&amp;rsquo;s better because once it calculates
+a fibonacci number recursively, it saves that number so it can access it the
+next time in needs it with one operation, instead of generating it recursively
+all over again.&lt;/p&gt;
+
+&lt;p&gt;So, memoization &lt;em&gt;is&lt;/em&gt; caching, but caching is not always memoization.&lt;/p&gt;
+</content>
+ </entry>
  
  <entry>
    <title>A Poem I Like</title>
@@ -18,9 +119,6 @@
    <id>http://haikus-in-c.com/posts/machines-of-loving-grace</id>
    <content type="html">&lt;p&gt;Here&amp;rsquo;s a poem that I recently, that I like more each time I read it. This blog
 is called Haikus in C anyways, why not get some poetry on here!&lt;/p&gt;
-
-&lt;!--more--&gt;
-
 
 &lt;p&gt;&lt;em&gt;All Watched Over By Machines of Loving Grace&lt;/em&gt;
 by Richard Brautigan&lt;/p&gt;
@@ -56,6 +154,35 @@ by Richard Brautigan&lt;/p&gt;
 
 
 
+
+&lt;!--more--&gt;
+
+
+&lt;p&gt;The phrase &amp;ldquo;Software is eating the world&amp;rdquo; is being &lt;a href=&quot;http://www.forbes.com/sites/benkepes/2013/10/23/enabling-software-to-eat-the-world-one-api-at-a-time/&quot;&gt;thrown&lt;/a&gt; &lt;a href=&quot;http://venturebeat.com/2013/11/14/softwares-eating-the-world-and-devs-are-serving-up-the-meal/&quot;&gt;around&lt;/a&gt;
+&lt;a href=&quot;http://techcrunch.com/2013/12/14/as-software-eats-the-world-non-tech-corporations-are-eating-startups/&quot;&gt;a lot&lt;/a&gt; on the internet these days, ever since Marc Andreessen coined it in a
+&lt;a href=&quot;http://online.wsj.com/news/articles/SB10001424053111903480904576512250915629460&quot;&gt;Wall Street Journal essay&lt;/a&gt; from 2011.&lt;/p&gt;
+
+&lt;p&gt;I believe in the idea, but I think that software has only taken its first bite
+in what will be a massive feast spanning hundreds of years. Software has already
+become a part of billions of people&amp;rsquo;s lives, whether it touches them directly
+or not (i.e. via a device/web browser), and yet there are so many places where
+software and computing power will be in just a handful of years where it is not
+right now. Intel&amp;rsquo;s Newton computer and other products like it are going to
+introduce the element of computer &amp;ldquo;intelligence,&amp;rdquo; or programmable behavior, into
+more and more corners of our existence (see the Nest thermostat, the automated
+car, the internet fridge). We&amp;rsquo;re going to continue to speed things up, make
+things more autonomous, and we&amp;rsquo;re going to use computers to do it.&lt;/p&gt;
+
+&lt;p&gt;This is really exciting.&lt;/p&gt;
+
+&lt;p&gt;Brautigan&amp;rsquo;s poem describes a potential endstate of this process, a serene utopia
+where software is so pervasive that it has become our guardian. Humanity is
+free to forget problems it once concerned itself with, safe in the
+hands of the machines it has created to solve them. I&amp;rsquo;m not sure I can fully
+believe in this eventuality. For one thing, I think there will always be bugs.
+No matter how big the system, no matter how refined, there will always be bugs
+because humans are not perfect, and at the end of the day, humans write
+software.&lt;/p&gt;
 </content>
  </entry>
  

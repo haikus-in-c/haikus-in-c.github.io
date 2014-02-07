@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+  <meta charset="utf-8">
+  <title>
+    
+      Is Memoization Caching? &ndash;
+    
+    Haikus in C
+  </title>
+
+  <meta name="author" content="Haikus in C" />
+  <meta name="description" content="a place where two columbia cs students share code and talk about their projects" />
+  <!--<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">-->
+
+  <link rel="alternate" type="application/rss+xml" href="/atom.xml" />
+
+  <link rel="stylesheet" href="/css/fontawesome.min.css" type="text/css" media="screen, projection" />
+  <link rel="stylesheet" href="/css/base.css" type="text/css" media="screen, projection" />
+  <link rel="stylesheet" href="/css/pygments.css" type="text/css" />
+  <link media="only screen and (max-device-width: 480px)" href="/css/mobile.css" type="text/css" rel="stylesheet" />
+  <link media="only screen and (device-width: 768px)" href="/css/mobile.css" type="text/css" rel="stylesheet" />
+  <link href='http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz' rel='stylesheet' type='text/css'>
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+  <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+  <script type="text/javascript" src="/js/application.js"></script>
+</head>
+
+<body>
+  <section class="header">
+	<h1>
+	  <a href="/">Haikus in C</a>
+	</h1>
+  </section>
+
+  <section class="sidebar">
+
+    <section class="meta">
+      <a href="https://github.com/haikus-in-c" target="_blank"><i class="icon icon-github"></i></a>
+    </section>
+
+    <section class="sections">
+      <ul>
+		<li><a href="/">home</a><li>
+        <li><a href="/about.html">about</a></li>
+        <li><a href="/posts.html">posts</a></li>
+      </ul>
+    </section>
+
+	<section class="shoutout">
+	  <p>made with help from <a href="https://github.com/mojombo/jekyll">jekyll</a> and an adapted theme from
+		<a href="http://zachholman.com/">zach holman</a>.</p>
+	</section>
+
+  </section>
+
+  <section class="content">
+  <h1>
+    <a href="/posts/memoization">Is Memoization Caching?</a>
+  </h1>
+
+  <section class="byline">
+    by Ian Zapolsky, February  7, 2014
+  </section>
+
+  <p>The concept of caching is simple: store something that is relevant to you in a
+place that is close to you so that you can access it subsequent times in way
+less time than having to go back to the original place you got it from again.</p>
+
+<p>The world without caching would suck.</p>
+
+<p>Imagine that you&rsquo;re in the library and you&rsquo;re writing an essay on someone.
+Suddenly, you need to look something up about this person, so you go into the
+stacks, find his biography on the shelf, read the information you need, put the
+biography back on the shelf, and come back to your desk. Without the book.
+This is the world without caching and it sucks because the next time you need to
+look up something about the subject of your essay, you need to walk back to the
+stacks and grab the book off the shelf again. Why not just bring the book to
+your desk! Put it in your cache!</p>
+
+<!--more-->
+
+
+<p>So then, what is memoization? Memoization is a <em>kind</em> of caching to help prevent
+functions from performing redundant work. In memoization, we cache previously
+calculated results of a function for later use by that same function. The
+clearest example we can present to decribe memoization is calculating fibonacci
+numbers. First, we look a fibonacci function, sans memoization:</p>
+
+<div class="highlight"><pre><code class="javascript"><span class="kd">var</span> <span class="nx">fibonacci_slow</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+
+  <span class="c1">// keep track of how many times we call fib</span>
+  <span class="kd">var</span> <span class="nx">times</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+  <span class="kd">var</span> <span class="nx">fib</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">n</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">times</span> <span class="o">=</span> <span class="nx">times</span><span class="o">+</span><span class="mi">1</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">n</span> <span class="o">===</span> <span class="mi">0</span> <span class="o">||</span> <span class="nx">n</span> <span class="o">===</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="nx">n</span><span class="p">;</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="nx">fib</span><span class="p">(</span><span class="nx">n</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="nx">fib</span><span class="p">(</span><span class="nx">n</span><span class="o">-</span><span class="mi">2</span><span class="p">);</span>
+    <span class="p">}</span>
+  <span class="p">};</span>
+
+  <span class="kd">var</span> <span class="nx">get_times</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">times</span><span class="p">;</span>
+  <span class="p">};</span>
+
+  <span class="k">return</span> <span class="p">{</span> <span class="nx">fib</span> <span class="o">:</span> <span class="nx">fib</span><span class="p">,</span>
+           <span class="nx">get_times</span> <span class="o">:</span> <span class="nx">get_times</span> <span class="p">};</span>
+
+<span class="p">}();</span>
+</code></pre></div>
+
+
+<p>For ever call to fib here, we have to recursively calculate the nth fibonacci
+number. This results in fib being called <em>a lot</em> of times, 21891 times to be
+precise to calculate the 20th fibonacci number.</p>
+
+<p>However, imagine we stored the nth fibonacci number in an array (cache), which we could
+then reference directly (like the book on our desk, instead of the library shelf).
+See the code below:</p>
+
+<div class="highlight"><pre><code class="javascript"><span class="kd">var</span> <span class="nx">fibonacci_fast</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+
+  <span class="c1">// keep track of how many times we call fib</span>
+  <span class="kd">var</span> <span class="nx">times</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+  <span class="c1">// memoization cache to keep track of calculated values</span>
+  <span class="kd">var</span> <span class="nx">memoization_cache</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">];</span>
+
+  <span class="kd">var</span> <span class="nx">fib</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">n</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">times</span> <span class="o">=</span> <span class="nx">times</span><span class="o">+</span><span class="mi">1</span><span class="p">;</span>
+    <span class="kd">var</span> <span class="nx">result</span> <span class="o">=</span> <span class="nx">memoization_cache</span><span class="p">[</span><span class="nx">n</span><span class="p">];</span>
+    <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span><span class="p">(</span><span class="nx">result</span><span class="p">)</span> <span class="o">!==</span> <span class="s1">&#39;number&#39;</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">result</span> <span class="o">=</span> <span class="nx">fib</span><span class="p">(</span><span class="nx">n</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="nx">fib</span><span class="p">(</span><span class="nx">n</span><span class="o">-</span><span class="mi">2</span><span class="p">);</span>
+      <span class="nx">memoization_cache</span><span class="p">[</span><span class="nx">n</span><span class="p">]</span> <span class="o">=</span> <span class="nx">result</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="nx">result</span><span class="p">;</span>
+  <span class="p">};</span>
+
+  <span class="kd">var</span> <span class="nx">get_times</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">times</span><span class="p">;</span>
+  <span class="p">};</span>
+
+  <span class="k">return</span> <span class="p">{</span> <span class="nx">fib</span> <span class="o">:</span> <span class="nx">fib</span><span class="p">,</span>
+           <span class="nx">get_times</span> <span class="o">:</span> <span class="nx">get_times</span> <span class="p">};</span>
+
+<span class="p">}();</span>
+</code></pre></div>
+
+
+<p>This version of fib is called only 39 steps to calculate the 20th fibonacci
+number, a huge improvement from 21891. It&rsquo;s better because once it calculates
+a fibonacci number recursively, it saves that number so it can access it the
+next time in needs it with one operation, instead of generating it recursively
+all over again.</p>
+
+<p>So, memoization <em>is</em> caching, but caching is not always memoization.</p>
+
+
+<!-- possibly update this later
+   TODO: bio here
+  <section class="meta">
+    <h3>Discussion, links, and tweets</h3>
+    <section class="copy">
+      <a href="https://twitter.com/" target="_blank">
+        <img src="?s=142" height="50" width="50" />
+      </a>
+
+      <p>
+        I'm a developer at GitHub. <a href="https://twitter.com/" target="_blank">Follow me on Twitter</a>;
+        you'll enjoy my tweets. I take care to carefully craft each one. Or at least aim to make
+        you giggle. Or offended. One of those two&mdash; I haven't decided which yet.
+      </p>
+
+      <a href="http://twitter.com/share" class="twitter-share-button" data-count="none" data-via="">Tweet</a>
+      <a href="http://twitter.com/" class="twitter-follow-button" data-show-count="false">Follow @</a>
+      <script src="http://platform.twitter.com/widgets.js" type="text/javascript"></script>
+    </section>
+  </section>
+-->
+
+  <hr>
+  
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+      /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+      var disqus_shortname = 'haikus'; // required: replace example with your forum shortname
+
+      /* * * DON'T EDIT BELOW THIS LINE * * */
+      (function() {
+          var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+          dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+  
+
+</section>
+
+
+</body>
+
+</html>
