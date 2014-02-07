@@ -58,214 +58,77 @@
   <section class="content">
   
 	<h1>
-	  <a href="/posts/2013-12-10-game-of-life">John Conway's Game of Life with jQuery</a>
+	  <a href="/posts/machines-of-loving-grace">A Poem I Like</a>
 	</h1>
 	
 	<section class="byline">
-	  by Ian Zapolsky, December 22, 2013
+	  by Ian Zapolsky, February  6, 2014
 	</section>
 
-    <p><p>In casting about for some simple projects to learn more about Javascript and
-jQuery recently I came across <a href="http://en.wikipedia.org/wiki/Conway's_Game_of_Life">John Conway&rsquo;s Game of Life</a>. I had
-heard about the game before, in an introductory CS class I took in freshman
-year of college, and since it&rsquo;s a relatively simple and grid-based game I
-decided to recreate it using the two aforementioned technologies for quick
-hour-long exercise.</p>
-
-<p>The game isn&rsquo;t actually a game, it&rsquo;s more of a cellular life simulation. Each
-cell is represented by a square on a grid. Cells can be either dead (white), or
-alive (black). The game progresses forward in time units (call them years),
-where each unit of time updates the state of the current population of dead
-and alive cells in the following four ways:</p>
-
-<ol>
-<li>  Any live cells with &lt; 2 live neighbors die (neighbor is understood here
-to mean any cell immediately adjacent to the given cell, including
-diagonally).</li>
-<li>  Any live cells with 2 or 3 live neighbors live.</li>
-<li>  Any live cells with > 3 live neighbors die.</li>
-<li>  Any dead cells with exactly 3 live neighbors become live cells.</li>
-</ol>
-
-
-<p>So our game has three main elements: The grid, the individual cells within the
-grid, and time.</p>
-
-<p>Let&rsquo;s start with the grid and the cells within. I chose to represent these as
-HTML div elements, with descriptive IDs so that I could keep track later of
-which divs on the page were adjacent. Below is code that fills a container with
-my grid of 40x40 cells.</p>
-
-<div class="highlight"><pre><code class="javascript"><span class="kd">var</span> <span class="nx">initBoxes</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span> <span class="nx">$container</span> <span class="p">)</span> <span class="p">{</span>
-  <span class="kd">var</span> <span class="nx">html</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">;</span>
-  <span class="kd">var</span> <span class="nx">i</span><span class="p">;</span>
-  <span class="k">for</span> <span class="p">(</span><span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="mi">40</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">for</span> <span class="p">(</span><span class="nx">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">j</span> <span class="o">&lt;</span> <span class="mi">40</span><span class="p">;</span> <span class="nx">j</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-      <span class="kd">var</span> <span class="nx">id</span> <span class="o">=</span> <span class="s1">&#39;x&#39;</span><span class="o">+</span><span class="nx">i</span><span class="o">+</span><span class="s1">&#39;y&#39;</span><span class="o">+</span><span class="nx">j</span><span class="p">;</span>
-      <span class="nx">html</span> <span class="o">+=</span> <span class="s1">&#39;&lt;div id=&quot;&#39;</span><span class="o">+</span><span class="nx">id</span><span class="o">+</span><span class="s1">&#39;&quot; class=&quot;box&quot;&gt;&lt;/div&gt;&#39;</span><span class="p">;</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
-  <span class="nx">$container</span><span class="p">.</span><span class="nx">html</span><span class="p">(</span> <span class="nx">html</span> <span class="p">);</span>
-<span class="p">};</span>
-</code></pre></div>
-
-
-
+    <p><p>Here&rsquo;s a poem that I recently, that I like more each time I read it. This blog
+is called Haikus in C anyways, why not get some poetry on here!</p>
 </p>
-    <p style="text-align:center;"><a href="/posts/2013-12-10-game-of-life">read more...</a></p>
+    <p style="text-align:center;"><a href="/posts/machines-of-loving-grace">read more...</a></p>
 
 	<hr>
 
   
 	<h1>
-	  <a href="/posts/2013-08-18-sudoku-solver">Why I Don't Like Sudoku Anymore</a>
+	  <a href="/posts/task-optimization">Dictionary Optimization with the Google Chrome Omnibox</a>
 	</h1>
 	
 	<section class="byline">
-	  by Ian Zapolsky, December  3, 2013
+	  by Ian Zapolsky, November 13, 2013
 	</section>
 
-    <p><p>Earlier this school year Ruchir and I kicked around the idea of trying to code a program that
-could solve sudoku puzzles. We talked about how we might do it, but in the midst of school and
-homework it fell off the map. That is until I became completely addicted to a sudoku app on my phone
-a week or so ago got inspired to take a crack at it.</p>
+    <p><p>Here&rsquo;s a fairly common scenario I have been running into this semester: I&rsquo;m
+reading something in Spanish at the computer, I come across a word I don&rsquo;t know.
+I look at it, contemplate looking it up, and continue reading. It&rsquo;s borderline
+terrifying that I&rsquo;m so spoiled by the speed of modern technology that I consider
+the time it takes to open a new browser tab, google my favorite Spanish-English
+dictionary site, and enter the word I&rsquo;m looking for to be prohibitive, but I do.</p>
 
-<p>I started to think about how a computer might play sudoku, and came up with two basic rules for
-figuring out the values of individual sudoku cells, both of which require sweeping over the entire
-puzzle first to determine all of the possible values for each open cell on the board (which
-is a task better suited for a computer than a human, trust me).</p>
+<p>But perhaps this superhuman level of laziness is what will ultimately drive the
+next wave of technological advances necessary to achieve the ultimate informational nirvana
+toward which the internet and modern search engine power is moving, a world
+in which you can instantly recieve information about things you look at in real
+time.</p>
 
-<ol>
-<li>Obvious Elimination: if a box has only one possible value, then it can only be set to that value.</li>
-<li>Unique Possibility: if a box has multiple possible values, but one of its possible values is not
-possible for any other open cell in that box&rsquo;s row, column, or square, then it must be set to that value.</li>
-</ol>
-
-
-<p>I was sure from my pen and paper/phone testing that these two rules alone would be enough to solve at
-least some sudokus, so I started thinking about how to design a sudoku board data structure. The
-sudoku board itself initially screams out for a 2D array of some sort, because ultimately all sudoku
-boards are just 9x9 squares made up of 81 individual cells (9 rows, 9 columns, and 9 3x3 boxes of
-cells):</p>
-
-<p><img src="/images/sudoku.png" alt="sudoku" /></p>
-
-<p>However, we can&rsquo;t just use a 2D array of integers, because each cell needs to hold more
-information than just its own value; it also needs to know all of the possible values it could be set
-to based on its position, and which row, column, and box it belong to so that when we later write
-methods to populate its list of possible values we can instantly know its location on the board.</p>
-
-<p>A simple <a href="https://github.com/haikus-in-c/haikus-in-c/blob/master/2013.8/sudoku_solver/SudokuBox.java">SudokuBox</a> object should do the trick, with logic to determine its box number
-based on its row and column index, and methods that abstract low level interaction with its list of
-possible values (add, remove, and check if a value is present). Now we can represent the board as a
-9x9 2D array of SudokuBox objects.</p>
-
-<p><em>The</em> central rule of all sudoku puzzles is that each row, column, and box on the greater 9x9 board
-must contain the numbers 1-9, non-repeating. What this means from a structure design standpoint is
-that we need to be able to quickly iterate through individaul rows, columns,
-and boxes in order to determine what values are still possible for cells in a given position. Iterating
-over the cells in a box was the first tricky piece of logic that came up in this project. Rows and columns
-are easy enough flip through, because one index of the 2D array stays the same, while the other
-increments:</p>
-
-<div class="highlight"><pre><code class="java"><span class="o">...</span>
-<span class="n">SudokuBox</span><span class="o">[][]</span> <span class="n">board</span> <span class="o">=</span> <span class="k">new</span> <span class="n">SudokuBox</span><span class="o">[</span><span class="mi">9</span><span class="o">][</span><span class="mi">9</span><span class="o">];</span> 
-
-<span class="c1">// picking random row and column</span>
-<span class="kt">int</span> <span class="n">row</span> <span class="o">=</span> <span class="mi">3</span><span class="o">;</span>
-<span class="kt">int</span> <span class="n">column</span> <span class="o">=</span> <span class="mi">6</span><span class="o">;</span>
-
-<span class="c1">// iterate over row</span>
-<span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">9</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span>
-    <span class="n">board</span><span class="o">[</span><span class="n">row</span><span class="o">][</span><span class="n">i</span><span class="o">].</span><span class="na">doSomething</span><span class="o">();</span>
-
-<span class="c1">// iterate over column</span>
-<span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">9</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span>
-    <span class="n">board</span><span class="o">[</span><span class="n">i</span><span class="o">][</span><span class="n">column</span><span class="o">].</span><span class="na">doSomething</span><span class="o">();</span>
-</code></pre></div>
-
-
-<p>However, iterating over a single box&rsquo;s cells proves to be a little more complicated because the
-cells of a box live on three separate rows and three separate columns. The key to figuring this out
-is to subdivide the boxes into columns and rows of boxes. Take another look at the picture of the
-board above. If we start in the top-left corner and work left to right, going to the next row down
-once we reach the end of a line, we get boxes 0-8. Boxes 0, 1, and 2 all begin with a row index of 0,
-boxes 3, 4, and 5 begin at row 3, and boxes 6, 7, and 8 all begin at row 6. This pattern is pretty
-clear: to find a box&rsquo;s start row, divide its number by 3 (rounding down to the nearest whole number,
-as integer division does in most programming languages), and then multiply by 3.</p>
-
-<p>We follow the same basic process to figure out our starting column index of a given box, but this time
-we subdivide along the columns: boxes 0, 3, and 6 all begin with a column index of 0, boxes 1, 4, and 7
-begin with a column index of 3, and boxes 2, 5, and 8 begin with a column index of 6. Regular division
-obviously won&rsquo;t work here, but modulus divison will because each of these groups contain box numbers from
-the same equivalence class (0/3/6 mod 3 = 0, &frac14;/7 mod 3 = 1, and 2/5/8 mod 3 = 2).</p>
-
-<div class="highlight"><pre><code class="java"><span class="o">...</span>
-<span class="kt">int</span> <span class="n">box</span> <span class="o">=</span> <span class="mi">4</span><span class="o">;</span>
-<span class="kt">int</span> <span class="n">start_row</span> <span class="o">=</span> <span class="o">(</span><span class="mi">4</span><span class="o">/</span><span class="mi">3</span><span class="o">)*</span><span class="mi">3</span><span class="o">;</span>      <span class="c1">// = 3, the start row for box 4</span>
-<span class="kt">int</span> <span class="n">start_column</span> <span class="o">=</span> <span class="o">(</span><span class="mi">4</span><span class="o">%</span><span class="mi">3</span><span class="o">)*</span><span class="mi">3</span><span class="o">;</span>       <span class="c1">// = 3, the start column for box 4</span>
-
-<span class="c1">// iterate over box</span>
-<span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">row</span> <span class="o">=</span> <span class="n">start_row</span><span class="o">;</span> <span class="n">row</span> <span class="o">&lt;</span> <span class="o">(</span><span class="n">start_row</span><span class="o">+</span><span class="mi">3</span><span class="o">);</span> <span class="n">row</span><span class="o">++)</span> <span class="o">{</span>
-    <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">column</span> <span class="o">=</span> <span class="n">start_column</span><span class="o">;</span> <span class="n">column</span> <span class="o">&lt;</span> <span class="o">(</span><span class="n">start_column</span><span class="o">+</span><span class="mi">3</span><span class="o">);</span> <span class="n">column</span><span class="o">++)</span>
-        <span class="n">board</span><span class="o">[</span><span class="n">row</span><span class="o">][</span><span class="n">column</span><span class="o">].</span><span class="na">doSomething</span><span class="o">();</span>
-<span class="o">}</span> 
-</code></pre></div>
-
-
-<p>Now we&rsquo;ve got the building blocks for a data structure that represents an entire sudoku board,
-and has logic in place that allow us to quickly pinpoint the location of a cell, and then traverse
-all its related cells to figure out what values should be possible for that cell. I call this
-the <a href="https://github.com/haikus-in-c/haikus-in-c/blob/master/2013.8/sudoku_solver/SudokuBoard.java">SudokuBoard</a>. Notable methods in the class are fillPossibleAll(), which uses our
-traversing strategies from above to fill the possible values of every cell, and checkToSetAll() which
-checks every cell to see if it fits our Obvious Elimination or Unique Possibility rules.</p>
-
-<p>The final class in my design is <a href="https://github.com/haikus-in-c/haikus-in-c/blob/master/2013.8/sudoku_solver/SudokuSolver.java">SudokuSolver</a>, and it controls the flow of the operations
-specified in SudokuBoard. Basically, this solver class does the following by calling methods on a
-SudokuBoard object.</p>
-
-<ol>
-<li>While our puzzle is nt complete:
-
-<ol>
-<li>Sweep through the entire board, using the cells who&rsquo;s values we already know to determine the possible values
-for each empty cell.</li>
-<li>Sweep through the board again, checking every cell&rsquo;s possible values against our two rules to see if we can
-fill in a cell with a definite value. If at any point we do set a cell&rsquo;s value, jump back to step 1.1.</li>
-</ol>
-</li>
-</ol>
-
-
-<p>And it works! The program can solve the majority of puzzles that are labeled as easy and medium difficulty.
-<em>But</em>, it can&rsquo;t solve hard puzzles. Why? Well, I did some research into sudoku and I found this
-[resource][sudokustrategy], which is basically a detailed list of the most common sudoku strategies. It
-describes more advanced patterns and methods of eliminating potential possible values by looking at
-possibility subsets.</p>
+<p>I recently decided to take my own small step toward this goal by writing two
+simple but effective Google Chrome extensions to help optimize the process
+of translating words and phrases between Spanish and English, and conjugating
+Spanish and English verbs.</p>
 </p>
-    <p style="text-align:center;"><a href="/posts/2013-08-18-sudoku-solver">read more...</a></p>
+    <p style="text-align:center;"><a href="/posts/task-optimization">read more...</a></p>
 
 	<hr>
 
   
 	<h1>
-	  <a href="/posts/2013-12-03-cool-tool">A Cool Tool I Wish I Had Found Earlier</a>
+	  <a href="/posts/argentinian-drinking-game">When an Argentinian Drinking Game Meets Computer Science</a>
 	</h1>
 	
 	<section class="byline">
-	  by Ian Zapolsky, December  3, 2013
+	  by Ian Zapolsky, September  1, 2013
 	</section>
 
-    <p><p>Writing as someone who recently came into the world of computer
-programming, and is still very much in the process of learning how to code,
-I think one of the biggest barriers of entry to new computer scientists is
-the terminal. How are you supposed to write and compile your first hello world
-program if you don&rsquo;t know how to navigate a filesystem without a
-&ldquo;standard&rdquo; GUI? Some might say Eclipse, or another IDE, but I
-say you&rsquo;d be cheating yourself out of a really important part of the general
-CS education: a deep understanding of the UNIX terminal environment.</p>
+    <p><p>I love drinking games.</p>
+
+<p>They&rsquo;re social, they&rsquo;re entertaining, but most importantly they have the unique
+quality of making losing fun. Perhaps the most famous drinking game in the
+world is beer pong, a game of which I am a strong proponent. However, beer pong
+offers little in the way of statistics or information a computer scientist could
+analyze to gain the upper hand: it all comes down to whether or not you can make
+the shot.</p>
+
+<p>There are other, more cerebral types of drinking games of course, that <em>do</em> offer
+opportunties for <strike>cheating</strike> observation and analysis. Today I
+would like the share one with you that I learned this past weekend in
+Buenos Aires. As far as I can tell it does not have an official name, and there
+very well may be a North American/English speaking version already being played.
+It&rsquo;s great fun but, as we&rsquo;ll see in this post, it is completely unfair.</p>
 </p>
-    <p style="text-align:center;"><a href="/posts/2013-12-03-cool-tool">read more...</a></p>
+    <p style="text-align:center;"><a href="/posts/argentinian-drinking-game">read more...</a></p>
 
 	<hr>
 
