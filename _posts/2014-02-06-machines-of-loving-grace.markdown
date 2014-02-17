@@ -65,10 +65,17 @@ Brautigan's poem describes a potential endstate of this process, a serene utopia
 where software is so pervasive that it has become our guardian. Humanity is
 free to forget problems it once concerned itself with, safe in the
 hands of the machines it has created to solve them. I'm not sure I can fully
-believe in this eventuality. For one thing, I think there will always be bugs.
+believe in this eventuality. Instead, I think there will always be bugs.
 No matter how big the system, no matter how refined, there will always be bugs
 because humans are not perfect, and at the end of the day, humans write
 software.
+
+Ultimately I think Brautigan is describing a world where P = NP, or where we
+(or our machines) have found polynomial-time solutions to problems that were not
+previously solvable in polynomial time. Were *this* to ever happen, then
+the possiblities of what our machines could do for us would be blown open.
+Our artificial intelligences would be perfect, and we could write programs to
+write other programs. We truly could be watched over by our own machines. 
 
 [sew1]:http://www.forbes.com/sites/benkepes/2013/10/23/enabling-software-to-eat-the-world-one-api-at-a-time/
 [sew2]:http://venturebeat.com/2013/11/14/softwares-eating-the-world-and-devs-are-serving-up-the-meal/
